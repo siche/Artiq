@@ -1,0 +1,1 @@
+conda activate artiq-main && artiq_run cooling.py

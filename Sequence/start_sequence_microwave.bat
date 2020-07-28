@@ -1,0 +1,1 @@
+conda activate artiq-main && artiq_run sequence_microwave.py

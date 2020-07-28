@@ -1,0 +1,1 @@
+conda activate artiq-main && artiq_run get_data.py
