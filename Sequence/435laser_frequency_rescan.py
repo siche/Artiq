@@ -1,14 +1,11 @@
-import sys
-import os
-import select
+import sys, os, time
+
 import numpy as np
 from artiq.experiment import *
-from scipy.optimize import curve_fit
 from save_data import save_file
 from progressbar import *
 import matplotlib.pyplot as plt
 from wlm_web import wlm_web
-import time
 
 from wlm_lock import laser_lock
 from image_processing import has_ion
@@ -40,7 +37,7 @@ def reload_ion():
     time.sleep(1)
     # is_there_ion = has_ion()
     costed_time = 0
-    while (not has_ion() and costed_time < 900):
+    while (not has_ion()==1 and costed_time < 900):
         # if not curr.is_on:
         curr.on()
         shutter_370.on()
@@ -230,26 +227,6 @@ class KasliTester(EnvExperiment):
         # save data
         data = np.zeros((4, N))
 
-        """
-        x_data = list(range(100))
-        y_data1 = [None]*100
-        y_data2 = [None]*100
-        """
-        
-        """
-        plt.figure(1)
-        fig1 = plt.subplot(211)
-        line1, = fig1.plot(x_data,y_data1)
-        show_data1 = 'Effiency:0'
-        txt1 = fig1.text(0.8,0.8,show_data1 ,verticalalignment = 'center', \
-                                            transform=fig1.transAxes)
-
-        fig2 = plt.subplot(212)
-        line2, = fig2.plot(x_data,y_data2)
-        show_data2 = 'Count:0'
-        txt2 = fig2.text(0.8,0.8,show_data2,verticalalignment = 'center', \
-                                            transform=fig2.transAxes)
-        """
         for i in range(N):
             fre_871 = rescan_data[i][1]
             AOM_435 = rescan_data[i][0]
@@ -270,8 +247,9 @@ class KasliTester(EnvExperiment):
             # run detection and save data
             temp = self.run_sequence()
 
-            # judge if has ion
-            if temp[1] < 90 and not has_ion():
+            # judge if there is only one ion
+            # if there is more than one turn off RF and reload ion
+            if temp[1] < 90 and not has_ion==1:
                 reload_ion()
                 temp = self.run_sequence()
             # print information

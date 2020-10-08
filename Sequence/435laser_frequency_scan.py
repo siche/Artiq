@@ -1,23 +1,17 @@
-import sys
-import os
-import select
+import sys, os, time, msvcrt
 import numpy as np
+
 from artiq.experiment import *
-from scipy.optimize import curve_fit
 from save_data import save_file
 from progressbar import *
 import matplotlib.pyplot as plt
 from wlm_web import wlm_web
-import time
+
 
 from image_processing import has_ion
 from ttl_client import shutter
 from current_client import current_web
-# from DDS import DDS_AD9910
-# from load_ion_client import reload_ion
-
-if os.name == "nt":
-    import msvcrt
+from SMB100B import SMB100B
 
 wm = wlm_web()
 curr = current_web()
@@ -25,6 +19,7 @@ curr = current_web()
 shutter_370 = shutter(com=0)
 flip_mirror = shutter(com=1)
 shutter_399 = shutter(com=2)
+rf_signal = SMB100B()
 
 ccd_on = flip_mirror.off
 pmt_on = flip_mirror.on
@@ -39,24 +34,30 @@ def reload_ion():
     time.sleep(1)
     # is_there_ion = has_ion()
     costed_time = 0
-    while (not has_ion() and costed_time < 900):
-        # if not curr.is_on:
+    ion_num = has_ion()
+    while (costed_time < 900 and not ion_num == 1):
+
+        # 如果有多个ion 关闭RF放掉离子
+        if ion_num > 1:
+            rf_signal.off()
+            time.sleep(5)
+            rf_signal.on()
+
         curr.on()
         shutter_370.on()
         shutter_399.on()
-        costed_time = time.time()-t1
-        print('COSTED TIME:%.1fs' % (costed_time))
         time.sleep(2)
 
-    ccd_on()
+        ion_num = has_ion()
+        costed_time = time.time()-t1
+        print('COSTED TIME:%.1fs' % (costed_time))
+
+
+    pmt_on()
     curr.off()
     shutter_370.off()
     shutter_399.off()
     curr.beep()
-
-
-def fit_func(x, a, b, c, d):
-    return a*np.sin(b*x+c)+d
 
 
 def is_871_locked(lock_point1=871.035192, lock_point2 = 871.035194):
@@ -242,7 +243,7 @@ class KasliTester(EnvExperiment):
 
             # wait for 871 to be locked
             while not is_871_locked(lock_point1, lock_point2):
-                print('locking...')
+                print('Laser is locking...')
                 time.sleep(3)
 
             # change AOM frequency
@@ -295,6 +296,12 @@ class KasliTester(EnvExperiment):
             rescan_time = 0
             temp_data = []
 
+            # there may multiple ion
+            if temp[1] > 900:
+                if has_ion() > 1:
+                    reload_ion()
+                    pmt_on()
+                    
             if temp[0] < 70:
                 while rescan_time < 5:
                     # check if there is ion

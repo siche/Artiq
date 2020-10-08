@@ -10,7 +10,7 @@ class SMB100B(object):
 
         self.sock = sock
         try:
-            self.sock.send(b'*IND?\r\n')
+            self.sock.send(b'*IDN?\r\n')
             self.sock.recv(256)
             print('Connect to SMB100B')
         except:
