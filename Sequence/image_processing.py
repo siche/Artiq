@@ -154,12 +154,16 @@ def bw_analysis(binary_img, p=10):
 
 
 def has_ion(plt_option = False, bw_threshold = 160, ion_area = 15, region = [200,750,200,650]):
-    img = window_capture()
-    img_gray = img[region[0]:region[1],region[2]:region[3]]
+    try:
+        img = window_capture()
+        img_gray = img[region[0]:region[1],region[2]:region[3]]
 
-    img_bw = img_gray > bw_threshold
-    img2, ion_num, centers = bw_analysis(img_bw, ion_area)
-    
+        img_bw = img_gray > bw_threshold
+        img2, ion_num, centers = bw_analysis(img_bw, ion_area)
+    except:
+        print('Function:has_ion Failed to get screenshot')
+        return -1
+            
     if  (ion_num > 0 and plt_option):
         plt.imshow(img_bw)
         plt.draw()

@@ -1,4 +1,4 @@
-import sys, os, time, msvcrt
+import sys, os, time, msvcrt, signal, atexit
 import numpy as np
 
 from artiq.experiment import *
@@ -10,10 +10,11 @@ from wlm_web import wlm_web
 
 from image_processing import has_ion
 from ttl_client import shutter
-from current_client import current_web
+from CurrentWebClient import current_web
 from SMB100B import SMB100B
 
 wm = wlm_web()
+wl_871 = 0.0
 curr = current_web()
 
 shutter_370 = shutter(com=0)
@@ -61,7 +62,8 @@ def reload_ion():
 
 
 def is_871_locked(lock_point1=871.035192, lock_point2 = 871.035194):
-    wl_871 = wm.get_data()[0]
+    global wl_871
+    wl_871 = wm.get_channel_data(0)
     is_locked = (abs(wl_871-lock_point1) < 0.000005) or (abs(wl_871-lock_point2) < 0.000005)
     return is_locked
 
@@ -84,6 +86,9 @@ def file_write(file_name, content):
     file.write(content)
     file.close()
 
+@atexit.register
+def closeAll():
+    curr.off()
 
 class KasliTester(EnvExperiment):
     def build(self):
@@ -192,8 +197,8 @@ class KasliTester(EnvExperiment):
 
         pmt_on()
         init_fre = 180
-        lock_point = 871.035338
-        lock_point1 = 871.035338
+        lock_point = 871.035337
+        lock_point1 = lock_point
         lock_point2 = 871.035343
         scan_step = 0.005
         N = 24000
@@ -238,70 +243,51 @@ class KasliTester(EnvExperiment):
         txt2 = fig2.text(0.8,0.8,show_data2,verticalalignment = 'center', \
                                             transform=fig2.transAxes)
         """
+        
         for i in range(N):
+            
             AOM_435 = init_fre+scan_step*i  # - 0.001*N/2
 
             # wait for 871 to be locked
             while not is_871_locked(lock_point1, lock_point2):
                 print('Laser is locking...')
                 time.sleep(3)
-
             # change AOM frequency
             code = "conda activate base && python dds.py " + str(AOM_435)
             os.system(code)
 
+            
             # run detection and save data
             temp = self.run_sequence()
 
             y_data1 = y_data1[1::]+[temp[0]]
             y_data2 = y_data2[1::]+[temp[1]]
+           
             # print information
-            data_item = [AOM_435, temp[0], temp[1], wm.get_data()[0]]
+            data_item = [AOM_435, temp[0], temp[1], wl_871]
             data[:, i] = data_item
-            
-            """
-            show_data1 = 'Effiency:'+str(temp[0])
-            show_data2 = 'Count:'+str(temp[1])
-            txt1.remove()
-            txt2.remove()
 
-            
-            txt1 = fig1.text(0.8,0.8,show_data1 ,verticalalignment = 'center', \
-                                            transform=fig1.transAxes)
-            txt2 = fig2.text(0.8,0.8,show_data2 ,verticalalignment = 'center', \
-                                            transform=fig2.transAxes)
-
-            line1.set_ydata(y_data1)
-            line2.set_ydata(y_data2)
-
-            fig1.relim()
-            fig1.autoscale_view(True, True, True)
-            fig2.relim()
-            fig2.autoscale_view(True, True, True)
-            
-            
-            plt.draw()
-            # plt.pause(1e-10)
-            """
             # write data
             content = str(data[0, i])+','+str(data[1, i]) + \
                 ','+str(data[2, i])+','+str(data[3, i])+'\n'
+            
             file_write(file_name, content)
-
             print_info(data_item)
             pbar.update(10*i+1)
             print('\n')
 
+            
+            
             # rescan at most n times when effiency is less than 80%
             rescan_time = 0
             temp_data = []
 
             # there may multiple ion
-            if temp[1] > 900:
+            if temp[1] > 800:
                 if has_ion() > 1:
                     reload_ion()
                     pmt_on()
-                    
+
             if temp[0] < 70:
                 while rescan_time < 5:
                     # check if there is ion
@@ -326,7 +312,7 @@ class KasliTester(EnvExperiment):
                     else:
                         reload_ion()
                         pmt_on()
-
+            
             if rescan_time == 5:
                 # print('saveing data')
                 temp_data = np.array(temp_data, dtype=np.int)
@@ -346,7 +332,6 @@ class KasliTester(EnvExperiment):
                 if effiencies.mean() < 90:
                     file_write(manual_rescan_file_name, rescan_content)
 
-    
             # update figure
             # line1.set_xdata(data[0,0:i])
 

@@ -11,3 +11,7 @@ class wlm_web():
         reply = requests.get("http://192.168.1.7:8888/api/")
         rawData = json.loads(reply.content.decode('utf-8'))
         return rawData['wavelengths']
+    
+    def get_channel_data(self, channel=1):
+        reply = requests.get("http://192.168.1.7:8888/api/"+str(channel)+"/")
+        return float(reply.content.decode('utf-8'))

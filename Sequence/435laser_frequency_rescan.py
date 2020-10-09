@@ -1,4 +1,4 @@
-import sys, os, time
+import sys, os, time, signal
 
 import numpy as np
 from artiq.experiment import *
@@ -10,7 +10,7 @@ from wlm_web import wlm_web
 from wlm_lock import laser_lock
 from image_processing import has_ion
 from ttl_client import shutter
-from current_client import current_web
+from CurrentWebClient import current_web
 # from load_ion_client import reload_ion
 
 if os.name == "nt":
@@ -100,6 +100,8 @@ def get_data(file_name, aom_scan_step=50/1e3):
     unique_rescan_points.sort(key=lambda x: x[1])
     return unique_rescan_points
 
+def closeAll(self):
+    curr.off()
 
 class KasliTester(EnvExperiment):
     def build(self):
@@ -205,7 +207,9 @@ class KasliTester(EnvExperiment):
 
     def run(self):
         self.pre_set()
-
+        
+        signal.signal(signal.SIGINT, closeAll)
+        signal.signal(signal.SIGTERM, closeAll)
         pmt_on()
 
         # aom frequnecy is interms of MHz
