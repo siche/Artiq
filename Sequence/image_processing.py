@@ -1,10 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import cv2
+import win32gui, win32ui, win32con, win32api, cv2, sys, PIL.Image
 
-# get screen shot by window name
-import win32gui, win32ui, win32con, win32api
-import sys
+from PyQt5.QtWidgets import QApplication
+from PyQt5 import QtGui
 
 hwnd_title = dict()
 def getAllWindow(hwnd, mouse):
@@ -51,6 +50,47 @@ def window_capture(windowName='Andor'):
     img = np.fromstring(saveBitMap.GetBitmapBits(True), dtype = np.uint8)
     img = img.reshape((h,w,-1))
     return cv2.cvtColor(img, cv2.COLOR_RGBA2GRAY)
+
+def qimage2numpy(qimage, dtype='array'):
+    """Convert QImage to numpy.ndarray.  The dtype defaults to uint8
+    for QImage.Format_Indexed8 or `bgra_dtype` (i.e. a record array)
+    for 32bit color images.  You can pass a different dtype to use, or
+    'array' to get a 3D uint8 array for color images."""
+    result_shape = (qimage.height(), qimage.width())
+    temp_shape = (qimage.height(),
+                  int(qimage.bytesPerLine() * 8 / qimage.depth()))
+    if qimage.format() in (QtGui.QImage.Format_ARGB32_Premultiplied,
+                           QtGui.QImage.Format_ARGB32,
+                           QtGui.QImage.Format_RGB32):
+        if dtype == 'rec':
+            dtype = QtGui.bgra_dtype
+        elif dtype == 'array':
+            dtype = np.uint8
+            result_shape += (4,)
+            temp_shape += (4,)
+    elif qimage.format() == QtGui.QImage.Format_Indexed8:
+        dtype = np.uint8
+    else:
+        raise ValueError("qimage2numpy only supports 32bit and 8bit images")
+        # FIXME: raise error if alignment does not match
+
+    buf = qimage.bits().asstring(qimage.byteCount())
+    result = np.frombuffer(buf, dtype).reshape(temp_shape)
+    if result_shape != temp_shape:
+        result = result[:, :result_shape[1]]
+    if qimage.format() == QtGui.QImage.Format_RGB32 and dtype == np.uint8:
+        result = result[..., :3]
+    result = result[:, :, ::-1] 
+    return result
+
+def window_capture2(windowName = 'Andor'):
+    (win_num, win_title) = getWindow(windowName)
+    hwnd = win32gui.GetWindowDC(win_num)
+    app = QApplication(sys.argv)
+    screen = QApplication.primaryScreen()
+    img = screen.grabWindow(hwnd).toImage()
+    return qimage2numpy(img)
+
 
 def bw_analysis(binary_img, p=10):
     img_size = np.shape(binary_img)
@@ -161,9 +201,20 @@ def has_ion(plt_option = False, bw_threshold = 160, ion_area = 15, region = [200
         img_bw = img_gray > bw_threshold
         img2, ion_num, centers = bw_analysis(img_bw, ion_area)
     except:
-        print('Function:has_ion Failed to get screenshot')
-        return -1
+        print('Function:winCapture1 Failed to get screenshot')
+        try:
+            img = windo_capture2()
+            img = img[region[0]:region[1],region[2]:region[3],:]
+            img_gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+
+            img_bw = img_gray > bw_threshold
+            img2, ion_num, centers = bw_analysis(img_bw, ion_area)
+        except:
+            print('Function:wincap2 Failed to get screenshot')
+
+        return -2
             
+
     if  (ion_num > 0 and plt_option):
         plt.imshow(img_bw)
         plt.draw()

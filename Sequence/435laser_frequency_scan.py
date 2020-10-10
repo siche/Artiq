@@ -1,4 +1,12 @@
-import sys, os, time, msvcrt, signal, atexit
+import sys
+import os
+import time
+import msvcrt
+import signal
+import atexit
+import win32api
+import win32con
+
 import numpy as np
 
 from artiq.experiment import *
@@ -26,23 +34,31 @@ ccd_on = flip_mirror.off
 pmt_on = flip_mirror.on
 # dds_435 = DDS_AD9910()
 
+
 def reload_ion():
     t1 = time.time()
     print('RELOADING...')
     pmt_on()
+    rf_signal.on()
     time.sleep(0.3)
     ccd_on()
     time.sleep(1)
     # is_there_ion = has_ion()
     costed_time = 0
     ion_num = has_ion()
-    while (costed_time < 900 and not ion_num == 1):
+    while (costed_time < 600 and not ion_num == 1):
 
         # 如果有多个ion 关闭RF放掉离子
         if ion_num > 1:
             rf_signal.off()
             time.sleep(5)
             rf_signal.on()
+
+        # 假设在出现 -1 的时候表示雾化
+        if ion_num == -1:
+            pass
+
+        # 现在不知道怎样检测雾化，当抓不到离子的时候默认是波长出问题，重新设置波长然后抓离子
 
         curr.on()
         shutter_370.on()
@@ -53,6 +69,40 @@ def reload_ion():
         costed_time = time.time()-t1
         print('COSTED TIME:%.1fs' % (costed_time))
 
+    t1 = time.time()
+    costed_time2 = 0
+    if costed_time > 600:
+        ion_num = has_ion()
+        rf_signal.off()
+        wm.relock(2)
+        time.sleep(5)
+        rf_signal.on()
+
+        while (costed_time2 < 600 and not ion_num == 1):
+            if ion_num > 1:
+                rf_signal.off()
+                time.sleep(5)
+                rf_signal.on()
+
+            # 假设在出现 -1 的时候表示雾化
+            if ion_num == -1:
+                pass
+
+            # 现在不知道怎样检测雾化，当抓不到离子的时候默认是波长出问题，重新设置波长然后抓离子
+
+            curr.on()
+            shutter_370.on()
+            shutter_399.on()
+            time.sleep(2)
+
+            ion_num = has_ion()
+            costed_time2 = time.time()-t1
+            print('COSTED TIME2:%.1fs' % (costed_time2))
+        wm.relock(2,-0.000005)
+
+    if costed_time2 > 600:
+        curr.off()
+        win32api.MessageBox(0, "Please Check 370 WaveLength","Warning", win32con.MB_ICONWARNING)
 
     pmt_on()
     curr.off()
@@ -61,10 +111,11 @@ def reload_ion():
     curr.beep()
 
 
-def is_871_locked(lock_point1=871.035192, lock_point2 = 871.035194):
+def is_871_locked(lock_point1=871.035192, lock_point2=871.035194):
     global wl_871
     wl_871 = wm.get_channel_data(0)
-    is_locked = (abs(wl_871-lock_point1) < 0.000005) or (abs(wl_871-lock_point2) < 0.000005)
+    is_locked = (abs(wl_871-lock_point1) <
+                 0.000005) or (abs(wl_871-lock_point2) < 0.000005)
     return is_locked
 
 
@@ -86,9 +137,11 @@ def file_write(file_name, content):
     file.write(content)
     file.close()
 
+
 @atexit.register
 def closeAll():
     curr.off()
+
 
 class KasliTester(EnvExperiment):
     def build(self):
@@ -164,9 +217,9 @@ class KasliTester(EnvExperiment):
                 delay(1*us)
 
                 # microwave on
-                #self.microwave.sw.on()
-                #delay(80*us)
-                #self.microwave.sw.off()
+                # self.microwave.sw.on()
+                # delay(80*us)
+                # self.microwave.sw.off()
 
                 # detection on
                 with parallel:
@@ -197,11 +250,11 @@ class KasliTester(EnvExperiment):
 
         pmt_on()
         init_fre = 180
-        lock_point = 871.035337
+        lock_point = 871.035339
         lock_point1 = lock_point
         lock_point2 = 871.035343
         scan_step = 0.005
-        N = 24000
+        N = 1200
 
         widgets = ['Progress: ', Percentage(), ' ', Bar('#'), ' ',
                    Timer(), ' ', ETA(), ' ']
@@ -212,19 +265,19 @@ class KasliTester(EnvExperiment):
         file = open(file_name, 'w+')
         file.close()
 
-        rescan_file_name = 'data\\rescan' +str(lock_point)[5::]+'-' + \
+        rescan_file_name = 'data\\rescan' + str(lock_point)[5::]+'-' + \
             str(init_fre)+'-'+str(float(init_fre+N*scan_step))+'.csv'
         rescan_file = open(rescan_file_name, 'w+')
         rescan_file.close()
 
-        manual_rescan_file_name = 'data\\manual_rescan' +str(lock_point)[5::]+'-' + \
+        manual_rescan_file_name = 'data\\manual_rescan' + str(lock_point)[5::]+'-' + \
             str(init_fre)+'-'+str(float(init_fre+N*scan_step))+'.csv'
         manual_rescan_file = open(manual_rescan_file_name, 'w+')
         manual_rescan_file.close()
 
         data = np.zeros((4, N))
         data[0, :] = np.linspace(init_fre, init_fre+scan_step*(N-1), N)
-        
+
         x_data = list(range(100))
         y_data1 = [None]*100
         y_data2 = [None]*100
@@ -243,9 +296,9 @@ class KasliTester(EnvExperiment):
         txt2 = fig2.text(0.8,0.8,show_data2,verticalalignment = 'center', \
                                             transform=fig2.transAxes)
         """
-        
+
         for i in range(N):
-            
+
             AOM_435 = init_fre+scan_step*i  # - 0.001*N/2
 
             # wait for 871 to be locked
@@ -256,13 +309,12 @@ class KasliTester(EnvExperiment):
             code = "conda activate base && python dds.py " + str(AOM_435)
             os.system(code)
 
-            
             # run detection and save data
             temp = self.run_sequence()
 
             y_data1 = y_data1[1::]+[temp[0]]
             y_data2 = y_data2[1::]+[temp[1]]
-           
+
             # print information
             data_item = [AOM_435, temp[0], temp[1], wl_871]
             data[:, i] = data_item
@@ -270,14 +322,12 @@ class KasliTester(EnvExperiment):
             # write data
             content = str(data[0, i])+','+str(data[1, i]) + \
                 ','+str(data[2, i])+','+str(data[3, i])+'\n'
-            
+
             file_write(file_name, content)
             print_info(data_item)
             pbar.update(10*i+1)
             print('\n')
 
-            
-            
             # rescan at most n times when effiency is less than 80%
             rescan_time = 0
             temp_data = []
@@ -312,7 +362,7 @@ class KasliTester(EnvExperiment):
                     else:
                         reload_ion()
                         pmt_on()
-            
+
             if rescan_time == 5:
                 # print('saveing data')
                 temp_data = np.array(temp_data, dtype=np.int)
@@ -339,4 +389,4 @@ class KasliTester(EnvExperiment):
         rescan_file.close()
         manual_rescan_file.close()
         save_file(data, __file__[:-3])
-
+        curr.off()

@@ -20,4 +20,4 @@ class SMB100B(object):
         self.sock.send(b':OUTPut:ALL:STATe 1\r\n')
     
     def off(self):
-        self.sock.send(b':OUTPut:ALL:STATe 1\r\n')
+        self.sock.send(b':OUTPut:ALL:STATe 0\r\n')

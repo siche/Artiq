@@ -2,6 +2,23 @@
 from serial import Serial
 import serial, time, atexit
 
+from influxdb import InfluxDBClient
+db_client = InfluxDBClient('192.168.1.13', 8086, database='mingming')
+
+def writeDB(switch=0):
+    data_json = [
+        {
+            "measurement": "wavelength",
+            "tags": {
+                "location": "s208"
+            },
+            "fields": {
+                "oven": switch
+            }
+        }
+    ]
+    db_client.write_points(data_json)
+
 class current_supply(object):
     def __init__(self, com='Com8'):
         ser = Serial(com, 9600, timeout=0.5)
@@ -38,6 +55,7 @@ class current_supply(object):
         if self.is_completed():
             print('enabled')
             self.is_on = True
+            writeDB(1)
         else:
             print('enable failed')
     
@@ -45,8 +63,9 @@ class current_supply(object):
         self.ser.write(b':OUTP OFF\r\n')
         time.sleep(0.1)
         if self.is_completed():
-            print('enabled')
+            print('disabled')
             self.is_on = False
+            writeDB(0)
         else:
             print('enable failed')
     

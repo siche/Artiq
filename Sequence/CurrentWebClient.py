@@ -3,7 +3,7 @@ import socket
 import os
 import threading
 import signal
-import sys
+import sys, atexit
 
 class current_web():
     def __init__(self, ip='192.168.1.51', port=6789):
@@ -19,6 +19,7 @@ class current_web():
         print(self.sock.recv(1024).decode('utf-8'))
         signal.signal(signal.SIGINT, self.exit)
         signal.signal(signal.SIGTERM, self.exit)
+        atexit.register(self.closeAll)
 
     def on(self):
         self.sock.send(b'on')
@@ -49,6 +50,14 @@ class current_web():
         cmd = 'python \"D:/Documents/208Code/LaserLock/Ion/CurrentWebServer.py\"'
         os.system(cmd)
     
+
     def exit(self,signum, frame):
         self.off()
+        sys.exit()
+    
+    def closeAll(self):
+        self.off()
+        self.sock.shutdown(socket.SHUT_RD)
+        self.sock.close()
+        print('off')
         sys.exit()
