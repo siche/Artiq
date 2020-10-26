@@ -1,9 +1,6 @@
-import sys
-import os
-import select
+import sys, os
 import numpy as np
 
-import matplotlib.pyplot as plt
 from artiq.experiment import *
 
 if os.name == "nt":
@@ -47,5 +44,5 @@ class KasliTester(EnvExperiment):
         self.pumping.sw.on()
 
     def run(self):
-        print('set cooling frequecny %d' % fre)
+        print('set frequecny %d' % fre)
         self.set_dds()
