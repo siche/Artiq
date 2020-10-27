@@ -96,7 +96,7 @@ class KasliTester(EnvExperiment):
         # the attenuation number must be float like 0.
         # dds 不是连续的
 
-        self.detection.set_att(18.)
+        self.detection.set_att(19.5)
         self.cooling.set_att(25.)
 
         # turn off all DDS
