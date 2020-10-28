@@ -1,1 +1,1 @@
-start ""  cmd /c "activate artiq-main&&artiq_run set_voltage.py&&timeout 5"
+start ""  cmd /c "activate artiq&&artiq_run set_voltage.py&&timeout 5"
