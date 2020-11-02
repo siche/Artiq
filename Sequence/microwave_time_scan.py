@@ -37,7 +37,7 @@ class KasliTester(EnvExperiment):
         self.detection.set_att(19.4) 
         self.cooling.set_att(19.)
         self.microwave.set_att(0.)
-        self.pumping.set_att(25.)
+        self.pumping.set_att(18.)
 
         self.microwave.sw.off()
         self.pumping.sw.off()
@@ -56,9 +56,9 @@ class KasliTester(EnvExperiment):
                 
                 # pumping for 400us
                 self.pumping.sw.on()
-                delay(50*us)
+                delay(10*us)
                 self.pumping.sw.off()
-                
+    
                 # microwave on
                 self.microwave.sw.on()
                 delay(t2*us)
@@ -81,8 +81,8 @@ class KasliTester(EnvExperiment):
         return (count,photon_count)
 
     def run(self):
-        init_time = 30
-        time_interval = 2
+        init_time = 150
+        time_interval = 10
         N = 30
         data = np.zeros((3,N))
         for i in range(N):

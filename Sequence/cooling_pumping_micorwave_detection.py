@@ -36,7 +36,7 @@ class KasliTester(EnvExperiment):
         self.ttl_435 = self.get_device('ttl6')
 
     @kernel
-    def run_sequence(self,pumping_time = 400.0):
+    def run_sequence(self,microwave_time = 400.0):
         # t2 is the time of microwave
 
         # initialize dds
@@ -73,17 +73,16 @@ class KasliTester(EnvExperiment):
                 self.cooling.sw.off()
 
                 # pumping
-                """
                 self.pumping.sw.on()
-                delay(pumping_time*us)
+                delay(10.*us)
                 self.pumping.sw.off()
-                """
+                
 
                 # detection on
                 with parallel: 
                     # self.detection.sw.on()
                     # 利用cooling  光作为detection
-                    self.cooling.sw.on()
+                    self.detection.sw.on()
                     # delay(10)
                     self.pmt.gate_rising(400*us)
                     photon_number = self.pmt.count(now_mu())
