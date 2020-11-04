@@ -55,10 +55,11 @@ class KasliTester(EnvExperiment):
                 delay(1*ms)
                 
                 # pumping for 400us
+                """
                 self.pumping.sw.on()
-                delay(1*us)
+                delay(10*us)
                 self.pumping.sw.off()
-
+                """
                 # microwave on
                 self.microwave.sw.on()
                 delay(t2*us)
@@ -81,7 +82,7 @@ class KasliTester(EnvExperiment):
         return (count,photon_count)
 
     def run(self):
-        init_time = 150
+        init_time = 450
         time_interval = 10
         N = 30
         data = np.zeros((3,N))
