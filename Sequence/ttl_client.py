@@ -2,7 +2,6 @@
 import socket
 import sys
 
-
 class shutter(object):
     def __init__(self,ip = '192.168.1.16',port=6666,com=2):
         self.com=com
@@ -19,7 +18,7 @@ class shutter(object):
         self.sock.send(code.encode('utf-8'))
         print(self.sock.recv(1024).decode('utf-8'))
 
-
+# test ttl-client
 if __name__ == '__main__':
     shutter_399 = shutter(com=1)
     import time

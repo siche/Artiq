@@ -36,7 +36,7 @@ def num_to_uint(num,data_type='frequency'):
         return(a,b)
 
 class dds_controller(object):
-    def __init__(self,com='com14'):
+    def __init__(self,com='com5'):
         ser = Serial(com)
         if not ser.is_open:
             ser.open()
@@ -83,7 +83,7 @@ class dds_controller(object):
         # print(ampm)
 
 if __name__ == '__main__':
-    dds1 = dds_controller('Com15')
+    dds1 = dds_controller('Com5')
     fre = float(sys.argv[1])
     print('435 AOM fre:%.4fMHz' % fre)
     dds1.set_frequency(port=0,frequency=fre,amplitude=0.8,phase=0)

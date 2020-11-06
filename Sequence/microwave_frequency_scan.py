@@ -5,7 +5,7 @@ import numpy as np
 from artiq.experiment import *
 from scipy.optimize import curve_fit
 from save_data import save_file
-
+import matplotlib.pyplot as plt
 if os.name == "nt":
     import msvcrt
 
@@ -87,7 +87,7 @@ class KasliTester(EnvExperiment):
         return (count,photon_count)
 
     def run(self):
-        flip_time = 460
+        flip_time = 26.1778
         N = 50
         data = np.zeros((3,N))
         for i in range(N):
@@ -106,5 +106,14 @@ class KasliTester(EnvExperiment):
             print('Frequency:%.4f' % fre)
         np.save('microwave',data)
         save_file(data,__file__[:-3])
-        
+        plt.figure(1)
+        ax1 = plt.subplot(121)
+        ax1.bar(data[0],data[1],width=0.001/2)
+        ax1.legend('efficiency')
+
+        ax2 = plt.subplot(122)
+        ax2.bar(data[0],data[2],width=0.001/2)
+        ax2.legend('count')
+
+        plt.show()
         

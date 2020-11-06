@@ -4,6 +4,11 @@ import select
 import numpy as np
 from artiq.experiment import *
 import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
+
+def fit_func(x,a,b,c):
+    return 50*np.sin(a+b*x)+c
+
 if os.name == "nt":
     import msvcrt
 from save_data import save_file
@@ -55,11 +60,10 @@ class KasliTester(EnvExperiment):
                 delay(1*ms)
                 
                 # pumping for 400us
-                """
                 self.pumping.sw.on()
                 delay(10*us)
                 self.pumping.sw.off()
-                """
+
                 # microwave on
                 self.microwave.sw.on()
                 delay(t2*us)
@@ -69,7 +73,7 @@ class KasliTester(EnvExperiment):
                 # detection on
                 with parallel: 
                     self.detection.sw.on()
-                    self.pmt.gate_rising(400*us)
+                    self.pmt.gate_rising(800*us)
                     photon_number = self.pmt.count(now_mu())
                     photon_count = photon_count + photon_number
                     if photon_number > 1:
@@ -82,12 +86,12 @@ class KasliTester(EnvExperiment):
         return (count,photon_count)
 
     def run(self):
-        init_time = 450
-        time_interval = 10
-        N = 30
+        init_time = 0
+        time_interval = 1
+        N = 80
         data = np.zeros((3,N))
         for i in range(N):
-            microwave_time = init_time + i*time_interval - N/2*time_interval
+            microwave_time = init_time + i*time_interval
              #microwave_time = init_time + i*time_interval
             temp = self.run_sequence(microwave_time)
             data[0,i] = microwave_time
@@ -113,4 +117,13 @@ class KasliTester(EnvExperiment):
         ax2.bar(data[0],data[2],width=time_interval/2)
         ax2.legend('count')
 
+        # fit function
+        popt, pcov = curve_fit(fit_func, data[0], data[1])
+        print("b:%s,b:%s,c:%s" % tuple(popt))
+        plt.figure(2)
+        plt.plot(data[0], data[1],'bo', label='intial data')
+        xdata = np.linspace(init_time, init_time+time_interval*N,50*N)
+        plt.plot(xdata, fit_func(xdata, *popt), 'r-',
+        label='fit:a=%5.3f, b=%5.3f, c=%5.3f' % tuple(popt))
+        plt.legend()
         plt.show()

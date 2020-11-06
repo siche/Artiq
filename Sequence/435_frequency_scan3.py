@@ -193,8 +193,8 @@ class KasliTester(EnvExperiment):
         pmt_on()
         shutter_370.off()
         center_fre = 260
-        scan_step = 0.01
-        fre_width = 50
+        scan_step = 0.1
+        fre_width = 1
         N = int(fre_width/scan_step)
         init_fre = center_fre - N/2*scan_step
         # init_fre = 342.57

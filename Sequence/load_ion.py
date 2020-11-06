@@ -2,74 +2,98 @@
 # auto load ion
 from image_processing import has_ion
 from ttl_client import shutter
-from current_client import current_web
+from CurrentWebClient import current_web
 import time
+import signal,sys
+import atexit
 
-shutter_370 = shutter(com=0)
-flip_mirror = shutter(com=1)
-shutter_399 = shutter(com=2)
+class IonLoader(object):
+    def __init__(self):
+        super(IonLoader, self).__init__()
+        self.shutter_370 = shutter(com=0)
+        self.flip_mirror = shutter(com=1)
+        self.shutter_399 = shutter(com=2)
+        self.curr = current_web()
+        self.isLoading = True
 
-ccd_on = flip_mirror.off
-pmt_on = flip_mirror.on
+        signal.signal(signal.SIGINT, self.exit)
+        signal.signal(signal.SIGTERM, self.exit)
+        atexit.register(self.closeAll)
+    def is_ion(self):
+        return has_ion()
 
-curr = current_web()
-t1 = time.time()
-
-def load_ion():
-    curr.on()
-    pmt_on()
-    time.sleep(0.3)
-    ccd_on()
-    time.sleep(1)
-    costed_time = 0
-
-    while (not has_ion() and costed_time < 1200):
-        
-        shutter_370.on()
-        shutter_399.on()
-        t2 = time.time()
-        costed_time = t2-t1
-        print('ION? %s' % has_ion())
-        print('LOADING ... %.1fs' % costed_time)
-        time.sleep(0.5)
-        
-    if costed_time > 1200:
-        print('COSTEM TIME IS OUT OF MAX TIME')
-    ccd_on()
-    curr.off()
-    # shutter_370.off()
-    shutter_399.off()
-    curr.beep(3)
-
-"""
-it will try to reload ion when ion gets lost
-step1: turn on 370-zero, wait for 10 seconds and adjust 370 to red
-step2: if step1 failed
-step2: load_ions
-"""
-def reload_ion():
-    shutter_370.on()
-    wait_time = 5
-    costed_time = 0
-
-    while (costed_time < wait_time and not has_ion()):
+    def load_ion(self):
+        self.curr.on()
+        self.flip_mirror.off()
+        time.sleep(0.3)
+        self.flip_mirror.on()
         time.sleep(1)
-        costed_time += 1
+
+        t1 = time.time()
+        costed_time = 0
+
+        while (not has_ion() and costed_time < 1200 and self.isLoading):
+            self.shutter_370.on()
+            self.shutter_399.on()
+            t2 = time.time()
+            costed_time = t2-t1
+            print('\rION? %s LAODING %.1F' % (has_ion(), costed_time),end = ' ')
+            # print('LOADING ... %.1fs' % costed_time)
+            time.sleep(0.5)
+
+        if costed_time > 1200:
+            print('COSTEM TIME IS OUT OF MAX TIME')
+            return False
+
+        if has_ion():    
+            self.flip_mirror.on()
+            self.curr.off()
+            self.shutter_370.off()
+            self.shutter_399.off()
+            self.curr.beep(3)
+            return True
+        else:
+            return False
+
+    def reload_ion(self):
+        self.shutter_370.on()
+        wait_time = 5
+        costed_time = 0
+
+        while (costed_time < wait_time and not has_ion()):
+            time.sleep(1)
+            costed_time += 1
+
+        if has_ion():
+            self.curr.off()
+            self.shutter_370.off()
+            self.shutter_399.off()
+            self.curr.beep(3)
+        else:
+            self.load_ion()
+
+    def protect(self, is_on=True):
+        if is_on:
+            self.shutter_370.on()
+        else:
+            self.shutter_370.off()
+
+    def exit(self, signum, frame):
+        self.curr.off()
+        sys.exit()
     
-    if has_ion():
-        curr.off()
-        shutter_370.off()
-        shutter_399.off()
-        curr.beep(3)
-    else:
-        load_ion()
+    def setLoad(self,isLoading=True):
+        self.isLoading = isLoading
+        if isLoading:
+            self.curr.on()
+        else:
+            self.curr.off()
+    
 
-def protect(is_on = True):
-    if is_on:
-        shutter_370.on()
-    else:
-        shutter_370.off()
-
+    def closeAll(self):
+        self.curr.off()
+    
 
 if __name__ == '__main__':
-    load_ion()
+    ion = IonLoader()
+    ion.load_ion()

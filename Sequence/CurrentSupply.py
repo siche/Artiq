@@ -1,23 +1,7 @@
 
 from serial import Serial
-import serial, time, atexit
-
-from influxdb import InfluxDBClient
-db_client = InfluxDBClient('192.168.1.13', 8086, database='mingming')
-
-def writeDB(switch=0):
-    data_json = [
-        {
-            "measurement": "wavelength",
-            "tags": {
-                "location": "s208"
-            },
-            "fields": {
-                "oven": switch
-            }
-        }
-    ]
-    db_client.write_points(data_json)
+import serial
+import time, signal, atexit, sys
 
 class current_supply(object):
     def __init__(self, com='Com8'):
@@ -38,15 +22,16 @@ class current_supply(object):
         self.max_vol = 3
         self.set_current_limit(self.max_current)
         self.set_voltage_limit(self.max_vol)
-        self.set_up(3.2,3)
+        self.set_up(3.1,3)
         self.off()
-        atexit.register(self.closeAll)
+        signal.signal(signal.SIGINT, self.exit)
+        signal.signal(signal.SIGTERM, self.exit)
 
     def is_completed(self):
         self.ser.write(b'*OPC?\r\n')
         status = self.ser.readline()
-        print(status)
         time.sleep(0.1)
+        # print('command completed:%s' % (status == b'1\n'))
         return (status == b'1\n')
 
     def on(self):
@@ -55,7 +40,6 @@ class current_supply(object):
         if self.is_completed():
             print('enabled')
             self.is_on = True
-            writeDB(1)
         else:
             print('enable failed')
     
@@ -63,9 +47,8 @@ class current_supply(object):
         self.ser.write(b':OUTP OFF\r\n')
         time.sleep(0.1)
         if self.is_completed():
-            print('disabled')
+            print('enabled')
             self.is_on = False
-            writeDB(0)
         else:
             print('enable failed')
     
@@ -146,8 +129,8 @@ class current_supply(object):
             self.ser.write(b':SYST:BEEP\r\n')
             time.sleep(0.1)
             t = t +0.1
-
-    def closeAll(self):
+    
+    def exit(self):
         self.off()
         self.ser.close()
-        
+        sys.exit()

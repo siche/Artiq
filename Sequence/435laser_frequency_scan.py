@@ -30,8 +30,8 @@ flip_mirror = shutter(com=1)
 shutter_399 = shutter(com=2)
 rf_signal = SMB100B()
 
-ccd_on = flip_mirror.off
-pmt_on = flip_mirror.on
+ccd_on = flip_mirror.on
+pmt_on = flip_mirror.off
 # dds_435 = DDS_AD9910()
 
 
@@ -111,11 +111,10 @@ def reload_ion():
     curr.beep()
 
 
-def is_871_locked(lock_point1=871.035192, lock_point2=871.035194):
+def is_871_locked(lock_point=871.035192):
     global wl_871
     wl_871 = wm.get_channel_data(0)
-    is_locked = (abs(wl_871-lock_point1) <
-                 0.000005) or (abs(wl_871-lock_point2) < 0.000005)
+    is_locked = abs(wl_871-lock_point) < 0.000005
     return is_locked
 
 
@@ -207,9 +206,11 @@ class KasliTester(EnvExperiment):
                 # turn on 435 and turn off 935 sideband
                 # with parallel:
                 # turn off 935
+                """
                 self.ttl_935.on()
                 delay(1*us)
-
+                """
+                
                 # turn on 435
                 self.ttl_435.off()
                 delay(1000*us)
@@ -226,7 +227,7 @@ class KasliTester(EnvExperiment):
                     # self.detection.sw.on()
                     # 利用cooling  光作为detection
                     self.cooling.sw.on()
-                    self.pmt.gate_rising(400*us)
+                    self.pmt.gate_rising(800*us)
                     photon_number = self.pmt.count(now_mu())
                     photon_count = photon_count + photon_number
                     if photon_number > 1:
@@ -250,11 +251,9 @@ class KasliTester(EnvExperiment):
 
         pmt_on()
         init_fre = 180
-        lock_point = 871.035339
-        lock_point1 = lock_point
-        lock_point2 = 871.035343
+        lock_point = 871.034581
         scan_step = 0.005
-        N = 1200
+        N = 10
 
         widgets = ['Progress: ', Percentage(), ' ', Bar('#'), ' ',
                    Timer(), ' ', ETA(), ' ']
@@ -302,7 +301,7 @@ class KasliTester(EnvExperiment):
             AOM_435 = init_fre+scan_step*i  # - 0.001*N/2
 
             # wait for 871 to be locked
-            while not is_871_locked(lock_point1, lock_point2):
+            while not is_871_locked(lock_point):
                 print('Laser is locking...')
                 time.sleep(3)
             # change AOM frequency

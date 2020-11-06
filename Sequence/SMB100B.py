@@ -6,7 +6,7 @@ class SMB100B(object):
     def __init__(self):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(3)
-        sock.connect(('192.168.1.21',5025))
+        sock.connect(('192.168.1.26',5025))
 
         self.sock = sock
         try:
