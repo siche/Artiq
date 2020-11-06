@@ -86,7 +86,10 @@ def reload_ion():
 
             # 假设在出现 -1 的时候表示雾化
             if ion_num == -1:
-                pass
+                rf_signal.off()
+                wm.relock(2)
+                time.sleep(2)
+                rf_signal.on()
 
             # 现在不知道怎样检测雾化，当抓不到离子的时候默认是波长出问题，重新设置波长然后抓离子
 
@@ -210,7 +213,7 @@ class KasliTester(EnvExperiment):
                 self.ttl_935.on()
                 delay(1*us)
                 """
-                
+
                 # turn on 435
                 self.ttl_435.off()
                 delay(1000*us)

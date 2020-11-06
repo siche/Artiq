@@ -18,6 +18,7 @@ class wlm_web():
         reply = requests.get("http://192.168.1.7:8888/api/"+str(channel)+"/")
         return float(reply.content.decode('utf-8'))
 
+    
     def lock(self, channel, fre=None):
         ws = create_connection("ws://192.168.1.7:8888/fileserver/")
         oldConfig = json.loads(ws.recv())
@@ -36,6 +37,7 @@ class wlm_web():
 
         ws.close()
 
+    # relock laser based on present lock point
     def relock(self, channel, delta=0.000005):
         ws = create_connection("ws://192.168.1.7:8888/fileserver/")
         oldConfig = json.loads(ws.recv())

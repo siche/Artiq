@@ -222,24 +222,26 @@ def window_capture2(windows_name = 'Andor'):
     img = screen.grabWindow(hwnd).toImage()
     return qimage2numpy(img)
 
-def has_ion(plt_option = False, bw_threshold = 160, ion_area = 15, region = [200,750,200,650]):
+def has_ion(bw_threshold = 160, ion_area = 15, region = [350,770,240,660],debug = False):
     img = window_capture()
     img_gray = img[region[0]:region[1],region[2]:region[3]]
 
     img_bw = img_gray > bw_threshold
     img2, ion_num, centers = bw_analysis(img_bw, ion_area)
     
-    if  (ion_num > 0 and plt_option):
+    if  debug:
         plt.imshow(img_bw)
         plt.draw()
         plt.pause(1e-17)
-    else:
-        if img_bw.sum()>30:
-            ion_num = -1
-            
+    
+    if ion_num==0 and img_bw.sum()>30:
+        ion_num = -1
+
+    print('Ion number:%s' % ion_num)        
     return ion_num
 
 if __name__ == "__main__":
+
     import time
     # img = cv2.imread('ion2.jpg')
     # img = get_screenshot([1300,450,100,100])
