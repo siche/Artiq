@@ -46,6 +46,7 @@ def reload_ion():
     # is_there_ion = has_ion()
     costed_time = 0
     ion_num = has_ion()
+    is_thermalized = False
     while (costed_time < 600 and not ion_num == 1):
 
         # 如果有多个ion 关闭RF放掉离子
@@ -54,11 +55,14 @@ def reload_ion():
             time.sleep(5)
             rf_signal.on()
 
-        # 假设在出现 -1 的时候表示雾化
+        # when ion_num = -1 it means that the ion is thermalized
+        # therefore, turn off rf and adjust 370 to toward red direction
         if ion_num == -1:
-            pass
-
-        # 现在不知道怎样检测雾化，当抓不到离子的时候默认是波长出问题，重新设置波长然后抓离子
+            is_thermalized = True
+            rf_signal.off()
+            wm.relock(2)
+            time.sleep(2)
+            rf_signal.on()
 
         curr.on()
         shutter_370.on()
@@ -68,51 +72,24 @@ def reload_ion():
         ion_num = has_ion()
         costed_time = time.time()-t1
         print('COSTED TIME:%.1fs' % (costed_time))
-
-    t1 = time.time()
-    costed_time2 = 0
-    if costed_time > 600:
-        ion_num = has_ion()
-        rf_signal.off()
-        wm.relock(2)
-        time.sleep(5)
-        rf_signal.on()
-
-        while (costed_time2 < 600 and not ion_num == 1):
-            if ion_num > 1:
-                rf_signal.off()
-                time.sleep(5)
-                rf_signal.on()
-
-            # 假设在出现 -1 的时候表示雾化
-            if ion_num == -1:
-                rf_signal.off()
-                wm.relock(2)
-                time.sleep(2)
-                rf_signal.on()
-
-            # 现在不知道怎样检测雾化，当抓不到离子的时候默认是波长出问题，重新设置波长然后抓离子
-
-            curr.on()
-            shutter_370.on()
-            shutter_399.on()
-            time.sleep(2)
-
-            ion_num = has_ion()
-            costed_time2 = time.time()-t1
-            print('COSTED TIME2:%.1fs' % (costed_time2))
+    
+    # adjust the 370 wavelength to initial point
+    if is_thermalized:
         wm.relock(2,-0.000005)
 
-    if costed_time2 > 600:
+    # if run out of time and do not catch ion
+    # raise warning information for turther processing 
+    if costed_time > 600 or ion_num !=1:
         curr.off()
         win32api.MessageBox(0, "Please Check 370 WaveLength","Warning", win32con.MB_ICONWARNING)
 
+    # else there is ion 
+    # turn to 435 laser scan
     pmt_on()
     curr.off()
     shutter_370.off()
     shutter_399.off()
     curr.beep()
-
 
 def is_871_locked(lock_point=871.035192):
     global wl_871
@@ -202,17 +179,17 @@ class KasliTester(EnvExperiment):
 
                 # pumping
                 self.pumping.sw.on()
-                delay(50*us)
+                delay(8*us)
                 self.pumping.sw.off()
                 delay(1*us)
 
                 # turn on 435 and turn off 935 sideband
                 # with parallel:
-                # turn off 935
-                """
+                # turn off 935 sideband
+                
                 self.ttl_935.on()
                 delay(1*us)
-                """
+            
 
                 # turn on 435
                 self.ttl_435.off()
@@ -221,22 +198,22 @@ class KasliTester(EnvExperiment):
                 delay(1*us)
 
                 # microwave on
-                # self.microwave.sw.on()
-                # delay(80*us)
-                # self.microwave.sw.off()
+                self.microwave.sw.on()
+                delay(26.1778*us)
+                self.microwave.sw.off()
 
                 # detection on
                 with parallel:
                     # self.detection.sw.on()
                     # 利用cooling  光作为detection
-                    self.cooling.sw.on()
+                    self.detection.sw.on()
                     self.pmt.gate_rising(800*us)
                     photon_number = self.pmt.count(now_mu())
                     photon_count = photon_count + photon_number
                     if photon_number > 1:
                         count = count + 1
 
-                # turn on 935
+                # turn on 935 sideband
                 self.ttl_935.off()
                 self.detection.sw.off()
 
@@ -256,7 +233,7 @@ class KasliTester(EnvExperiment):
         init_fre = 180
         lock_point = 871.034581
         scan_step = 0.005
-        N = 10
+        N = 2000
 
         widgets = ['Progress: ', Percentage(), ' ', Bar('#'), ' ',
                    Timer(), ' ', ETA(), ' ']
