@@ -231,9 +231,9 @@ class KasliTester(EnvExperiment):
 
         pmt_on()
         init_fre = 210
-        lock_point = 871.034585
+        lock_point = 871.034593
         scan_step = 0.005
-        N = 5000
+        N = 10000
 
         widgets = ['Progress: ', Percentage(), ' ', Bar('#'), ' ',
                    Timer(), ' ', ETA(), ' ']
@@ -321,7 +321,7 @@ class KasliTester(EnvExperiment):
                 while rescan_time < 5:
                     # check if there is ion
                     ccd_on()
-                    time.sleep(0.5)
+                    time.sleep(0.8)
 
                     # there is ion try to cool the ion
                     if has_ion():
