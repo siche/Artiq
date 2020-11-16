@@ -86,8 +86,8 @@ class KasliTester(EnvExperiment):
         return (count,photon_count)
 
     def run(self):
-        init_time = 20
-        time_interval = 1
+        init_time = 24
+        time_interval = 2
         N = 30
         data = np.zeros((3,N))
         for i in range(N):

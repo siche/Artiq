@@ -79,7 +79,7 @@ class KasliTester(EnvExperiment):
                 
                 # microwave
                 self.microwave.sw.on()
-                delay(26.1778*us)
+                delay(40*us)
                 self.microwave.sw.off()
                 # detection on
                 with parallel: 
@@ -87,7 +87,7 @@ class KasliTester(EnvExperiment):
                     # 利用cooling  光作为detection
                     self.detection.sw.on()
                     # delay(10)
-                    self.pmt.gate_rising(800*us)
+                    self.pmt.gate_rising(400*us)
                     photon_number = self.pmt.count(now_mu())
                     photon_count = photon_count + photon_number
                     if photon_number > 1:
