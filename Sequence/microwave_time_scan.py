@@ -73,7 +73,7 @@ class KasliTester(EnvExperiment):
                 # detection on
                 with parallel: 
                     self.detection.sw.on()
-                    self.pmt.gate_rising(1200*us)
+                    self.pmt.gate_rising(600*us)
                     photon_number = self.pmt.count(now_mu())
                     photon_count = photon_count + photon_number
                     if photon_number > 1:
@@ -86,9 +86,9 @@ class KasliTester(EnvExperiment):
         return (count,photon_count)
 
     def run(self):
-        init_time = 24
-        time_interval = 2
-        N = 30
+        init_time = 0
+        time_interval = 0.5
+        N = 100
         data = np.zeros((3,N))
         for i in range(N):
             microwave_time = init_time + i*time_interval
@@ -118,6 +118,7 @@ class KasliTester(EnvExperiment):
         ax2.legend('count')
 
         # fit function
+        """
         popt, pcov = curve_fit(fit_func, data[0], data[1])
         print("b:%s,b:%s,c:%s" % tuple(popt))
         plt.figure(2)
@@ -126,4 +127,5 @@ class KasliTester(EnvExperiment):
         plt.plot(xdata, fit_func(xdata, *popt), 'r-',
         label='fit:a=%5.3f, b=%5.3f, c=%5.3f' % tuple(popt))
         plt.legend()
+        """
         plt.show()
