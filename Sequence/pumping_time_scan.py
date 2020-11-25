@@ -66,21 +66,13 @@ class KasliTester(EnvExperiment):
                 self.pumping.sw.on()
                 delay(pumping_time*us)
                 self.pumping.sw.off()
-                
-                # microwave on
-                self.microwave.sw.on()
-                delay(65*us)
-                self.microwave.sw.off()
                 delay(1*us)
-            
 
-                self.ttl_935.off()
-                delay(1*us)
                 # delay(1*us)
                 # detection on
                 with parallel: 
-                    self.pmt.gate_rising(400*us)
                     self.detection.sw.on()
+                    self.pmt.gate_rising(400*us)
                     photon_number = self.pmt.count(now_mu())
                     photon_count = photon_count + photon_number
                     if photon_number > 1:
@@ -99,34 +91,32 @@ class KasliTester(EnvExperiment):
         return (count,photon_count)
 
     def run(self):
-        x_data = list(range(100))
-        y_data = [None]*100
-        fig = plt.figure(1)
-        fig, = plt.plot(x_data,y_data)
-        ax = plt.gca()
-        show_data = 'effiency:0'
-        txt = ax.text(0.8,0.8,show_data ,verticalalignment = 'center', \
-                                   transform=ax.transAxes)
-        self.pre_set()
-        i = 0
-
-        for i in range(100):
-            pumping_time = i
+                # dds_435 = dds_controller()
+        # flip_time = 75
+        # microwave_fre = 400.0
+        init_time = 0
+        time_interval = 0.3
+        N = 200
+        data = np.zeros((3,N))
+        pumping_time = 50.
+        for i in range(N):
+            pumping_time = init_time+time_interval*i
+            # pumping_time = 15.0
             temp = self.run_sequence(pumping_time)
+            data[0,i]=pumping_time
+            data[1,i]=temp[0]*2
+            data[2,i]=temp[1]
+            print("%d/%d" %((i+1),N))
+            print('pumping time:%.2fus\tcout:%d\teffiency:%d%%' % (pumping_time,temp[1],temp[0]))
+        
+        # save_file(data,__file__[:-3])
+        plt.figure(1)
+        
+        ax1 = plt.subplot(121)
+        ax1.plot(data[0],data[1])
+        ax1.set_title('Detection Effiency')
 
-            y_data[i] = temp[0]
-            txt.remove()
-            fig.set_ydata(y_data)
-            ax.relim()
-            show_data = 'effiency:'+str(temp[0])
-            txt = ax.text(0.8,0.8,show_data ,verticalalignment = 'center', \
-                                   transform=ax.transAxes)
-            ax.autoscale_view(True, True, True)
-
-
-            plt.draw()
-            plt.pause(1e-15)
-
-            print('detection effiency:%.1f%%' % (temp[0]))
-            print('count:%d' % temp[1])
+        ax2 = plt.subplot(122)
+        ax2.plot(data[0],data[2])
+        ax2.set_title('Detection Count')
         plt.show()
