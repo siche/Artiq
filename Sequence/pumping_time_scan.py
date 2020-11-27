@@ -94,11 +94,11 @@ class KasliTester(EnvExperiment):
                 # dds_435 = dds_controller()
         # flip_time = 75
         # microwave_fre = 400.0
-        init_time = 0
+        init_time = 0.
         time_interval = 1
         N = 40
         data = np.zeros((3,N))
-        pumping_time = 50.
+        # pumping_time = 50.
         for i in range(N):
             pumping_time = init_time+time_interval*i
             # pumping_time = 15.0
