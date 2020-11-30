@@ -18,7 +18,23 @@ class wlm_web():
         reply = requests.get("http://192.168.1.7:8888/api/"+str(channel)+"/")
         return float(reply.content.decode('utf-8'))
 
-    
+    def unlock(self,channel=1):
+        ws = create_connection("ws://192.168.1.7:8888/fileserver/")
+        oldConfig = json.loads(ws.recv())
+
+        for item in oldConfig:
+            if item['channel'] == channel:
+                channelConfig = item
+                break
+
+        if channelConfig:
+            channelConfig["lock"] = False
+            channelConfig["fre"] = str(fre)
+            ws.send(json.dumps(channelConfig))
+
+        ws.close()
+
+
     def lock(self, channel, fre=None):
         ws = create_connection("ws://192.168.1.7:8888/fileserver/")
         oldConfig = json.loads(ws.recv())
