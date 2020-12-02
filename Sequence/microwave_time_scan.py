@@ -61,7 +61,7 @@ class KasliTester(EnvExperiment):
                 
                 # pumping for 400us
                 self.pumping.sw.on()
-                delay(10*us)
+                delay(15*us)
                 self.pumping.sw.off()
 
                 # microwave on
