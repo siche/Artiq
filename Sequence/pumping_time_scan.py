@@ -20,6 +20,7 @@ class KasliTester(EnvExperiment):
         self.pumping = self.get_device(dds_channel[3])
         self.pmt = self.get_device('ttl0')
         self.ttl_935 = self.get_device('ttl7')
+        self.ttl_pumping = self.get_device('ttl4')
     
     @kernel
     def pre_set(self):
@@ -79,6 +80,7 @@ class KasliTester(EnvExperiment):
                         count = count + 1
                 self.detection.sw.off()
                 self.cooling.sw.on()
+                self.ttl_pumping.off()
                  # turn on 935         
                 #self.ttl_935.off()
         
