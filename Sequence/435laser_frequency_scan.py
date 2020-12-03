@@ -147,10 +147,10 @@ class KasliTester(EnvExperiment):
         self.microwave.set(400.*MHz)
         self.pumping.set(260*MHz)
 
-        self.detection.set_att(19.4)
+        self.detection.set_att(20.)
         self.cooling.set_att(19.)
         self.microwave.set_att(0.)
-        self.pumping.set_att(25.)
+        self.pumping.set_att(15.)
 
     @kernel
     def run_sequence(self):

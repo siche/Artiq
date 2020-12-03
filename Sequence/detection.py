@@ -20,39 +20,6 @@ class KasliTester(EnvExperiment):
         self.pmt = self.get_device('ttl0')
 
     @kernel
-    def set_dds(self):
-        self.core.break_realtime()
-        self.cooling.init()
-        self.detection.init()
-        self.dds2.init()
-        self.dds3.init()
-
-        # set frequecny
-        self.cooling.set(250*MHz)
-        self.detection.set(260*MHz)
-
-        # set amplitude attenuation
-        # the origin output is about 9 dbm
-        # the attenuation number must be float like 0.
-        # dds 不是连续的
-
-        self.detection.set_att(10.)
-        self.cooling.set_att(25.)
-
-        # turn off all DDS
-        self.dds2.sw.off()
-        self.dds3.sw.off()
-
-        self.cooling.sw.off()
-
-        for i in range(1000):
-            with sequential:
-                self.detection.sw.on()
-                delay(0.5*s)
-                self.detection.sw.off()
-                delay(0.5*s)
-
-    @kernel
     def set_dds_off(self):
         self.core.break_realtime()
         self.cooling.init()
@@ -69,7 +36,7 @@ class KasliTester(EnvExperiment):
         # the attenuation number must be float like 0.
         # dds 不是连续的
 
-        self.detection.set_att(19.4)
+        self.detection.set_att(25.)
         self.cooling.set_att(25.)
 
         # turn off all DDS
@@ -96,14 +63,15 @@ class KasliTester(EnvExperiment):
         # the attenuation number must be float like 0.
         # dds 不是连续的
 
-        self.detection.set_att(19.5)
+        self.detection.set_att(25.)
         self.cooling.set_att(25.)
 
         # turn off all DDS
         self.dds2.sw.off()
         self.dds3.sw.off()
-
         self.cooling.sw.off()
+
+        # turn on detec
         self.detection.sw.on()
 
     def run(self):

@@ -38,7 +38,7 @@ class KasliTester(EnvExperiment):
 
         self.detection.set_att(19.0) 
         self.cooling.set_att(19.)
-        self.pumping.set_att(15.)
+        self.pumping.set_att(19.)
         self.microwave.set_att(0.)
 
     @kernel

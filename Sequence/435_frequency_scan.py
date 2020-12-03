@@ -25,8 +25,8 @@ shutter_370 = shutter(com=0)
 flip_mirror = shutter(com=1)
 shutter_399 = shutter(com=2)
 
-ccd_on = flip_mirror.off
-pmt_on = flip_mirror.on
+ccd_on = flip_mirror.on
+pmt_on = flip_mirror.off
 
 
 def reload_ion():
@@ -159,22 +159,22 @@ class KasliTester(EnvExperiment):
                 delay(1*us)
 
                 # microwave on
-                #self.microwave.sw.on()
-                #delay(60*us)
-                #self.microwave.sw.off()
+                self.microwave.sw.on()
+                delay(24.686*us)
+                self.microwave.sw.off()
 
                 # detection on
                 with parallel:
                     # self.detection.sw.on()
                     # 利用cooling  光作为detection
                     self.detection.sw.on()
-                    self.pmt.gate_rising(400*us)
+                    self.pmt.gate_rising(800*us)
                     photon_number = self.pmt.count(now_mu())
                     photon_count = photon_count + photon_number
                     if photon_number > 1:
                         count = count + 1
 
-                # turn on 935
+                # turn on 935 sideband
                 self.ttl_935.off()
                 self.detection.sw.off()
 
@@ -195,15 +195,15 @@ class KasliTester(EnvExperiment):
         scan_step = 0.000002
         # fre_width = 1
         # N = int(fre_width/scan_step)
-        N = 2000
-        init_fre = 871.035000
+        N = 10000
+        init_fre = 871.034400
         # init_fre = 342.57
         # lock_point = 871.034694
         widgets = ['Progress: ', Percentage(), ' ', Bar('#'), ' ',
                    Timer(), ' ', ETA(), ' ']
         pbar = ProgressBar(widgets=widgets, maxval=10*N).start()
 
-        file_name = 'data\\'+str(lock_point)[5::]+'-'+str(init_fre)+'-' + \
+        file_name = 'data\\'+str(init_fre)[5::]+'-'+str(init_fre)+'-' + \
             str(float(init_fre+N*scan_step))+'.csv'
         file = open(file_name, 'w+')
         file.close()
@@ -256,7 +256,7 @@ class KasliTester(EnvExperiment):
             y_data1 = y_data1[1::]+[temp[0]]
             y_data2 = y_data2[1::]+[temp[1]]
             # print information
-            data_item = [AOM_435, temp[0], temp[1], wm.get_data()[0]]
+            data_item = [fre_871, temp[0], temp[1], wm.get_data()[0]]
             data[:, i] = data_item
 
             # write data

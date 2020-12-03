@@ -41,7 +41,7 @@ class KasliTester(EnvExperiment):
         self.detection.set_att(19.4) 
         self.cooling.set_att(25.)
         self.microwave.set_att(0.)
-        self.pumping.set_att(25.)
+        self.pumping.set_att(20.)
 
         self.microwave.sw.off()
         self.pumping.sw.off()
@@ -59,7 +59,7 @@ class KasliTester(EnvExperiment):
                 delay(400*us)
 
                 self.pumping.sw.on()
-                delay(400*us)
+                delay(15*us)
                 self.pumping.sw.off()
                 
                 # microwave on
