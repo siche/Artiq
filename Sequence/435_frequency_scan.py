@@ -168,7 +168,7 @@ class KasliTester(EnvExperiment):
                     # self.detection.sw.on()
                     # 利用cooling  光作为detection
                     self.detection.sw.on()
-                    self.pmt.gate_rising(800*us)
+                    self.pmt.gate_rising(400*us)
                     photon_number = self.pmt.count(now_mu())
                     photon_count = photon_count + photon_number
                     if photon_number > 1:
