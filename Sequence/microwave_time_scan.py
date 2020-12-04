@@ -88,8 +88,8 @@ class KasliTester(EnvExperiment):
 
     def run(self):
         init_time = 0
-        time_interval = 2
-        N = 30
+        time_interval = 1
+        N = 50
         data = np.zeros((3,N))
         for i in range(N):
             microwave_time = init_time + i*time_interval
