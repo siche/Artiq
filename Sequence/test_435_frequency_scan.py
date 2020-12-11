@@ -160,7 +160,7 @@ class KasliTester(EnvExperiment):
                 # detection on
                 with parallel:
                     # self.detection.sw.on()
-                    self.pmt.gate_rising(300*us)
+                    self.pmt.gate_rising(800*us)
                     self.detection.sw.on()
                     photon_number = self.pmt.count(now_mu())
                     photon_count = photon_count + photon_number
