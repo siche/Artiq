@@ -55,13 +55,13 @@ class KasliTester(EnvExperiment):
                 self.cooling.sw.on()
                 self.detection.sw.off()
                 # cooling for 1 ms
-                delay(1*ms)
+                delay(400*us)
                 self.cooling.sw.off()
                 delay(1*us)
                 
                 # pumping for 400us
                 self.pumping.sw.on()
-                delay(15*us)
+                delay(25*us)
                 self.pumping.sw.off()
                 delay(1*us)
 
@@ -74,7 +74,7 @@ class KasliTester(EnvExperiment):
                 # detection on
                 with parallel: 
                     self.detection.sw.on()
-                    self.pmt.gate_rising(600*us)
+                    self.pmt.gate_rising(800*us)
                     photon_number = self.pmt.count(now_mu())
                     photon_count = photon_count + photon_number
                     if photon_number > 1:
