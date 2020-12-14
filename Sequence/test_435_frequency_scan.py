@@ -158,8 +158,8 @@ class KasliTester(EnvExperiment):
                 delay(24.686*us)
                 self.microwave.sw.off()
                 
-                # turn off 935
-                self.ttl_935_AOM.on()
+                # turn off 935 sideband
+                self.ttl_935_EOM.on()
 
                 # turn off 935 sideband
                 # self.ttl_935_EOM.on()
