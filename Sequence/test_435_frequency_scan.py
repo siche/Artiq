@@ -94,7 +94,8 @@ class KasliTester(EnvExperiment):
         self.microwave = self.get_device(dds_channel[2])
         self.pumping = self.get_device(dds_channel[3])
         self.pmt = self.get_device('ttl0')
-        self.ttl_935 = self.get_device('ttl7')
+        self.ttl_935_AOM = self.get_device('ttl4')
+        self.ttl_935_EOM = self.get_device('ttl7')
         self.ttl_435 = self.get_device('ttl6')
 
     @kernel
@@ -131,7 +132,7 @@ class KasliTester(EnvExperiment):
             with sequential:
                 # turn off 435
                 self.ttl_435.on()
-                self.ttl_935.off()
+                self.ttl_935_EOM.off()
                 self.detection.sw.off()
 
                 # cooling for 1.5 ms
@@ -149,13 +150,19 @@ class KasliTester(EnvExperiment):
                 # turn on 435 and turn off 935 sideband
                 # with parallel:
                 # turn off 935 sideband
-                # self.ttl_935.on()
+                # self.ttl_935_EOM.on()
                 # delay(1*us)
 
                 # microwave on
                 self.microwave.sw.on()
                 delay(24.686*us)
                 self.microwave.sw.off()
+                
+                # turn off 935
+                self.ttl_935_AOM.on()
+
+                # turn off 935 sideband
+                # self.ttl_935_EOM.on()
 
                 # detection on
                 with parallel:
@@ -168,7 +175,8 @@ class KasliTester(EnvExperiment):
                         count = count + 1
 
                 # turn on 935 sideband
-                self.ttl_935.off()
+                self.ttl_935_AOM.off()
+                self.ttl_935_EOM.off()
                 self.detection.sw.off()
 
         self.cooling.sw.on()
@@ -176,7 +184,7 @@ class KasliTester(EnvExperiment):
         self.microwave.sw.off()
 
         # turn on 935
-        self.ttl_935.off()
+        self.ttl_935_EOM.off()
         # self.ttl_435.on()
         return (count, photon_count)
 
