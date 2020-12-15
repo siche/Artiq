@@ -112,7 +112,7 @@ class KasliTester(EnvExperiment):
         self.pumping.set(260*MHz)
 
         self.detection.set_att(19.4)
-        self.cooling.set_att(19.)
+        self.cooling.set_att(10.)
         self.microwave.set_att(0.)
         self.pumping.set_att(18.)
 
@@ -155,7 +155,7 @@ class KasliTester(EnvExperiment):
 
                 # microwave on
                 self.microwave.sw.on()
-                delay(24.686*us)
+                delay(21.35*us)
                 self.microwave.sw.off()
                 
                 # turn off 935 sideband
@@ -168,7 +168,7 @@ class KasliTester(EnvExperiment):
                 with parallel:
                     # self.detection.sw.on()
                     self.pmt.gate_rising(800*us)
-                    self.detection.sw.on()
+                    self.cooling.sw.on()
                     photon_number = self.pmt.count(now_mu())
                     photon_count = photon_count + photon_number
                     if photon_number > 1:
