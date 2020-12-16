@@ -169,7 +169,7 @@ class KasliTester(EnvExperiment):
                     # self.detection.sw.on()
                     # 利用cooling  光作为detection
                     self.cooling.sw.on()
-                    self.pmt.gate_rising(600*us)
+                    self.pmt.gate_rising(300*us)
                     photon_number = self.pmt.count(now_mu())
                     photon_count = photon_count + photon_number
                     if photon_number > 1:
@@ -179,14 +179,6 @@ class KasliTester(EnvExperiment):
                 self.ttl_935_EOM.off()
                 self.cooling.sw.on()
 
-        self.cooling.sw.on()
-        self.detection.sw.off()
-        self.microwave.sw.off()
-
-        # turn on 935
-        self.ttl_935_AOM.off()
-        self.ttl_935_EOM.off()
-        # self.ttl_435.on()
         return (count, photon_count)
 
     def run(self):
@@ -194,11 +186,11 @@ class KasliTester(EnvExperiment):
 
         pmt_on()
         shutter_370.off()
-        scan_step = 0.000002
+        scan_step = 0.000001
         # fre_width = 1
         # N = int(fre_width/scan_step)
         N = 10000
-        init_fre = 871.036018
+        init_fre = 871.037650
         # init_fre = 342.57
         # lock_point = 871.034694
         widgets = ['Progress: ', Percentage(), ' ', Bar('#'), ' ',
@@ -245,8 +237,11 @@ class KasliTester(EnvExperiment):
             if temp[0] < 50 :
                 ccd_on()
                 time.sleep(0.7)
+
+                # reload ion 
                 if not has_ion():
                     costed_time = 0
+                    curr.on()
                     while not has_ion() and costed_time < 300:
                         shutter_370.on()
                         time.sleep(5)
@@ -255,7 +250,9 @@ class KasliTester(EnvExperiment):
                     time.sleep(0.5)
                     temp = self.run_sequence()
                 else:
+                    curr.off()
                     pmt_on()
+
             y_data1 = y_data1[1::]+[temp[0]]
             y_data2 = y_data2[1::]+[temp[1]]
             # print information
