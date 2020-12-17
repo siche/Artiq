@@ -186,11 +186,11 @@ class KasliTester(EnvExperiment):
 
         pmt_on()
         shutter_370.off()
-        scan_step = 0.00000001
+        scan_step = 0.000001/2
         # fre_width = 1
         # N = int(fre_width/scan_step)
-        N = 400
-        init_fre = 871.046158
+        N = 15000
+        init_fre = 871.049180
         # init_fre = 342.57
         # lock_point = 871.034694
         widgets = ['Progress: ', Percentage(), ' ', Bar('#'), ' ',
