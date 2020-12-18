@@ -137,13 +137,13 @@ class KasliTester(EnvExperiment):
 
                 # cooling for 1.5 ms
                 self.cooling.sw.on()
-                delay(400*us)
+                delay(1000*us)
                 self.cooling.sw.off()
                 delay(1*us)
 
                 # pumping
                 self.pumping.sw.on()
-                delay(35*us)
+                delay(25*us)
                 self.pumping.sw.off()
                 delay(1*us)
 
@@ -154,20 +154,24 @@ class KasliTester(EnvExperiment):
                 # delay(1*us)
 
                 # microwave on
+                """
                 self.microwave.sw.on()
                 delay(21.35*us)
                 self.microwave.sw.off()
-                
-                # turn off 935 sideband
-                self.ttl_935_EOM.on()
+                """
 
+                # turn off 935 sideband
+                # self.ttl_935_EOM.on()
+                self.ttl_935_AOM.on()
+                delay(400*us)
                 # turn off 935 sideband
                 # self.ttl_935_EOM.on()
 
                 # detection on
+                self.ttl_935_AOM.off()
                 with parallel:
                     # self.detection.sw.on()
-                    self.pmt.gate_rising(800*us)
+                    self.pmt.gate_rising(400*us)
                     self.cooling.sw.on()
                     photon_number = self.pmt.count(now_mu())
                     photon_count = photon_count + photon_number
@@ -191,7 +195,7 @@ class KasliTester(EnvExperiment):
     def run(self):
         self.pre_set()
         
-        N = 100
+        N = 20
         for i in range(N):
             # run detection and save data
             temp = self.run_sequence()

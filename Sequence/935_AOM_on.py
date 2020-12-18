@@ -13,8 +13,9 @@ if os.name == "nt":
 class KasliTester(EnvExperiment):
     def build(self):
         self.setattr_device('core')
-        self.ttl_935 = self.get_device('ttl4')
-
+        self.ttl_935_AOM = self.get_device('ttl4')
+        self.ttl_935_EOM = self.get_device('ttl7')
+        
     @kernel
     def pre_set(self):
         # initialize dd        
@@ -25,7 +26,7 @@ class KasliTester(EnvExperiment):
     def run_sequence(self):
         self.core.break_realtime()
         with sequential:
-            self.ttl_935.off()
+            self.ttl_935_AOM.off()
     
 
     def run(self):

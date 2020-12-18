@@ -27,7 +27,6 @@ class KasliTester(EnvExperiment):
         self.core.break_realtime()
         with sequential:
             self.ttl_935_EOM.off()
-            self.ttl_935_AOM.off()
     
 
     def run(self):

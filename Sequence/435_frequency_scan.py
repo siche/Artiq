@@ -142,11 +142,10 @@ class KasliTester(EnvExperiment):
                 self.pumping.sw.off()
                 delay(1*us)
 
-                # turn on 435 turn off 935
-                # with parallel:
+                # turn off 935
                 # turn off 935 sideband
-                self.ttl_935_AOM.on()
                 self.ttl_935_EOM.on()
+                self.ttl_935_AOM.on()
                 delay(1*us)
 
                 # turn on 435
@@ -168,8 +167,8 @@ class KasliTester(EnvExperiment):
                 with parallel:
                     # self.detection.sw.on()
                     # 利用cooling  光作为detection
-                    self.cooling.sw.on()
                     self.pmt.gate_rising(300*us)
+                    self.cooling.sw.on()
                     photon_number = self.pmt.count(now_mu())
                     photon_count = photon_count + photon_number
                     if photon_number > 1:
