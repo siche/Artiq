@@ -188,8 +188,8 @@ class KasliTester(EnvExperiment):
         scan_step = 0.000001/2
         # fre_width = 1
         # N = int(fre_width/scan_step)
-        N = 15000
-        init_fre = 871.032100
+        N = 4000
+        init_fre = 871.036000
         # init_fre = 342.57
         # lock_point = 871.034694
         widgets = ['Progress: ', Percentage(), ' ', Bar('#'), ' ',
