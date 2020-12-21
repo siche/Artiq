@@ -150,7 +150,7 @@ class KasliTester(EnvExperiment):
 
                 # turn on 435
                 self.ttl_435.off()
-                delay(400*us)
+                delay(800*us)
                 self.ttl_435.on()
                 delay(1*us)
 
@@ -161,7 +161,7 @@ class KasliTester(EnvExperiment):
                 self.microwave.sw.off()
                 """
 
-                # turn on 935
+                # turn on 935 without sideband
                 self.ttl_935_AOM.off()
                 # detection on
                 with parallel:
@@ -189,7 +189,7 @@ class KasliTester(EnvExperiment):
         # fre_width = 1
         # N = int(fre_width/scan_step)
         N = 15000
-        init_fre = 871.036600
+        init_fre = 871.032000
         # init_fre = 342.57
         # lock_point = 871.034694
         widgets = ['Progress: ', Percentage(), ' ', Bar('#'), ' ',

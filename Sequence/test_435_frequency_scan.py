@@ -163,7 +163,7 @@ class KasliTester(EnvExperiment):
                 # turn off 935 sideband
                 # self.ttl_935_EOM.on()
                 self.ttl_935_AOM.on()
-                delay(400*us)
+                delay(800*us)
                 # turn off 935 sideband
                 # self.ttl_935_EOM.on()
 
