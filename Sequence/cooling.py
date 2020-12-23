@@ -40,7 +40,7 @@ class KasliTester(EnvExperiment):
         # dds 不是连续的
 
         self.detection.set_att(19.4)  # = -8.74dbm
-        self.cooling.set_att(10.)     # = -6.60dbm
+        self.cooling.set_att(20.)     # = -6.60dbm
         
         #turn off all DDS except cooling
         self.dds2.sw.off()
