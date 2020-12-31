@@ -91,7 +91,7 @@ def reload_ion():
     shutter_399.off()
     curr.beep()
 
-def is_871_locked(lock_point=871.035192):
+def is_871_locked(lock_point=871.034616):
     global wl_871
     wl_871 = wm.get_channel_data(0)
     is_locked = abs(wl_871-lock_point) < 0.000005
@@ -131,7 +131,8 @@ class KasliTester(EnvExperiment):
         self.microwave = self.get_device(dds_channel[2])
         self.pumping = self.get_device(dds_channel[3])
         self.pmt = self.get_device('ttl0')
-        self.ttl_935 = self.get_device('ttl7')
+        self.ttl_935_AOM = self.get_device('ttl4')
+        self.ttl_935_EOM = self.get_device('ttl7')
         self.ttl_435 = self.get_device('ttl6')
 
     @kernel
@@ -148,9 +149,9 @@ class KasliTester(EnvExperiment):
         self.pumping.set(260*MHz)
 
         self.detection.set_att(20.)
-        self.cooling.set_att(19.)
+        self.cooling.set_att(10.)
         self.microwave.set_att(0.)
-        self.pumping.set_att(15.)
+        self.pumping.set_att(18.)
 
     @kernel
     def run_sequence(self):
@@ -164,22 +165,18 @@ class KasliTester(EnvExperiment):
         photon_count = 0
         photon_number = 0
         count = 0
-        for i in range(100):
+        for i in range(300):
             with sequential:
-                # turn off 435
-                self.ttl_435.on()
-                self.ttl_935.off()
-                self.detection.sw.off()
 
                 # cooling for 1.5 ms
                 self.cooling.sw.on()
-                delay(1.5*ms)
+                delay(1*ms)
                 self.cooling.sw.off()
                 delay(1*us)
 
                 # pumping
                 self.pumping.sw.on()
-                delay(8*us)
+                delay(25*us)
                 self.pumping.sw.off()
                 delay(1*us)
 
@@ -187,43 +184,43 @@ class KasliTester(EnvExperiment):
                 # with parallel:
                 # turn off 935 sideband
                 
-                self.ttl_935.on()
+                # turn off 935
+                # turn off 935 sideband
+                self.ttl_935_EOM.on()
+                self.ttl_935_AOM.on()
                 delay(1*us)
-            
 
                 # turn on 435
                 self.ttl_435.off()
-                delay(1000*us)
+                delay(1200*us)
                 self.ttl_435.on()
                 delay(1*us)
 
                 # microwave on
+                """
                 self.microwave.sw.on()
                 delay(26.1778*us)
                 self.microwave.sw.off()
+                """
+                # turn on 935 without sideband
+                self.ttl_935_AOM.off()
+
 
                 # detection on
                 with parallel:
                     # self.detection.sw.on()
                     # 利用cooling  光作为detection
-                    self.detection.sw.on()
-                    self.pmt.gate_rising(800*us)
+                    self.pmt.gate_rising(300*us)
+                    self.cooling.sw.on()
                     photon_number = self.pmt.count(now_mu())
                     photon_count = photon_count + photon_number
                     if photon_number > 1:
                         count = count + 1
 
                 # turn on 935 sideband
-                self.ttl_935.off()
-                self.detection.sw.off()
+                self.ttl_935_EOM.off()
+                self.cooling.sw.on()
 
-        self.cooling.sw.on()
-        self.detection.sw.off()
-        self.microwave.sw.off()
-
-        # turn on 935
-        self.ttl_935.off()
-        # self.ttl_435.on()
         return (count, photon_count)
 
     def run(self):
@@ -231,9 +228,9 @@ class KasliTester(EnvExperiment):
 
         pmt_on()
         init_fre = 210
-        lock_point = 871.034593
-        scan_step = 0.005
-        N = 10000
+        lock_point = 871.034720
+        scan_step = 0.05
+        N = 1000
 
         widgets = ['Progress: ', Percentage(), ' ', Bar('#'), ' ',
                    Timer(), ' ', ETA(), ' ']
