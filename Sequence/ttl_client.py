@@ -3,7 +3,7 @@ import socket
 import sys
 
 class shutter(object):
-    def __init__(self,ip = '192.168.1.16',port=6666,com=2):
+    def __init__(self,ip = '192.168.1.26',port=6666,com=2):
         self.com=com
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect((ip,port))
