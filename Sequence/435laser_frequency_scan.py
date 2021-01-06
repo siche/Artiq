@@ -1,13 +1,8 @@
-import sys
-import os
-import time
-import msvcrt
-import signal
-import atexit
-import win32api
-import win32con
+import sys, os, msvcrt, time
+import signal, atexit, win32api, win32con
 
 import numpy as np
+from tqdm import trange
 
 from artiq.experiment import *
 from save_data import save_file
@@ -227,10 +222,10 @@ class KasliTester(EnvExperiment):
         self.pre_set()
 
         pmt_on()
-        init_fre = 210
-        lock_point = 871.034720
+        init_fre = 180
+        lock_point = 871.034823
         scan_step = 0.05
-        N = 1000
+        N = 2000
 
         widgets = ['Progress: ', Percentage(), ' ', Bar('#'), ' ',
                    Timer(), ' ', ETA(), ' ']
@@ -273,7 +268,7 @@ class KasliTester(EnvExperiment):
                                             transform=fig2.transAxes)
         """
 
-        for i in range(N):
+        for i in trange(N):
 
             AOM_435 = init_fre+scan_step*i  # - 0.001*N/2
 
