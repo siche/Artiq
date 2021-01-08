@@ -224,8 +224,8 @@ class KasliTester(EnvExperiment):
         pmt_on()
         init_fre = 180
         lock_point = 871.034823
-        scan_step = 0.05
-        N = 2000
+        scan_step = 0.05/2
+        N = 4200
 
         widgets = ['Progress: ', Percentage(), ' ', Bar('#'), ' ',
                    Timer(), ' ', ETA(), ' ']
