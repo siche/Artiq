@@ -1,65 +1,96 @@
-import sys
-import os
-import select
+import sys, os, msvcrt, time
+import signal, atexit, win32api, win32con
+
 import numpy as np
+from tqdm import trange
+
 from artiq.experiment import *
-from scipy.optimize import curve_fit
 from save_data import save_file
 from progressbar import *
 import matplotlib.pyplot as plt
 from wlm_web import wlm_web
-import time
 
-from wlm_lock import laser_lock
+
 from image_processing import has_ion
 from ttl_client import shutter
-from current_client import current_web
-# from load_ion_client import reload_ion
-
-if os.name == "nt":
-    import msvcrt
+from CurrentWebClient import current_web
+from SMB100B import SMB100B
 
 wm = wlm_web()
+wl_871 = 0.0
 curr = current_web()
 
 shutter_370 = shutter(com=0)
 flip_mirror = shutter(com=1)
 shutter_399 = shutter(com=2)
+rf_signal = SMB100B()
 
-ccd_on = flip_mirror.off
-pmt_on = flip_mirror.on
+ccd_on = flip_mirror.on
+pmt_on = flip_mirror.off
 
 
 def reload_ion():
     t1 = time.time()
     print('RELOADING...')
     pmt_on()
+    rf_signal.on()
     time.sleep(0.3)
     ccd_on()
     time.sleep(1)
     # is_there_ion = has_ion()
     costed_time = 0
-    while (not has_ion() and costed_time < 900):
-        # if not curr.is_on:
+    ion_num = has_ion()
+    is_thermalized = False
+    while (costed_time < 600 and not ion_num == 1):
+
+        # 如果有多个ion 关闭RF放掉离子
+        if ion_num > 1:
+            rf_signal.off()
+            time.sleep(5)
+            rf_signal.on()
+
+        # when ion_num = -1 it means that the ion is thermalized
+        # therefore, turn off rf and adjust 370 to toward red direction
+        if ion_num == -1:
+            is_thermalized = True
+            rf_signal.off()
+            wm.relock(2)
+            time.sleep(2)
+            rf_signal.on()
+
         curr.on()
         shutter_370.on()
         shutter_399.on()
-        costed_time = time.time()-t1
-        print('COSTED TIME:%.1fs' % (costed_time))
         time.sleep(2)
 
+        ion_num = has_ion()
+        costed_time = time.time()-t1
+        print('COSTED TIME:%.1fs' % (costed_time))
+    
+    # adjust the 370 wavelength to initial point
+    if is_thermalized:
+        wm.relock(2,-0.000005)
+
+    # if run out of time and do not catch ion
+    # raise warning information for turther processing 
+    if costed_time > 600 or ion_num !=1:
+        curr.off()
+        win32api.MessageBox(0, "Please Check 370 WaveLength","Warning", win32con.MB_ICONWARNING)
+
+    # else there is ion 
+    # turn to 435 laser scan
     pmt_on()
     curr.off()
     shutter_370.off()
     shutter_399.off()
     curr.beep()
-    time.sleep(0.7)
 
-
-def is_871_locked(lock_point=871.034924):
-    wl_871 = wm.get_data()[0]
-    is_locked = abs(wl_871-lock_point) < 0.000004
+def is_871_locked(lock_point=871.034616):
+    global wl_871
+    wl_871 = wm.get_channel_data(0)
+    is_locked = abs(wl_871-lock_point) < 0.000005
     return is_locked
+
 
 
 def prog_bar(N):
@@ -69,37 +100,21 @@ def prog_bar(N):
     return pbar
 
 
+def print_info(item):
+    print("Accuracy:%.1f%%" % (item[1]))
+    print('Photon Count:%d' % item[2])
+    print('\n')
+
+
 def file_write(file_name, content):
     file = open(file_name, 'a')
     file.write(content)
     file.close()
 
 
-def get_data(file_name, aom_scan_step=50/1e3):
-    file = open(file_name, 'r')
-    file.seek(0)
-    item = file.readline()
-    rescan_points = []
-
-    while item:
-        data = item[:-1].split(',')
-        temp_fre = float(data[0])
-        temp_lock = float(data[-1])
-
-        for i in range(-5, 6):
-            fre1 = round(temp_fre+i*aom_scan_step, 2)
-            rescan_points.append((fre1, temp_lock))
-        item = file.readline()
-
-    unique_rescan_points = []
-
-    for point in rescan_points:
-        if point not in unique_rescan_points:
-            unique_rescan_points.append(point)
-
-    file.close()
-    unique_rescan_points.sort(key=lambda x: x[1])
-    return unique_rescan_points
+@atexit.register
+def closeAll():
+    curr.off()
 
 
 class KasliTester(EnvExperiment):
@@ -111,8 +126,10 @@ class KasliTester(EnvExperiment):
         self.microwave = self.get_device(dds_channel[2])
         self.pumping = self.get_device(dds_channel[3])
         self.pmt = self.get_device('ttl0')
-        self.ttl_935 = self.get_device('ttl7')
+        self.ttl_935_AOM = self.get_device('ttl4')
+        self.ttl_935_EOM = self.get_device('ttl7')
         self.ttl_435 = self.get_device('ttl6')
+
 
     @kernel
     def pre_set(self):
@@ -127,15 +144,13 @@ class KasliTester(EnvExperiment):
         self.microwave.set(400.*MHz)
         self.pumping.set(260*MHz)
 
-        self.detection.set_att(19.4)
-        self.cooling.set_att(19.)
+        self.detection.set_att(20.)
+        self.cooling.set_att(10.)
         self.microwave.set_att(0.)
-        self.pumping.set_att(25.)
+        self.pumping.set_att(18.)
 
     @kernel
     def run_sequence(self, rabi_time, run_times):
-        # t2 is the time of microwave
-
         # initialize dds
         self.core.break_realtime()
         self.microwave.sw.off()
@@ -146,14 +161,10 @@ class KasliTester(EnvExperiment):
         count = 0
         for i in range(run_times):
             with sequential:
-                # turn off 435
-                self.ttl_435.on()
-                self.ttl_935.off()
-                self.detection.sw.off()
 
                 # cooling for 1.5 ms
                 self.cooling.sw.on()
-                delay(20*ms)
+                delay(1*ms)
                 self.cooling.sw.off()
                 delay(1*us)
 
@@ -165,8 +176,12 @@ class KasliTester(EnvExperiment):
 
                 # turn on 435 and turn off 935 sideband
                 # with parallel:
+                # turn off 935 sideband
+                
                 # turn off 935
-                self.ttl_935.on()
+                # turn off 935 sideband
+                self.ttl_935_EOM.on()
+                self.ttl_935_AOM.on()
                 delay(1*us)
 
                 # turn on 435
@@ -176,43 +191,43 @@ class KasliTester(EnvExperiment):
                 delay(1*us)
 
                 # microwave on
-                # self.microwave.sw.on()
-                # delay(80*us)
-                # self.microwave.sw.off()
+                """
+                self.microwave.sw.on()
+                delay(26.1778*us)
+                self.microwave.sw.off()
+                """
+                # turn on 935 without sideband
+                self.ttl_935_AOM.off()
+
 
                 # detection on
                 with parallel:
                     # self.detection.sw.on()
                     # 利用cooling  光作为detection
+                    self.pmt.gate_rising(300*us)
                     self.cooling.sw.on()
-                    self.pmt.gate_rising(400*us)
                     photon_number = self.pmt.count(now_mu())
                     photon_count = photon_count + photon_number
                     if photon_number > 1:
                         count = count + 1
 
-                # turn on 935
-                self.ttl_935.off()
-                self.detection.sw.off()
+                # turn on 935 sideband
+                self.ttl_935_EOM.off()
+                self.cooling.sw.on()
 
-        self.cooling.sw.on()
-        self.detection.sw.off()
-        self.microwave.sw.off()
-
-        # turn on 935
-        self.ttl_935.off()
-        # self.ttl_435.on()
         return (100*count/run_times, photon_count)
 
     def run(self):
         self.pre_set()
         pmt_on()
-        AOM_435 = 240.99
-        lock_point = 871.035134
-        N = 200 
+        AOM_435 = 235.455
+        lock_point = 871.0346645
+
+        
         rabi_time = 0
-        rabi_time_step = 5
-        run_times = 50
+        rabi_time_step = 0.5
+        N = 200
+        run_times = 200
 
         widgets = ['Progress: ', Percentage(), ' ', Bar('#'), ' ',
                    Timer(), ' ', ETA(), ' ']
@@ -220,7 +235,7 @@ class KasliTester(EnvExperiment):
 
         # save file
         time_now = time.strftime("%Y-%m-%d-%H-%M")
-        file_name = 'data\\435-rabi-scan'+'-'+time_now+'.csv'
+        file_name = 'data\\435-rabi-scan'+'-'+'AOM'+str(AOM_435)+'-'+time_now+'.csv'
         file = open(file_name, 'w+')
         file.close()
 
@@ -263,7 +278,7 @@ class KasliTester(EnvExperiment):
             temp = self.run_sequence(rabi_time, run_times)
 
             # judge if has ion
-            if temp[0] < 70 :
+            if temp[1] < 50 :
                 ccd_on()
                 time.sleep(0.7)
                 if not has_ion():
@@ -272,7 +287,7 @@ class KasliTester(EnvExperiment):
                 else:
                     pmt_on()
                     time.sleep(0.5)
-                
+ 
             # print information
             data_item = [AOM_435, rabi_time, temp[1], temp[0]]
             data[:, i] = data_item
@@ -282,8 +297,7 @@ class KasliTester(EnvExperiment):
                 ',' + str(data[2, i])+','+str(data[3, i])+'\n'
             file_write(file_name, content)
 
-            print('Count:%d' % temp[1])
-            print('Effiency:%.1f%%' % temp[0])
+            print('time:%.1f  Count:%d  Effi:%.1f%% ' % (rabi_time, temp[1], temp[0]))
             pbar.update(10*i+1)
             print('\n')
             rabi_time = rabi_time + rabi_time_step
