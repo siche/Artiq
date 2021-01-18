@@ -221,14 +221,16 @@ class KasliTester(EnvExperiment):
         self.pre_set()
 
         pmt_on()
-        init_fre = 235.43
+        init_fre = 235.462
         lock_point = 871.034666
-        scan_step = 0.001
-        rabi_time = 27
-        N = 50
+        scan_step = 0.0001
+        amp = 0.02
+
+        rabi_time = 8000
+        N = 120
         run_times = 200
 
-        file_name = 'data\\Rabi_AOM_Fre_Scan'+str(init_fre)+'-'+\
+        file_name = 'data\\435_width_scan_amp='+str(amp)+ 'rabi_time=' + str(rabi_time)+ 'fre '+str(init_fre)+'-'+\
                      str(float(init_fre+N*scan_step))+'.csv'
         file = open(file_name, 'w+')
         file.close()
@@ -246,7 +248,8 @@ class KasliTester(EnvExperiment):
                 time.sleep(3)
 
             # change AOM frequency
-            code = "conda activate base && python dds.py " + str(AOM_435)
+            code = "conda activate base && python dds.py " + str(AOM_435) + " " + str(amp)
+            print(code)
             os.system(code)
 
             # run detection and save data

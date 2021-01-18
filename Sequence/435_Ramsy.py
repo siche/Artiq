@@ -6,6 +6,7 @@ from tqdm import trange
 
 from artiq.experiment import *
 from save_data import save_file
+from progressbar import *
 import matplotlib.pyplot as plt
 from wlm_web import wlm_web
 
@@ -148,7 +149,7 @@ class KasliTester(EnvExperiment):
         self.pumping.set_att(18.)
 
     @kernel
-    def run_sequence(self, rabi_time, run_times = 100):
+    def run_sequence(self):
         # t2 is the time of microwave
 
         # initialize dds
@@ -159,7 +160,7 @@ class KasliTester(EnvExperiment):
         photon_count = 0
         photon_number = 0
         count = 0
-        for i in range(run_times):
+        for i in range(300):
             with sequential:
 
                 # cooling for 1.5 ms
@@ -186,7 +187,7 @@ class KasliTester(EnvExperiment):
 
                 # turn on 435
                 self.ttl_435.off()
-                delay(rabi_time*us)
+                delay(200*us)
                 self.ttl_435.on()
                 delay(1*us)
 
@@ -215,26 +216,57 @@ class KasliTester(EnvExperiment):
                 self.ttl_935_EOM.off()
                 self.cooling.sw.on()
 
-        return (100*count/run_times, photon_count)
+        return (count, photon_count)
 
     def run(self):
         self.pre_set()
 
         pmt_on()
-        init_fre = 235.43
-        lock_point = 871.034666
-        scan_step = 0.001
-        rabi_time = 27
-        N = 50
-        run_times = 200
+        init_fre = 210
+        lock_point = 871.034661
+        scan_step = 0.01
+        N = 5000
 
-        file_name = 'data\\Rabi_AOM_Fre_Scan'+str(init_fre)+'-'+\
-                     str(float(init_fre+N*scan_step))+'.csv'
+        widgets = ['Progress: ', Percentage(), ' ', Bar('#'), ' ',
+                   Timer(), ' ', ETA(), ' ']
+        pbar = ProgressBar(widgets=widgets, maxval=10*N).start()
+
+        file_name = 'data\\'+str(lock_point)[5::]+'-'+str(init_fre)+'-' + \
+            str(float(init_fre+N*scan_step))+'.csv'
         file = open(file_name, 'w+')
         file.close()
 
+        rescan_file_name = 'data\\rescan' + str(lock_point)[5::]+'-' + \
+            str(init_fre)+'-'+str(float(init_fre+N*scan_step))+'.csv'
+        rescan_file = open(rescan_file_name, 'w+')
+        rescan_file.close()
+
+        manual_rescan_file_name = 'data\\manual_rescan' + str(lock_point)[5::]+'-' + \
+            str(init_fre)+'-'+str(float(init_fre+N*scan_step))+'.csv'
+        manual_rescan_file = open(manual_rescan_file_name, 'w+')
+        manual_rescan_file.close()
+
         data = np.zeros((4, N))
         data[0, :] = np.linspace(init_fre, init_fre+scan_step*(N-1), N)
+
+        x_data = list(range(100))
+        y_data1 = [None]*100
+        y_data2 = [None]*100
+
+        """
+        plt.figure(1)
+        fig1 = plt.subplot(211)
+        line1, = fig1.plot(x_data,y_data1)
+        show_data1 = 'Effiency:0'
+        txt1 = fig1.text(0.8,0.8,show_data1 ,verticalalignment = 'center', \
+                                            transform=fig1.transAxes)
+
+        fig2 = plt.subplot(212)
+        line2, = fig2.plot(x_data,y_data2)
+        show_data2 = 'Count:0'
+        txt2 = fig2.text(0.8,0.8,show_data2,verticalalignment = 'center', \
+                                            transform=fig2.transAxes)
+        """
 
         for i in trange(N):
 
@@ -244,13 +276,15 @@ class KasliTester(EnvExperiment):
             while not is_871_locked(lock_point):
                 print('Laser is locking...')
                 time.sleep(3)
-
             # change AOM frequency
             code = "conda activate base && python dds.py " + str(AOM_435)
             os.system(code)
 
             # run detection and save data
-            temp = self.run_sequence(rabi_time, run_times)
+            temp = self.run_sequence()
+
+            y_data1 = y_data1[1::]+[temp[0]]
+            y_data2 = y_data2[1::]+[temp[1]]
 
             # print information
             data_item = [AOM_435, temp[0], temp[1], wl_871]
@@ -262,15 +296,68 @@ class KasliTester(EnvExperiment):
 
             file_write(file_name, content)
             print_info(data_item)
+            pbar.update(10*i+1)
             print('\n')
 
+            # rescan at most n times when effiency is less than 80%
+            rescan_time = 0
+            temp_data = []
+
+            # there may multiple ion
+            if temp[1] > 800:
+                if has_ion() > 1:
+                    reload_ion()
+                    pmt_on()
+
+            if temp[0] < 70:
+                while rescan_time < 5:
+                    # check if there is ion
+                    ccd_on()
+                    time.sleep(0.8)
+
+                    # there is ion try to cool the ion
+                    if has_ion():
+                        shutter_370.on()
+                        time.sleep(0.5)
+                        shutter_370.off()
+                        pmt_on()
+                        time.sleep(0.2)
+                        temp1 = self.run_sequence()
+                        temp_data.append(list(temp1))
+                        rescan_time += 1
+                        print('rescan:%d, effiency:%d' %
+                              (rescan_time, temp1[0]))
+                        print('\n')
+
+                    # there is no ion reload ion
+                    else:
+                        reload_ion()
+                        pmt_on()
+
+            if rescan_time == 5:
+                # print('saveing data')
+                temp_data = np.array(temp_data, dtype=np.int)
+                effiencies = temp_data[:, 0]
+                counts = temp_data[:, 1]
+
+                rescan_content = str(AOM_435)
+                for k in range(5):
+                    rescan_content = rescan_content+','+str(effiencies[k])
+
+                for kk in range(5):
+                    rescan_content = rescan_content+','+str(counts[kk])
+
+                rescan_content = rescan_content + '\n'
+                file_write(rescan_file_name, rescan_content)
+
+                if effiencies.mean() < 90:
+                    file_write(manual_rescan_file_name, rescan_content)
+
+            # update figure
+            # line1.set_xdata(data[0,0:i])
+
         file.close()
-        save_file(data, file_name[5:-4])
+        rescan_file.close()
+        manual_rescan_file.close()
+        save_file(data, __file__[:-3])
         curr.off()
-        
-        # plot figures
-        plt.figure(1)
-        x1 = data[0,:]
-        y1 = data[1,:]
-        plt.plot(x1, y1)
-        plt.show()

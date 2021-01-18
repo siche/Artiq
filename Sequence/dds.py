@@ -84,9 +84,16 @@ class dds_controller(object):
 
 if __name__ == '__main__':
     dds1 = dds_controller('Com5')
+    amp = 0.5
+    
     fre = float(sys.argv[1])
-    print('435 AOM fre:%.4fMHz' % fre)
-    dds1.set_frequency(port=0,frequency=fre,amplitude=0.8,phase=0)
+    try:   
+        amp = float(sys.argv[2])
+    except:
+        print('set amplitue to default value')
+
+    print('435 AOM fre:%.4fMHz Amplitude:%.2f' % (fre, amp))
+    dds1.set_frequency(port=0,frequency=fre,amplitude=amp,phase=0)
 
 """
     for i in range(7):

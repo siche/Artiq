@@ -187,7 +187,7 @@ class KasliTester(EnvExperiment):
 
                 # turn on 435
                 self.ttl_435.off()
-                delay(1200*us)
+                delay(200*us)
                 self.ttl_435.on()
                 delay(1*us)
 
@@ -222,10 +222,10 @@ class KasliTester(EnvExperiment):
         self.pre_set()
 
         pmt_on()
-        init_fre = 234.5
-        lock_point = 871.0346645
-        scan_step = 0.005
-        N = 400
+        init_fre = 210
+        lock_point = 871.034661
+        scan_step = 0.01
+        N = 5000
 
         widgets = ['Progress: ', Percentage(), ' ', Bar('#'), ' ',
                    Timer(), ' ', ETA(), ' ']
