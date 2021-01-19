@@ -224,7 +224,7 @@ class KasliTester(EnvExperiment):
         init_fre = 235.43
         lock_point = 871.034665
         scan_step = 0.001
-        rabi_time = 27
+        rabi_time = 1000
         N = 50
         run_times = 200
 
