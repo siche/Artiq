@@ -224,16 +224,16 @@ class KasliTester(EnvExperiment):
         init_fre = 235.462
         lock_point = 871.034666
         scan_step = 0.0001
-        init_amp = 0.05
+        init_amp = 0.04
 
-        M = 10
-        amp_step = 0.003
+        M = 9
+        amp_step = 0.004
 
-        rabi_time = 2000
+        rabi_time = 4000
         N = 120
         run_times = 200
 
-
+        plt.figure(figsize=(16,10))
         for j in trange(M):
             amp = init_amp - j*amp_step
             file_name = 'data\\435_width_iteration_scan_amp='+str(amp)+ 'rabi_time=' + str(rabi_time)+ 'fre '+str(init_fre)+'-'+\
@@ -261,7 +261,7 @@ class KasliTester(EnvExperiment):
                 temp = self.run_sequence(rabi_time, run_times)
 
                 # print information
-                data_item = [AOM_435, temp[0], temp[1], wl_871]
+                data_item = [AOM_435, 100-temp[0], temp[1], wl_871]
                 data[:, i] = data_item
 
                 # write data
@@ -275,10 +275,12 @@ class KasliTester(EnvExperiment):
             file.close()
             save_file(data, file_name[5:-4])
             curr.off()
+
+            ax = plt.subplot('25'+str(j+1))
+            ax.plot(data[0,:], data[1,:])
         
         # plot figures
-        plt.figure(1)
-        x1 = data[0,:]
-        y1 = data[1,:]
-        plt.plot(x1, y1)
+        fig_name = 'data\\435_width_iteration_scan_amp='+ '-'+str(amp)+'-'+str(init_amp)+'rabi_time=' + str(rabi_time)+ 'fre '+str(init_fre)+'-'+\
+                     str(float(init_fre+N*scan_step))+'.pdf'
+        plt.savefig(fig_name)
         plt.show()
