@@ -224,52 +224,57 @@ class KasliTester(EnvExperiment):
         init_fre = 235.462
         lock_point = 871.034666
         scan_step = 0.0001
-        amp = 0.03
+        init_amp = 0.05
 
-        rabi_time = 4000
+        M = 10
+        amp_step = 0.003
+
+        rabi_time = 2000
         N = 120
         run_times = 200
 
-        file_name = 'data\\435_width_scan_amp='+str(amp)+ 'rabi_time=' + str(rabi_time)+ 'fre '+str(init_fre)+'-'+\
+
+        for j in trange(M):
+            amp = init_amp - j*amp_step
+            file_name = 'data\\435_width_iteration_scan_amp='+str(amp)+ 'rabi_time=' + str(rabi_time)+ 'fre '+str(init_fre)+'-'+\
                      str(float(init_fre+N*scan_step))+'.csv'
-        file = open(file_name, 'w+')
-        file.close()
+            file = open(file_name, 'w+')
+            file.close()
 
-        data = np.zeros((4, N))
-        data[0, :] = np.linspace(init_fre, init_fre+scan_step*(N-1), N)
+            data = np.zeros((4, N))
+            data[0, :] = np.linspace(init_fre, init_fre+scan_step*(N-1), N)
 
-        for i in trange(N):
+            for i in range(N):
+                AOM_435 = init_fre+scan_step*i  # - 0.001*N/2
 
-            AOM_435 = init_fre+scan_step*i  # - 0.001*N/2
+                # wait for 871 to be locked
+                while not is_871_locked(lock_point):
+                    print('Laser is locking...')
+                    time.sleep(3)
 
-            # wait for 871 to be locked
-            while not is_871_locked(lock_point):
-                print('Laser is locking...')
-                time.sleep(3)
+                # change AOM frequency
+                code = "conda activate base && python dds.py " + str(AOM_435) + " " + str(amp)
+                print(code)
+                os.system(code)
 
-            # change AOM frequency
-            code = "conda activate base && python dds.py " + str(AOM_435) + " " + str(amp)
-            print(code)
-            os.system(code)
+                # run detection and save data
+                temp = self.run_sequence(rabi_time, run_times)
 
-            # run detection and save data
-            temp = self.run_sequence(rabi_time, run_times)
+                # print information
+                data_item = [AOM_435, temp[0], temp[1], wl_871]
+                data[:, i] = data_item
 
-            # print information
-            data_item = [AOM_435, temp[0], temp[1], wl_871]
-            data[:, i] = data_item
+                # write data
+                content = str(data[0, i])+','+str(data[1, i]) + \
+                    ','+str(data[2, i])+','+str(data[3, i])+'\n'
 
-            # write data
-            content = str(data[0, i])+','+str(data[1, i]) + \
-                ','+str(data[2, i])+','+str(data[3, i])+'\n'
+                file_write(file_name, content)
+                print_info(data_item)
+                print('\n')
 
-            file_write(file_name, content)
-            print_info(data_item)
-            print('\n')
-
-        file.close()
-        save_file(data, file_name[5:-4])
-        curr.off()
+            file.close()
+            save_file(data, file_name[5:-4])
+            curr.off()
         
         # plot figures
         plt.figure(1)

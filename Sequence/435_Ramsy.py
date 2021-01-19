@@ -303,7 +303,8 @@ class KasliTester(EnvExperiment):
             rescan_time = 0
             temp_data = []
 
-            # there may multiple ion
+            # there may multi
+            # ple ion
             if temp[1] > 800:
                 if has_ion() > 1:
                     reload_ion()
