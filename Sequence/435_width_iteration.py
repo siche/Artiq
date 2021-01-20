@@ -226,7 +226,7 @@ class KasliTester(EnvExperiment):
         scan_step = 0.0001
         init_amp = 0.04
 
-        M = 9
+        M = 10
         amp_step = 0.004
 
         rabi_time = 4000
