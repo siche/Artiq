@@ -33,7 +33,7 @@ def tcp_link(sock, addr):
     sock.send(b'Connected to OVEN SERVER!!!')
     while True:
         state = sock.recv(1024).decode('utf-8')
-        repl = 'NO COMMAND'
+        reply = 'NO COMMAND'
         if state == 'on':
             CURR.on()
             reply = 'ON RECEIVED'
@@ -49,16 +49,19 @@ def tcp_link(sock, addr):
             reply = 'Beep'
 
         # command is in the format
-        # set curr=3.2 vol=2
-        if 'set' in 'a':
+        # set curr=3.2 vol=2.0
+        # must be 2 demicals
+        if 'set' in state:
             command = state.split(' ')
             for item in command:
                 if 'vol' in item:
-                    new_vol = float(item[-1])
+                    args = item.split('=')
+                    new_vol = float(args[-1])
                 
                 if 'curr' in item:
-                    new_curr = float(item[-1])
-
+                    args = item.split('=')
+                    new_curr = float(args[-1])
+                    
             CURR.set_up(curr=new_curr, vol=new_vol)
             reply = 'CURR:{}, VOL:{}'.format(new_curr, new_vol)
         sock.send(reply.encode('utf-8'))

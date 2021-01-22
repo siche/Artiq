@@ -45,6 +45,11 @@ class current_web():
         else:
             print('Beep Failed')
 
+    def set_up(self, curr=3.1, vol=2.0):
+        code = 'set curr='+str(curr)+' vol='+str(vol)
+        self.sock.send(code.encode('utf-8'))
+        reply = self.sock.recv(1024).decode('utf-8')
+
     def runServer(self):
         cmd = 'python \"D:/Document/GitHub/Laser-Control/Ion/CurrentWebServer.py\"'
         os.system(cmd)
