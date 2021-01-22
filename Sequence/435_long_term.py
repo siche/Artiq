@@ -12,10 +12,14 @@ from wlm_web import wlm_web
 
 from image_processing import has_ion
 from ttl_client import shutter
+
+from CurrentWebClient import current_web
 from SMB100B import SMB100B
 
 wm = wlm_web()
 wl_871 = 0.0
+curr = current_web()
+rf_signal = SMB100B()
 
 shutter_370 = shutter(com=0)
 flip_mirror = shutter(com=1)
@@ -25,6 +29,61 @@ ccd_on = flip_mirror.on
 pmt_on = flip_mirror.off
 # dds_435 = DDS_AD9910()
 
+def reload_ion():
+    t1 = time.time()
+    print('RELOADING...')
+    pmt_on()
+    rf_signal.on()
+    time.sleep(0.3)
+    ccd_on()
+    time.sleep(1)
+    # is_there_ion = has_ion()
+    costed_time = 0
+    ion_num = has_ion()
+    is_thermalized = False
+    while (costed_time < 600 and not ion_num == 1):
+
+        # 如果有多个ion 关闭RF放掉离子
+        if ion_num > 1:
+            rf_signal.off()
+            time.sleep(5)
+            rf_signal.on()
+
+        # when ion_num = -1 it means that the ion is thermalized
+        # therefore, turn off rf and adjust 370 to toward red direction
+        if ion_num == -1:
+            is_thermalized = True
+            rf_signal.off()
+            wm.relock(2)
+            time.sleep(2)
+            rf_signal.on()
+
+        curr.on()
+        shutter_370.on()
+        shutter_399.on()
+        time.sleep(2)
+
+        ion_num = has_ion()
+        costed_time = time.time()-t1
+        print('COSTED TIME:%.1fs' % (costed_time))
+    
+    # adjust the 370 wavelength to initial point
+    if is_thermalized:
+        wm.relock(2,-0.000005)
+
+    # if run out of time and do not catch ion
+    # raise warning information for turther processing 
+    if costed_time > 600 or ion_num !=1:
+        curr.off()
+        win32api.MessageBox(0, "Please Check 370 WaveLength","Warning", win32con.MB_ICONWARNING)
+
+    # else there is ion 
+    # turn to 435 laser scan
+    pmt_on()
+    curr.off()
+    shutter_370.off()
+    shutter_399.off()
+    curr.beep()
 
 def is_871_locked(lock_point=871.034616):
     global wl_871
@@ -54,7 +113,7 @@ def file_write(file_name, content):
 
 @atexit.register
 def closeAll():
-    pass
+    curr.off()
 
 
 class KasliTester(EnvExperiment):
@@ -173,7 +232,8 @@ class KasliTester(EnvExperiment):
         sleep_time = 5
         M = 2000
 
-        file_name = 'data\\435_long_term.csv'
+        time_now = time.strftime("%Y-%m-%d-%H-%M")
+        file_name = 'data\\435_long_term'+time_now+'.csv'
         file = open(file_name, 'w+')
         file.close()
 
@@ -201,6 +261,10 @@ class KasliTester(EnvExperiment):
                 # run detection and save data
                 temp = self.run_sequence(rabi_time, run_times)
 
+                if temp[0] < 5:
+                    reload_ion()
+                    pmt_on()
+
                 # print information
                 data_item = [AOM_435, temp[0], temp[1], wl_871]
                 data[:, i] = data_item
@@ -219,13 +283,13 @@ class KasliTester(EnvExperiment):
                 if ydata[min_ind -1] < 50 and ydata[min_ind+1]<50:
                     center_fre = data[0,:][min_ind]
             """
-                 
+
             # save data
             all_data[0,j] = delta_t
             all_data[1,j] = data[0,:][min_ind]
             all_data[2,j] = ydata[min_ind]
         
-            content = str(delta_t)+','+str(center_fre)+'\n'
+            content = str(delta_t)+','+str(data[0,:][min_ind])+ ',' + str(ydata[min_ind])+'\n'
             file_write(file_name, content)
 
             time.sleep(sleep_time)
