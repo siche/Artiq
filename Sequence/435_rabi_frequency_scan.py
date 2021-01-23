@@ -53,8 +53,8 @@ def file_write(file_name, content):
 
 def register_frequency(fre, effi):
     time_now = time.strftime("%Y-%m-%d-%H-%M")
-    file = open('long_term_register.csc','a')
-    content = time_now + ',' + str(fre)
+    file = open('data\\long_term_register.csv','a')
+    content = time_now + ',' + str(fre) + ',' + str(effi) + '\n'
     file.write(content)
     file.close()
 
@@ -210,7 +210,9 @@ class KasliTester(EnvExperiment):
             file_write(file_name, content)
             print_info(data_item)
             print('\n')
-        
+    
+        min_index = data[1,:].argmin(axis=0)
+        register_frequency(data[0,min_index],data[1,min_index])
 
         file.close()
         save_file(data, file_name[5:-4])
