@@ -51,6 +51,12 @@ def file_write(file_name, content):
     file.write(content)
     file.close()
 
+def register_frequency(fre, effi):
+    time_now = time.strftime("%Y-%m-%d-%H-%M")
+    file = open('long_term_register.csc','a')
+    content = time_now + ',' + str(fre)
+    file.write(content)
+    file.close()
 
 @atexit.register
 def closeAll():
@@ -162,11 +168,11 @@ class KasliTester(EnvExperiment):
         self.pre_set()
 
         pmt_on()
-        init_fre = 235.467
+        init_fre = 235.484
         lock_point = 871.034659
         scan_step = 0.0001*3
-        rabi_time = 20
-        N = 40
+        rabi_time = 80
+        N = 30
         run_times = 200
 
         file_name = 'data\\Rabi_AOM_fre_Scan'+str(init_fre)+'-'+\
@@ -204,6 +210,7 @@ class KasliTester(EnvExperiment):
             file_write(file_name, content)
             print_info(data_item)
             print('\n')
+        
 
         file.close()
         save_file(data, file_name[5:-4])
