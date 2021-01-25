@@ -45,7 +45,7 @@ def reload_ion():
     while (costed_time < 600 and not ion_num == 1):
 
         # 如果有多个ion 关闭RF放掉离子
-        if ion_num > 1:
+        if ion_num > 1 :
             rf_signal.off()
             time.sleep(5)
             rf_signal.on()

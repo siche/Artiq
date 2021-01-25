@@ -7,6 +7,13 @@ import time
 import signal,sys
 import atexit
 
+def register_data(t1):
+    time_now = time.strftime("%Y-%m-%d-%H-%M")
+    file = open('data\\load_time.csv','a')
+    content = time_now + ',' + str(t1)
+    file.write(content)
+    file.close()
+
 class IonLoader(object):
     def __init__(self):
         super(IonLoader, self).__init__()
@@ -51,6 +58,7 @@ class IonLoader(object):
             self.shutter_370.off()
             self.shutter_399.off()
             self.curr.beep(3)
+            register_data(costed_time)
             return True
         else:
             return False
