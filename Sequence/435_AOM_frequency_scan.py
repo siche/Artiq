@@ -164,14 +164,14 @@ class KasliTester(EnvExperiment):
         self.pre_set()
 
         pmt_on()
-        init_fre = 210
+        init_fre = 220
         lock_point = 871.034658
         scan_step = 0.01
-        rabi_time = 6000
-        N = 6000
+        rabi_time = 1000
+        N = 3000
         run_times = 200
 
-        amp = 0.05
+        amp = 0.9
         file_name = 'data\\Rabi_AOM_Fre_Scan'+ 'amp=' + str(amp)+'rabi_time=' + str(rabi_time)+'fre='+ str(init_fre)+'-'+ str(float(init_fre+N*scan_step))+'.csv'
         file = open(file_name, 'w+')
         file.close()

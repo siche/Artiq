@@ -10,7 +10,7 @@ import atexit
 def register_data(t1):
     time_now = time.strftime("%Y-%m-%d-%H-%M")
     file = open('data\\load_time.csv','a')
-    content = time_now + ',' + str(t1)
+    content = time_now + ',' + str(t1) + '\n'
     file.write(content)
     file.close()
 
