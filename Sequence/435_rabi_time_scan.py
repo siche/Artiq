@@ -151,12 +151,14 @@ class KasliTester(EnvExperiment):
 
     def run(self):
         
-        AOM_435 = 228.4915
+        # AOM_435 = 228.4915
+        AOM_435 = 239.761
         lock_point = 871.034664
         init_value = 0
-        scan_step = 10
-        N = 400
+        scan_step = 2
+        N = 2000
         run_times = 200
+        amp = 0.2
 
 
         self.pre_set()
@@ -172,7 +174,7 @@ class KasliTester(EnvExperiment):
 
         # drive AOM
         code = "conda activate base && python dds.py " + \
-            str(AOM_435) + ' ' + str(0.5)
+            str(AOM_435) + ' ' + str(amp)
         os.system(code)
        
         # scab iteration
