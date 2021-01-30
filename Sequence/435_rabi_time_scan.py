@@ -152,11 +152,11 @@ class KasliTester(EnvExperiment):
     def run(self):
         
         # AOM_435 = 228.4915
-        AOM_435 = 239.761
+        AOM_435 = 239.764
         lock_point = 871.034664
         init_value = 0
-        scan_step = 2
-        N = 2000
+        scan_step = 4
+        N = 500
         run_times = 200
         amp = 0.2
 
