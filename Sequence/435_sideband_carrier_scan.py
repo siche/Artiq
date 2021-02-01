@@ -171,12 +171,12 @@ class KasliTester(EnvExperiment):
         init_fre = 239.68
         sideband_fre1 = 228.38
         carrier_fre = 239.7
-        sideband_fre2 = 2*carrier_fre-sideband_fre1
+        sideband_fre2 = 250.8
 
         lock_point = 871.034662
         scan_step = 0.001/2
 
-        rabi_time = 100
+        rabi_time = 200
         scan_times = 200*2
         N = 3*scan_times
 
