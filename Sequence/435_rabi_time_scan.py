@@ -151,15 +151,15 @@ class KasliTester(EnvExperiment):
 
     def run(self):
         
-        # AOM_435 = 228.4915
-        AOM_435 = 239.789
-        lock_point = 871.034664
+        # AOM_435 MicroMotion = 228.4915
+        # AOM_435 Red Phonon Sideband 239.0195
+        AOM_435 = 239.2285
+        lock_point = 871.034669
         init_value = 0
-        scan_step = 4
+        scan_step = 1
         N = 500
         run_times = 200
-        amp = 0.2
-
+        amp = 0.9
 
         self.pre_set()
         pmt_on()

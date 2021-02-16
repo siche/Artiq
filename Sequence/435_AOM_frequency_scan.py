@@ -171,7 +171,7 @@ class KasliTester(EnvExperiment):
         N = 1000
         run_times = 100
 
-        amp = 0.9
+        amp = 0.5
         file_name = 'data\\Rabi_AOM_Fre_Scan'+ 'amp=' + str(amp)+'rabi_time=' + str(rabi_time)+'fre='+ str(init_fre)+'-'+ str(float(init_fre+N*scan_step))+'.csv'
         file = open(file_name, 'w+')
         file.close()

@@ -168,11 +168,11 @@ class KasliTester(EnvExperiment):
         self.pre_set()
 
         pmt_on()
-        init_fre = 238.6
-        lock_point = 871.034662
+        init_fre = 240.3
+        lock_point = 871.034667
         scan_step = 0.001
         rabi_time = 100
-        N = 800
+        N = 200
         run_times = 200
 
         file_name = 'data\\Rabi_AOM_fre_Scan'+str(init_fre)+'-'+\
