@@ -32,7 +32,15 @@ class KasliTester(EnvExperiment):
         # set frequecny
         
         self.cooling.set(fre*MHz)
-        self.detection.set(260*MHz)
+        self.detection.set(260*MHz, amplitude = 0.2, profile=0)
+        self.detection.set(260*MHz, amplitude = 0.3, profile=1)
+        self.detection.set(260*MHz, amplitude = 0.4, profile=2)
+        self.detection.set(260*MHz, amplitude = 0.5, profile=3)
+        self.detection.set(260*MHz, amplitude = 0.6, profile=4)
+        self.detection.set(260*MHz, amplitude = 0.7, profile=5)
+        self.detection.set(260*MHz, amplitude = 0.8, profile=6)
+        self.detection.set(260*MHz, amplitude = 0.9, profile=7)
+
         self.dds2.set(400*MHz)
         # set amplitude attenuation
         # the origin output is about 9 dbm
@@ -54,3 +62,8 @@ class KasliTester(EnvExperiment):
     def run(self):
         print('set cooling frequecny %d' % fre)
         self.set_dds()
+        """
+        for i in range(4):
+            self.detection.set_profile(0)
+            delay(5*s)
+        """
