@@ -168,7 +168,7 @@ class KasliTester(EnvExperiment):
         lock_point = 871.034662
         scan_step = 0.001
         rabi_time = 100
-        N = 4500
+        N = 6000
         run_times = 100
 
         amp = 0.5
