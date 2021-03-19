@@ -11,7 +11,7 @@ vols = [5.0, 1.0, -0.75, 1.0, 5.0, 5.0, 1.0, -0.33, 1.0, 5.0, 0.0,0.0]
 # vols = [0.5, -0.5, -0.75, -0.5, 0.2, 0.5, -0.5, -0.33, -0.5, 0.2, 0.0,0.0]
 chs = [0, 2, 3, 4, 5, 8, 11, 12, 14, 15, 18, 20] 
 # bias 1 is for focus micromotion compensation, and the second one is for horizontal micromotion compensation
-bias = [0.1, 0.085]
+bias = [0.020, 0.068]
 split = 3
 for i in range(5):
     vols[i] += bias[0] + bias[1]
