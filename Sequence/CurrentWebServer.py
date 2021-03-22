@@ -19,7 +19,7 @@ TODO:
 """
 
 CURR = current_supply('com9')
-CURR.set_up(curr=3.1, vol=2)
+CURR.set_up(curr=3.0, vol=2)
 
 MAX_LISTEN = 10
 SOCK_PORT = 6789
