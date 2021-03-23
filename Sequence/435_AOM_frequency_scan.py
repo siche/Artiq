@@ -164,11 +164,11 @@ class KasliTester(EnvExperiment):
         self.pre_set()
 
         pmt_on()
-        init_fre = 240.061-4
+        init_fre = 240.061-4.5
         lock_point = 871.034649
-        scan_step = 0.001
+        scan_step = 0.001*2.5
         rabi_time = 100
-        N = 8000
+        N = 2000
         run_times = 100
 
         amp = 0.5
