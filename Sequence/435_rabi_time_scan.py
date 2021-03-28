@@ -153,13 +153,14 @@ class KasliTester(EnvExperiment):
         
         # AOM_435 MicroMotion = 228.4915
         # AOM_435 Red Phonon Sideband 239.0195
-        AOM_435 = 239.2285
-        lock_point = 871.034669
+        # AOM_435 = 239.965-22.52968/2
+        AOM_435 = 238.381
+        lock_point = 871.034647
         init_value = 0
-        scan_step = 1
-        N = 500
-        run_times = 200
-        amp = 0.9
+        scan_step = 4
+        N = 200
+        run_times = 100
+        amp = 0.6
 
         self.pre_set()
         pmt_on()
@@ -187,7 +188,7 @@ class KasliTester(EnvExperiment):
                 time.sleep(3)
 
             # run detection and save data
-            temp = self.run_sequence(scan_value)
+            temp = self.run_sequence(scan_value,run_times)
 
             # print information
             data_item = [scan_value, temp[0], temp[1], wl_871]

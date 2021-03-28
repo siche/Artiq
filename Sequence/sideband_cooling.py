@@ -147,6 +147,9 @@ class KasliTester(EnvExperiment):
                 # turn on 935 sideband
                 self.ttl_935_EOM.off()
                 self.cooling.sw.on()
+        all_cout = [0]*100
+        for j in range(100):
+            scan_time = 10*j
 
         return (100*count/run_times, photon_count)
 
@@ -193,16 +196,16 @@ class KasliTester(EnvExperiment):
                  # turn on 935 sideband
                 self.ttl_935_AOM.on()
                 self.ttl_935_EOM.off()
-
+                
     def run(self):
         
         # AOM_435 MicroMotion = 228.4915
         # AOM_435 Red Phonon Sideband 239.0195
         # AOM_435 Blue Sideband 
 
-        AOM_435 = 239.808
-        AOM_435_RED_SIDEBAND = 239.240
-        lock_point = 871.034662
+        AOM_435 = 239.912
+        AOM_435_RED_SIDEBAND = 238.381
+        lock_point = 871.034644
         init_value = 0
         scan_step = 1
         N = 500
