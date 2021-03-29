@@ -18,6 +18,7 @@ class DDS_test(EnvExperiment):
 
         # asf = amp/1*2**14
         # fre = fre/1GHz*2**32
+        self.detection.init()
 
         self.core.break_realtime()
     
@@ -35,4 +36,4 @@ class DDS_test(EnvExperiment):
         
         self.detection.set(frequency=250*MHz,amplitude=0.5, profile=1)
         self.detection.set(frequency=260*MHz,amplitude=0.5, profile=2)
-
+        self.detction.read16(20)
