@@ -36,4 +36,4 @@ class DDS_test(EnvExperiment):
         
         self.detection.set(frequency=250*MHz,amplitude=0.5, profile=1)
         self.detection.set(frequency=260*MHz,amplitude=0.5, profile=2)
-        self.detction.read16(20)
+        self.detction.set_profile_ram()

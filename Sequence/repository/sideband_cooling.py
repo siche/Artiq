@@ -2,17 +2,18 @@ import numpy as np
 import time
 from artiq.experiment import *
 
-
+_RED_SIDEBAND = 238
 class SideBandCooling(EnvExperiment):
     def build(self):
 
         # define HardWare device
         dds_channel = ['urukul0_ch'+str(i) for i in range(4)]
         self.setattr_device('core')
-        self.detection = self.get_device(dds_channel[0])
+        self.dds1_435 = self.get_device(dds_channel[0])
         self.cooling = self.get_device(dds_channel[1])
         self.microwave = self.get_device(dds_channel[2])
         self.pumping = self.get_device(dds_channel[3])
+
         self.pmt = self.get_device('ttl0')
         self.ttl_935_AOM = self.get_device('ttl4')
         self.ttl_935_EOM = self.get_device('ttl7')
@@ -25,16 +26,16 @@ class SideBandCooling(EnvExperiment):
     def pre_set(self):
         self.core.break_realtime()
         self.cooling.init()
-        self.detection.init()
-        self.microwave.init()
+        self.dds1_435.init()
+        self.microwave.init()   
         self.pumping.init()
 
         self.cooling.set(250*MHz)
-        self.detection.set(260*MHz)
+        self.dds1_435.set(_RED_SIDEBNAD*MHz)
         self.microwave.set(400.*MHz)
         self.pumping.set(260*MHz)
 
-        self.detection.set_att(20.)
+        self.dds1_435.set_att(20.)
         self.cooling.set_att(10.)
         self.microwave.set_att(0.)
         self.pumping.set_att(18.)
@@ -75,6 +76,7 @@ class SideBandCooling(EnvExperiment):
             #    some cooling time
             for i in range(50):
                 with parallel:
+
                     # 1.1 turn off 935 sideband
                     self.ttl_935_EOM.on()
 
@@ -85,23 +87,21 @@ class SideBandCooling(EnvExperiment):
                 delay(100*us)
 
                 # 1.2 Pumping Back
-                self.ttl_935_EOM.on()
-                delay(50*us)
-
+                self.ttl_935_EOM.off()
+                delay(10*us)
+            delay(20*us)
             # 3 cooling result detection
             # Mainly detect the red sideband
-            self.pumping.sw.on()
-            delay(50*us)
-            self.pumping.sw.off()
 
             for i in range(100):
-                scan_time = 2*i
+                scan_time = 5*i
                 for j in range(100):
-                    self.ttl_935_EOM.on()
+                    with sequential:
+                        self.ttl_935_EOM.on()
 
-                    self.ttl_435.off()
-                    delay(scan_time*us)
-                    self.ttl_435_on()
+                        self.ttl_435.off()
+                        delay(scan_time*us)
+                        self.ttl_435_on()
 
                     with parallel:
                         self.pmt.gate_rising(300*us)
@@ -111,8 +111,6 @@ class SideBandCooling(EnvExperiment):
                         if photon_number > 1:
                             count = count + 1
                     self.ttl_935_EOM.on()
-                self.mutate_dataset("SBC Data",i,count)
-
-    def run(self):
+                self.mutate_dataset("SBCData",i,count)
 
        
