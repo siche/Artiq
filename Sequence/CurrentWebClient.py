@@ -6,7 +6,7 @@ import signal
 import sys
 
 class current_web():
-    def __init__(self, ip='192.168.1.51', port=6789):
+    def __init__(self, ip='192.168.1.13', port=6789):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             self.sock.connect((ip, port))

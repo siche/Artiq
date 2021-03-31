@@ -18,12 +18,12 @@ TODO:
     4.adjust oven current 
 """
 
-CURR = current_supply('com9')
+CURR = current_supply('com4')
 CURR.set_up(curr=3.0, vol=2)
 
 MAX_LISTEN = 10
 SOCK_PORT = 6789
-IP = '192.168.1.51'
+IP = '192.168.1.13'
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((IP,SOCK_PORT))
 s.listen(MAX_LISTEN)

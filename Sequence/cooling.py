@@ -56,7 +56,7 @@ class KasliTester(EnvExperiment):
 
         self.cooling.sw.on()
         self.detection.sw.off()
-        self.dds3.sw.off()06
+        self.dds3.sw.off()
         
 
     def run(self):

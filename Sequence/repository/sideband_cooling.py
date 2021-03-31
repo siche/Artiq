@@ -3,6 +3,8 @@ import time
 from artiq.experiment import *
 
 _RED_SIDEBAND = 238
+
+
 class SideBandCooling(EnvExperiment):
     def build(self):
 
@@ -19,19 +21,23 @@ class SideBandCooling(EnvExperiment):
         self.ttl_935_EOM = self.get_device('ttl7')
         self.ttl_435 = self.get_device('ttl6')
 
-        # define dataset
-        self.set_dataset("SBCData", np.full(100, 0), broadcast=True)
+    def run(self):
+        t1 = time.time()
+        self.pre_set()
+        self.sidebandcooling()
+        t2 = time.time()
+        print("time cost:%s" % (t2-t1))
 
     @kernel
     def pre_set(self):
         self.core.break_realtime()
         self.cooling.init()
         self.dds1_435.init()
-        self.microwave.init()   
+        self.microwave.init()
         self.pumping.init()
 
         self.cooling.set(250*MHz)
-        self.dds1_435.set(_RED_SIDEBNAD*MHz)
+        self.dds1_435.set(_RED_SIDEBAND*MHz)
         self.microwave.set(400.*MHz)
         self.pumping.set(260*MHz)
 
@@ -39,15 +45,12 @@ class SideBandCooling(EnvExperiment):
         self.cooling.set_att(10.)
         self.microwave.set_att(0.)
         self.pumping.set_att(18.)
-    
-    """
+
+        # define dataset
+        # self.set_dataset("SBCData", np.full(100, 0), broadcast=True)
+
     @kernel
     def sidebandcooling(self):
-    """
-
-
-    @kernel
-    def sidebandcooling(self, rabi_time, run_times=200):
         # initialize dds
         self.core.break_realtime()
         self.microwave.sw.off()
@@ -56,6 +59,7 @@ class SideBandCooling(EnvExperiment):
         photon_count = 0
         photon_number = 0
         count = 0
+        all_count = [0]*100
 
         with sequential:
 
@@ -101,7 +105,7 @@ class SideBandCooling(EnvExperiment):
 
                         self.ttl_435.off()
                         delay(scan_time*us)
-                        self.ttl_435_on()
+                        self.ttl_435.on()
 
                     with parallel:
                         self.pmt.gate_rising(300*us)
@@ -111,6 +115,11 @@ class SideBandCooling(EnvExperiment):
                         if photon_number > 1:
                             count = count + 1
                     self.ttl_935_EOM.on()
-                self.mutate_dataset("SBCData",i,count)
+                all_count[i] = count
+                #self.mutate_dataset("SBCData", i, count)
+            self.saveData(all_count)
 
-       
+    @rpc(flags = {"async"})
+    def saveData(self, x):
+        for i in range(len(x)):
+            print(x[i])
