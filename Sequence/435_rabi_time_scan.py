@@ -154,13 +154,13 @@ class KasliTester(EnvExperiment):
         # AOM_435 MicroMotion = 228.4915
         # AOM_435 Red Phonon Sideband 239.0195
         # AOM_435 = 239.965-22.52968/2
-        AOM_435 = 238.381
+        AOM_435 = 238.340
         lock_point = 871.034647
         init_value = 0
-        scan_step = 4
-        N = 200
+        scan_step = 2
+        N = 100
         run_times = 100
-        amp = 0.6
+        amp = 0.5
 
         self.pre_set()
         pmt_on()
