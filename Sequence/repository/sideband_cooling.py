@@ -3,7 +3,7 @@ import time
 from artiq.experiment import *
 import matplotlib.pyplot as plt
 
-_RED_SIDEBAND = 238.087
+_RED_SIDEBAND = 238.103
 
 class SideBandCooling(EnvExperiment):
     def build(self):
@@ -59,8 +59,9 @@ class SideBandCooling(EnvExperiment):
         photon_count = 0
         photon_number = 0
         count = 0
-        all_count = [0]*100
-
+        N = 100
+        all_count = [0]*N
+        all_time = [0]*N
         with sequential:
 
             # 0.0 doppler cooling
@@ -78,8 +79,7 @@ class SideBandCooling(EnvExperiment):
             # sideband cooling
             # 1. turn off 935 sideband and turn on 435 for
             #    some cooling time
-            """
-            for i in range(50):
+            for i in range(1000):
                 with parallel:
 
                     # 1.1 turn off 935 sideband
@@ -89,36 +89,49 @@ class SideBandCooling(EnvExperiment):
                     # TODO:DDS profile 的切换
                     # self.switch_to_red()
                     self.ttl_435.off()
-                delay(100*us)
+                delay(50*us)
 
                 self.ttl_435.on()
                 # 1.2 Pumping Back
                 self.ttl_935_EOM.off()
+
+                self.pumping.sw.on()
                 delay(20*us)
-            delay(20*us)
+                self.pumping.sw.off()
+
+            # delay(*us)
             # 3 cooling result detection
             # Mainly detect the red sideband
-            """
-            for i in range(100):
+            
+            for i in range(N):
                 scan_time = 2*i
                 count = 0
-                for j in range(100):
+                for j in range(50):
                     with sequential:
                         
+                        """
                         self.cooling.sw.on()
-                        delay(500*us)
+                        delay(1000*us)
                         self.cooling.sw.off()
                         delay(1*us)
+                        """
 
+                        self.cooling.sw.off()
                         self.pumping.sw.on()
                         delay(50*us)
                         self.pumping.sw.off()
                         delay(1*us)
 
                         self.ttl_935_EOM.on()
+                        self.ttl_935_AOM.on()
+                        delay(1*us)
+
                         self.ttl_435.off()
                         delay(scan_time*us)
                         self.ttl_435.on()
+                        delay(1*us)
+
+                        self.ttl_935_AOM.off()
 
                     with parallel:
                         self.pmt.gate_rising(300*us)
@@ -127,14 +140,15 @@ class SideBandCooling(EnvExperiment):
                         photon_count = photon_count + photon_number
                         if photon_number > 1:
                             count = count + 1
-                    self.ttl_935_EOM.on()
-                all_count[i] = count
+                    self.ttl_935_EOM.off()
+                all_count[i] = count*2
+                all_time[i] = scan_time
                 #self.mutate_dataset("SBCData", i, count)
-            self.saveData(all_count)
+            self.saveData(all_time, all_count)
 
     @rpc(flags = {"async"})
-    def saveData(self, x):
-        xdata = np.arange(0,200,2)
+    def saveData(self, xdata, ydata):
+        # xdata = np.arange(0,200,1)
         plt.figure()
-        plt.plot(xdata,x)
+        plt.plot(xdata, ydata)
         plt.show()

@@ -155,10 +155,10 @@ class KasliTester(EnvExperiment):
         # AOM_435 Red Phonon Sideband 239.0195
         # AOM_435 = 239.965-22.52968/2
         t1 = time.time()
-        AOM_435 = 239.920
+        AOM_435 = 238.103
         lock_point = 871.034647
         init_value = 0
-        scan_step = 1
+        scan_step = 2
         N = 100
         run_times = 100
         amp = 0.5
