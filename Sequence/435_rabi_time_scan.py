@@ -82,7 +82,7 @@ class KasliTester(EnvExperiment):
         self.pumping.set_att(18.)
 
     @kernel
-    def run_sequence(self, rabi_time, run_times=200):
+    def run_sequence(self, rabi_time, run_times=100):
         # initialize dds
         self.core.break_realtime()
         self.microwave.sw.off()
@@ -154,11 +154,12 @@ class KasliTester(EnvExperiment):
         # AOM_435 MicroMotion = 228.4915
         # AOM_435 Red Phonon Sideband 239.0195
         # AOM_435 = 239.965-22.52968/2
-        AOM_435 = 238.340
+        t1 = time.time()
+        AOM_435 = 239.923
         lock_point = 871.034647
         init_value = 0
-        scan_step = 2
-        N = 100
+        scan_step = 1
+        N = 50
         run_times = 100
         amp = 0.5
 
@@ -205,6 +206,8 @@ class KasliTester(EnvExperiment):
         save_file(data, file_name[5:-4])
         curr.off()
         
+        t2 = time.time()
+        print("Time costed:%s" %(t2-t1))
         # plot figures
         plt.figure(1)
         x1 = data[0,:]
