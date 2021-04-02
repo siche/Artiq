@@ -3,8 +3,7 @@ import time
 from artiq.experiment import *
 import matplotlib.pyplot as plt
 
-_RED_SIDEBAND = 238
-
+_RED_SIDEBAND = 238.087
 
 class SideBandCooling(EnvExperiment):
     def build(self):
@@ -79,6 +78,7 @@ class SideBandCooling(EnvExperiment):
             # sideband cooling
             # 1. turn off 935 sideband and turn on 435 for
             #    some cooling time
+            """
             for i in range(50):
                 with parallel:
 
@@ -94,18 +94,28 @@ class SideBandCooling(EnvExperiment):
                 self.ttl_435.on()
                 # 1.2 Pumping Back
                 self.ttl_935_EOM.off()
-                delay(100*us)
+                delay(20*us)
             delay(20*us)
             # 3 cooling result detection
             # Mainly detect the red sideband
-
+            """
             for i in range(100):
-                scan_time = 100*i
+                scan_time = 2*i
                 count = 0
                 for j in range(100):
                     with sequential:
-                        self.ttl_935_EOM.on()
+                        
+                        self.cooling.sw.on()
+                        delay(500*us)
+                        self.cooling.sw.off()
+                        delay(1*us)
 
+                        self.pumping.sw.on()
+                        delay(50*us)
+                        self.pumping.sw.off()
+                        delay(1*us)
+
+                        self.ttl_935_EOM.on()
                         self.ttl_435.off()
                         delay(scan_time*us)
                         self.ttl_435.on()

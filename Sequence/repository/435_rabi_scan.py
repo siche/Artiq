@@ -4,7 +4,7 @@ from artiq.experiment import *
 import matplotlib.pyplot as plt
 
 _RED_SIDEBAND = 238
-_CARRIER = 239.923
+_CARRIER = 239.920
 
 
 class SideBandCooling(EnvExperiment):
@@ -23,7 +23,7 @@ class SideBandCooling(EnvExperiment):
         self.ttl_935_EOM = self.get_device('ttl7')
         self.ttl_435 = self.get_device('ttl6')
 
-    @kernel 
+    @kernel
     def pre_set(self):
         self.core.break_realtime()
         self.cooling.init()
@@ -53,14 +53,23 @@ class SideBandCooling(EnvExperiment):
         # photon_count = 0
         photon_number = 0
         count = 0
-        for i in range(run_times):
-            # with sequential:
 
-            # cooling for 1.5 ms
+        with sequential:
             self.cooling.sw.on()
             delay(1*ms)
             self.cooling.sw.off()
             delay(1*us)
+
+        for i in range(run_times):
+            # with sequential:
+
+            # cooling for 1.5 ms
+            """
+            self.cooling.sw.on()
+            delay(1*ms)
+            self.cooling.sw.off()
+            delay(1*us)
+            """
 
             # pumping
             self.pumping.sw.on()
@@ -117,23 +126,31 @@ class SideBandCooling(EnvExperiment):
 
         N = int((stop-start)/step)
         # N = 100
-        rabi_time = start
-
         all_count = [0]*N
+        all_time = [0.0]*N
+        rabi_time = 0.0
+
+        
 
         for j in range(N):
-            rabi_time = start + step
+            rabi_time = start + step*j
             count = 0
             photon_number = 0
+
+            
+
+            self.cooling.sw.on()
+            delay(1*ms)
+            self.cooling.sw.off()
+            delay(1*us)
+
             for i in range(run_times):
                 # with sequential:
-
-                # cooling for 1.5 ms
                 self.cooling.sw.on()
                 delay(1*ms)
                 self.cooling.sw.off()
                 delay(1*us)
-
+                # cooling for 1.5 ms
                 # pumping
                 self.pumping.sw.on()
                 delay(50*us)
@@ -181,19 +198,21 @@ class SideBandCooling(EnvExperiment):
                 self.cooling.sw.on()
 
             all_count[j] = count
-        self.AnalysisData(all_count)
+            all_time[j] = rabi_time
+        self.AnalysisData(all_count, all_time)
 
     @rpc(flags={"async"})
-    def AnalysisData(self, ydata):
+    def AnalysisData(self, ydata1, ydata2):
         xdata = np.arange(self.start, self.stop, self.step)
         plt.figure()
-        plt.plot(xdata, ydata)
+        plt.plot(xdata, ydata1)
+        print(ydata2)
         plt.show()
 
     def run(self):
         t1 = time.time()
         self.start = 0.0
-        self.stop = 50.0
+        self.stop = 100.0
         self.step = 1.0
 
         self.pre_set()
