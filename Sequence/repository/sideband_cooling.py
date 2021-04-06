@@ -79,6 +79,7 @@ class SideBandCooling(EnvExperiment):
             # sideband cooling
             # 1. turn off 935 sideband and turn on 435 for
             #    some cooling time
+            """
             for i in range(1000):
                 with parallel:
 
@@ -98,7 +99,7 @@ class SideBandCooling(EnvExperiment):
                 self.pumping.sw.on()
                 delay(20*us)
                 self.pumping.sw.off()
-
+            """
             # delay(*us)
             # 3 cooling result detection
             # Mainly detect the red sideband

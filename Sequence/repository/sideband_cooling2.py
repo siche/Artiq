@@ -85,9 +85,20 @@ class SideBandCooling(EnvExperiment):
                 count = 0
 
                 for j in range(repeat_time):
+                    
+                    # 0.0 doppler cooling
+                    self.cooling.sw.on()
+                    delay(1*ms)
+                    self.cooling.sw.off()
+                    delay(1*us)
 
-                    # 2.1 sideband cooling for 50 cycles ##
-                    """
+                    # pumping
+                    self.pumping.sw.on()
+                    delay(50*us)
+                    self.pumping.sw.off()
+                    delay(1*us)
+
+                    # 2.1 sideband cooling for 50 cycles ##  
                     for k in range(50):
                         with parallel:
 
@@ -102,10 +113,11 @@ class SideBandCooling(EnvExperiment):
                         # 1.2 Pumping Back
                         self.ttl_935_EOM.off()
 
+                        """
                         self.pumping.sw.on()
                         delay(20*us)
                         self.pumping.sw.off()
-                    """
+                        """
 
                     with sequential:
 
