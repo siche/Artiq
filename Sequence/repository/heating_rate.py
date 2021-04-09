@@ -3,7 +3,7 @@ import time
 from artiq.experiment import *
 import matplotlib.pyplot as plt
 
-_RED_SIDEBAND = 238.103
+_RED_SIDEBAND = 238.146-0.001*50
 _BLUE_SIDEBAND = 241.103
 
 class HeatingRateMeasurement(EnvExperiment):
@@ -25,7 +25,7 @@ class HeatingRateMeasurement(EnvExperiment):
     def run(self):
         t1 = time.time()
         self.pre_set()
-        self.sidebandcooling()
+        self.HeatingRate()
         t2 = time.time()
         print("time cost:%s" % (t2-t1))
 
@@ -51,7 +51,7 @@ class HeatingRateMeasurement(EnvExperiment):
     def HeatingRate(self,delay_time=1, rabi_time = 20):
         # initialize dds
         self.core.break_realtime()
-        self.microwave.sw.off()
+        self.dds1_435.sw.off()
         self.pumping.sw.off()
 
         photon_count = 0
@@ -61,17 +61,22 @@ class HeatingRateMeasurement(EnvExperiment):
         temp_count = 0
         N = 100
 
-        data_aom_frequency = [0]*100
+        data_aom_frequency = [0.0]*100
         data_count = [0]*100
+        AOM_435 =238.146
 
         for i in range(100):
             
+            
             # set 435 aom frequency  
-            AOM_435 = _RED_SIDEBAND + i*aom_scan_step
+            AOM_435 = _RED_SIDEBAND + float(i)*aom_scan_step
+            self.core.break_realtime()
+
             self.dds1_435.set(AOM_435*MHz)
+            delay(26*ms)
             
             temp_count = 0
-
+            
             # 对于每一个frequency测量100次
             for j in range(100):
                 with sequential:
@@ -116,6 +121,8 @@ class HeatingRateMeasurement(EnvExperiment):
     @rpc(flags = {"async"})
     def saveData(self, xdata, ydata):
         # xdata = np.arange(0,200,1)
+        np.save('xdata.npy',xdata)
+        np.save('ydata.npy',ydata)
         plt.figure()
         plt.plot(xdata, ydata)
         plt.show()
