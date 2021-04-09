@@ -11,10 +11,10 @@ class HeatingRateMeasurement(EnvExperiment):
 
         # define HardWare device
         dds_channel = ['urukul0_ch'+str(i) for i in range(4)]
+
         self.setattr_device('core')
-        self.dds1_435 = self.get_device(dds_channel[0])
+        self.dds1_435 = self.get_device(dds_channel[2])
         self.cooling = self.get_device(dds_channel[1])
-        self.microwave = self.get_device(dds_channel[2])
         self.pumping = self.get_device(dds_channel[3])
 
         self.pmt = self.get_device('ttl0')
@@ -34,17 +34,14 @@ class HeatingRateMeasurement(EnvExperiment):
         self.core.break_realtime()
         self.cooling.init()
         self.dds1_435.init()
-        self.microwave.init()
         self.pumping.init()
 
         self.cooling.set(250*MHz)
         self.dds1_435.set(_RED_SIDEBAND*MHz)
-        self.microwave.set(400.*MHz)
         self.pumping.set(260*MHz)
 
-        self.dds1_435.set_att(20.)
+        self.dds1_435.set_att(18.)
         self.cooling.set_att(10.)
-        self.microwave.set_att(0.)
         self.pumping.set_att(18.)
 
         # define dataset
@@ -60,6 +57,7 @@ class HeatingRateMeasurement(EnvExperiment):
         photon_count = 0
         photon_number = 0
 
+        aom_scan_step = 0.001
         temp_count = 0
         N = 100
 
@@ -68,15 +66,14 @@ class HeatingRateMeasurement(EnvExperiment):
 
         for i in range(100):
             
-            # set 435 aom frequency
-            aom_scan_step = 0.001 
+            # set 435 aom frequency  
             AOM_435 = _RED_SIDEBAND + i*aom_scan_step
             self.dds1_435.set(AOM_435*MHz)
             
             temp_count = 0
 
             # 对于每一个frequency测量100次
-            for j in range(100)
+            for j in range(100):
                 with sequential:
 
                     # 0.0 doppler cooling
@@ -87,31 +84,33 @@ class HeatingRateMeasurement(EnvExperiment):
 
                     # pumping
                     self.pumping.sw.on()
-                    delay(50*us)
+                    delay(30*us)
                     self.pumping.sw.off()
 
                     # Trun off all light and wait for delay time to heat ion
                     delay(delay_time*us)
 
                     # turn on 435 
-                    self.ttl_435.off()
+                    with parallel:
+                        self.ttl_435.off()
+                        self.ttl_935_EOM.on()
+
                     delay(rabi_time*us)
                     self.ttl_435.on()
 
                     # meaure count
                     with parallel:
-                        self.pmt.gate_rising(300*us)
                         self.cooling.sw.on()
+                        self.pmt.gate_rising(300*us)
                         photon_number = self.pmt.count(now_mu())
                         photon_count = photon_count + photon_number
                         if photon_number > 1:
                             temp_count = temp_count + 1
+                    
                     self.ttl_935_EOM.off()
 
             data_count[i] = temp_count
             data_aom_frequency[i] = AOM_435
-
-
         self.saveData(data_aom_frequency,data_count)
 
     @rpc(flags = {"async"})

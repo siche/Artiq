@@ -43,7 +43,6 @@ class SideBandCooling(EnvExperiment):
 
         self.dds1_435.set_att(20.)
         self.cooling.set_att(10.)
-        self.microwave.set_att(0.)
         self.pumping.set_att(18.)
 
         # define dataset
