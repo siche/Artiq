@@ -70,10 +70,11 @@ class HeatingRateMeasurement(EnvExperiment):
             
             # set 435 aom frequency  
             AOM_435 = _RED_SIDEBAND + float(i)*aom_scan_step
-            self.core.break_realtime()
+            # self.core.break_realtime()
 
+            delay(100*us)
             self.dds1_435.set(AOM_435*MHz)
-            delay(26*ms)
+            # delay(26*ms)
             
             temp_count = 0
             
