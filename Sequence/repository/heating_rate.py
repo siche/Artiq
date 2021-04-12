@@ -3,7 +3,7 @@ import time
 from artiq.experiment import *
 import matplotlib.pyplot as plt
 
-_RED_SIDEBAND = 238.146-0.001*50
+_RED_SIDEBAND = 238.142-0.001*50
 _BLUE_SIDEBAND = 241.103
 
 class HeatingRateMeasurement(EnvExperiment):
@@ -65,7 +65,7 @@ class HeatingRateMeasurement(EnvExperiment):
         data_count = [0]*100
         AOM_435 =238.146
 
-        for i in range(10):
+        for i in range(100):
             
             
             # set 435 aom frequency  

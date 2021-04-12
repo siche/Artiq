@@ -3,9 +3,8 @@ import time
 from artiq.experiment import *
 import matplotlib.pyplot as plt
 
-_RED_SIDEBAND = 238
-_CARRIER = 239.920
-
+_RED_SIDEBAND = 238.142
+_CARRIER = 238.142
 
 class SideBandCooling(EnvExperiment):
     def build(self):
@@ -13,9 +12,9 @@ class SideBandCooling(EnvExperiment):
         # define HardWare device
         dds_channel = ['urukul0_ch'+str(i) for i in range(4)]
         self.setattr_device('core')
-        self.dds1_435 = self.get_device(dds_channel[0])
+        # self.dds1_435 = self.get_device(dds_channel[0])
         self.cooling = self.get_device(dds_channel[1])
-        self.microwave = self.get_device(dds_channel[2])
+        self.dds1_435 = self.get_device(dds_channel[2])
         self.pumping = self.get_device(dds_channel[3])
 
         self.pmt = self.get_device('ttl0')
@@ -28,17 +27,14 @@ class SideBandCooling(EnvExperiment):
         self.core.break_realtime()
         self.cooling.init()
         self.dds1_435.init()
-        self.microwave.init()
         self.pumping.init()
 
         self.cooling.set(250*MHz)
         self.dds1_435.set(_CARRIER*MHz)
-        self.microwave.set(400.*MHz)
         self.pumping.set(260*MHz)
 
-        self.dds1_435.set_att(20.)
+        self.dds1_435.set_att(18.)
         self.cooling.set_att(10.)
-        self.microwave.set_att(0.)
         self.pumping.set_att(18.)
 
         # define dataset
@@ -130,14 +126,10 @@ class SideBandCooling(EnvExperiment):
         all_time = [0.0]*N
         rabi_time = 0.0
 
-        
-
         for j in range(N):
             rabi_time = start + step*j
             count = 0
             photon_number = 0
-
-            
 
             self.cooling.sw.on()
             delay(1*ms)
@@ -212,8 +204,8 @@ class SideBandCooling(EnvExperiment):
     def run(self):
         t1 = time.time()
         self.start = 0.0
-        self.stop = 100.0
-        self.step = 1.0
+        self.stop = 200.0
+        self.step = 2.0
 
         self.pre_set()
         self.RabiTimeScan(self.start, self.stop, self.step)
