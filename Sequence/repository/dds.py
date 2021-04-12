@@ -3,7 +3,7 @@
 import struct
 from serial import Serial
 from numpy import floor,pi
-import sys
+import sys, signal
 
 def num_to_uint(num,data_type='frequency'):
 
@@ -41,9 +41,11 @@ class dds_controller(object):
         if not ser.is_open:
             ser.open()
         self.ser = ser
-
+        signal.signal(signal.SIGINT, self.exit)
+        signal.signal(signal.SIGTERM, self.exit)
 
     def set_frequency(self,port=0,frequency=100,amplitude=0.2,phase=0):
+        print("Frequency:%.3f AMP:%.3f" % (frequency,amplitude))
         if not self.ser.is_open:
             self.ser.open()
         
@@ -81,6 +83,10 @@ class dds_controller(object):
         self.ser.write(s6)
         self.ser.close()
         # print(ampm)
+        
+    def exit(self,signum, frame):
+        self.ser.close()
+        sys.exit()
 
 if __name__ == '__main__':
     dds1 = dds_controller('Com5')

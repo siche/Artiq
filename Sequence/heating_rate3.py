@@ -95,7 +95,7 @@ class KasliTester(EnvExperiment):
         self.pumping.set_att(18.)
 
     @kernel
-    def run_sequence(self, rabi_time, run_times = 100):
+    def run_sequence(self, rabi_time=100, run_times = 100, DelayTime=100):
         # t2 is the time of microwave
 
         # initialize dds
@@ -127,6 +127,7 @@ class KasliTester(EnvExperiment):
                 
                 # turn off 935
                 # turn off 935 sideband
+                delay(DelayTime*us)
                 self.ttl_935_EOM.on()
                 self.ttl_935_AOM.on()
                 delay(1*us)
@@ -174,6 +175,7 @@ class KasliTester(EnvExperiment):
         rabi_time = 100
         N = 100
         run_times = 100
+        delay_time = 100
 
         file_name = 'data\\Rabi_AOM_fre_Scan'+str(init_fre)+'-'+\
                      str(float(init_fre+N*scan_step))+'.csv'
@@ -197,7 +199,7 @@ class KasliTester(EnvExperiment):
             os.system(code)
 
             # run detection and save data
-            temp = self.run_sequence(rabi_time, run_times)
+            temp = self.run_sequence(rabi_time, run_times, delay_time)
 
             # print information
             data_item = [AOM_435, temp[0], temp[1], wl_871]

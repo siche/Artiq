@@ -2,6 +2,7 @@ import numpy as np
 import time
 from artiq.experiment import *
 import matplotlib.pyplot as plt
+from dds import *
 
 _RED_SIDEBAND = 238.142-0.001*50
 _BLUE_SIDEBAND = 241.103
@@ -48,7 +49,7 @@ class HeatingRateMeasurement(EnvExperiment):
         # self.set_dataset("SBCData", np.full(100, 0), broadcast=True)
 
     @kernel
-    def HeatingRate(self,delay_time=1, rabi_time = 20):
+    def HeatingRate(self,delay_time=1,rabi_time = 20):
         # initialize dds
         self.core.break_realtime()
         self.dds1_435.sw.off()
@@ -63,11 +64,9 @@ class HeatingRateMeasurement(EnvExperiment):
 
         data_aom_frequency = [0.0]*100
         data_count = [0]*100
-        AOM_435 =238.146
+        AOM_435 =238.142
 
         for i in range(100):
-            
-            
             # set 435 aom frequency  
             AOM_435 = _RED_SIDEBAND + float(i)*aom_scan_step
             # self.core.break_realtime()
