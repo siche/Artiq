@@ -15,7 +15,6 @@ from wlm_web import wlm_web
 
 wm = wlm_web()
 
-
 def is_871_locked(lock_point=871.034655):
     global wl_871
     wl_871 = wm.get_channel_data(0)
@@ -108,13 +107,13 @@ class HeatingRateMeasurement(EnvExperiment):
         return event_count
 
     @rpc(flags={"async"})
-    def saveData(self, data):
+    def saveData(self, file_name,data):
         # xdata = np.arange(0,200,1)
         # Save the data as csv file
         time_now = time.strftime("%Y-%m-%d-%H-%M")
         csv_name = 'data\\'+"HeatRate2"+"-"+time_now+".csv"
 
-        with open(csv_name, "w", newline='') as t:
+        with open(file_name, "w", newline='') as t:
             file = csv.writer(t)
             file.writerows(data)
 
@@ -139,9 +138,9 @@ class HeatingRateMeasurement(EnvExperiment):
         # N：the number of frequency
         # M: the number of delay times
         N = 100
-        M = 21
+        M = 5
 
-        delay_times = np.linspace(0, 5000, M)
+        delay_times = np.linspace(2250, 3500, M)
 
         rabi_time = 75.0
         delay_time = 0.0
@@ -164,6 +163,10 @@ class HeatingRateMeasurement(EnvExperiment):
         data[:M,-2] = np.transpose(delay_times)
 
         AOM_435 = 0.0
+
+        # define filename
+        time_now = time.strftime("%Y-%m-%d-%H-%M")
+        csv_name = 'data\\'+"HeatRate2"+"-"+time_now+".csv"
 
         for m in trange(M):
             delay_time = delay_times[m]
@@ -202,6 +205,6 @@ class HeatingRateMeasurement(EnvExperiment):
             if red_data*blue_data!=0:
                 phonon_number = (100-red_data)/(red_data-blue_data)
             data[m,-1] = phonon_number
-
+            np.save('data.npy',data)
         # combine data
         self.saveData(data)
