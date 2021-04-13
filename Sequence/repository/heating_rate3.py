@@ -4,7 +4,6 @@ Vary delay time
 Vary rabi time to get the phonon number
 """
 
-
 import numpy as np
 import time, csv
 from artiq.experiment import *

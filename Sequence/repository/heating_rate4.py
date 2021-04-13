@@ -1,12 +1,12 @@
 """
-Fix red  and blue sideband rabi time 
+Fix red  and blue sideband detuning 
 Vary delay time
-Vary detuning to get the phonon number
+Vary rabi time to get the phonon number
 """
 
+
 import numpy as np
-import time
-import csv
+import time, csv
 from artiq.experiment import *
 import matplotlib.pyplot as plt
 from dds import *
@@ -14,7 +14,6 @@ from tqdm import trange
 from wlm_web import wlm_web
 
 wm = wlm_web()
-
 
 def is_871_locked(lock_point=871.034655):
     global wl_871
@@ -112,12 +111,12 @@ class HeatingRateMeasurement(EnvExperiment):
         # xdata = np.arange(0,200,1)
         # Save the data as csv file
         time_now = time.strftime("%Y-%m-%d-%H-%M")
-        csv_name = 'data\\'+"HeatRate2"+"-"+time_now+".csv"
+        csv_name = 'data\\'+"HeatRate4"+"-"+time_now+".csv"
 
-        with open(csv_name, "w", newline='') as t:
+        with open(csv_name,"w",newline='') as t:
             file = csv.writer(t)
             file.writerows(data)
-
+        
         """
         np.save('xdata.npy', xdata)
         np.save('ydata.npy', ydata)
@@ -130,78 +129,79 @@ class HeatingRateMeasurement(EnvExperiment):
         self.pre_set()
 
         # heating rate measurement
-
+        
         # DDS parametr
         DDS_AMP = 0.5
         aom_scan_step = 0.001
 
         # Scan parametr
-        # N：the number of frequency
+        # N：the number of rabi_times
         # M: the number of delay times
-        N = 100
-        M = 21
+        # n MUST BE LARGER THAN m !!!
+        N = 4
+        M = 3
 
-        delay_times = np.linspace(0, 5000, M)
+        delay_times = np.linspace(0,5000,M)
+        rabi_times = np.linspace(0,100,N)
 
         rabi_time = 75.0
         delay_time = 0.0
 
-        _RED_SIDEBAND = 238.142
+        _RED_SIDEBAND = 238.139
         _BLUE_SIDEBAND = 241.804
         WL_871 = 871.034655
 
-        aom_scan_steps = np.arange(0, N*aom_scan_step, aom_scan_step)
-        _RED_SIDEBANDS = _RED_SIDEBAND - N/2*aom_scan_step+aom_scan_steps
-        _BLUE_SIDEBANDS = _BLUE_SIDEBAND - N/2*aom_scan_step + aom_scan_steps
-
         # data container
-        # the first column is the redetunings
-        # the -2 column is the delaytimes
+        data = np.zeros((N,3*M+3))
 
-        data = np.zeros((N, 2*M+4))
-        data[:, 0] = np.transpose(_RED_SIDEBANDS)
-        data[:, 1] = np.transpose(_BLUE_SIDEBANDS)
+        # the first column is the rabi times
+        # the -2 column is the delay times
+        # the -1 column is the mean phonon number
+        # the inner part are the scan data
+        data[:,0] = np.transpose(rabi_times)
         data[:M,-2] = np.transpose(delay_times)
-
-        AOM_435 = 0.0
 
         for m in trange(M):
             delay_time = delay_times[m]
+
             while not is_871_locked(WL_871):
                 print("871 is Out of Lock")
                 time.sleep(5)
         
             for n in range(N):
+                rabi_time = rabi_times[n]
 
-                # blue sideband
-                AOM_435 = _RED_SIDEBANDS[n]
-                DDS.set_frequency(port=0, frequency=AOM_435,
-                                  amplitude=DDS_AMP, phase=0)
+                # red sideband detection
+                DDS.set_frequency(port=0, frequency=_RED_SIDEBAND, amplitude=DDS_AMP,phase=0)
                 time.sleep(0.02)
-                temp_data1 = self.HeatingRate(
-                    DelayTime=delay_time, RabiTime=rabi_time)
-                data[n,2*m+2] = temp_data1
-                print("Event Count:%s" % temp_data1)
+                temp_data1 = self.HeatingRate(DelayTime=delay_time,RabiTime=rabi_time)
+                data[n,3*m+1] = temp_data1
+                print("Red Sideband Event Count:%s" % temp_data1)
 
-                # blue sidebands
-                AOM_435 = _BLUE_SIDEBANDS[n]
-                DDS.set_frequency(port=0, frequency=AOM_435,
-                                  amplitude=DDS_AMP, phase=0)
-                time.sleep(0.02)
+                # blue sideband detection
+                DDS.set_frequency(port=0, frequency=_BLUE_SIDEBAND,amplitude=DDS_AMP,phase=0)
                 time.sleep(0.02)
                 temp_data2 = self.HeatingRate(DelayTime=delay_time, RabiTime=rabi_time)
-                data[n,2*m+3] = temp_data2
+                data[n,3*m+2] = temp_data2
+                print("Blue Sideband Event Count:%s" % temp_data2)
 
-                print("Event Count:%s" % temp_data2)
+                # calculate mean phono number
+                temp_data3 = 0
+                if (temp_data1-temp_data2)!=0:
+                    temp_data3 = (100-temp_data1)/(temp_data1-temp_data2)
+                data[n,3*m+3] = temp_data3
+                print("Mean Phonon:%.2f" % temp_data3)
 
-            # try to calculate the phonon number
-            red_data = data[:,2*m+2].min()
-            blue_data = data[:,2*m+3].min()
-            
-            phonon_number = -1
-            if red_data*blue_data!=0:
-                phonon_number = (100-red_data)/(red_data-blue_data)
-            data[m,-1] = phonon_number
-
-        # combine data
+            # average over rabi time
+            phonon_numbers = data[:,3*m+3]
+            mean_phonon_number = phonon_numbers[phonon_numbers!=0].mean()
+            data[m,-1] = mean_phonon_number
+    
         self.saveData(data)
+
+
+
+
+
+
+
