@@ -134,8 +134,9 @@ class HeatingRateMeasurement(EnvExperiment):
         N = 200
         M = 5
         frequency_scan_step = 2500
+        delay_time_start = 12500
 
-        delay_times = np.linspace(0,(M-1)*frequency_scan_step,M)
+        delay_times = np.linspace(delay_time_start,delay_time_start+(M-1)*frequency_scan_step,M)
 
         rabi_time = 75.0
         delay_time = 0.0
