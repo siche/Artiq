@@ -5,8 +5,7 @@ Vary detuning to get the phonon number
 """
 
 import numpy as np
-import time
-import csv
+import time,os,csv
 from artiq.experiment import *
 import matplotlib.pyplot as plt
 from dds import *
@@ -132,8 +131,8 @@ class HeatingRateMeasurement(EnvExperiment):
         # Scan parametr
         # N：the number of frequency
         # M: the number of delay times
-        N = 100
-        M = 20
+        N = 200
+        M = 5
         frequency_scan_step = 2500
 
         delay_times = np.linspace(0,(M-1)*frequency_scan_step,M)
@@ -150,7 +149,7 @@ class HeatingRateMeasurement(EnvExperiment):
         _BLUE_SIDEBANDS = _BLUE_SIDEBAND - N/2*aom_scan_step + aom_scan_steps
 
         AOM_435 = 0.0
-        scan_data = np.zeros((2,N+4))
+        scan_data = np.zeros((N,4))
         # 0: delay time
         # 1: red/blue sideband
         # 2-N+2:scan data
@@ -159,11 +158,13 @@ class HeatingRateMeasurement(EnvExperiment):
 
         # define filename
         time_now = time.strftime("%Y-%m-%d-%H-%M")
-        file_name = 'data\\'+"HeatRate2"+"-"+time_now+".csv"
+        dir_name = os.path.join(os.getcwd(),'data',time_now)
+        os.system("mkdir " + dir_name)
 
         for m in trange(M):
             delay_time = delay_times[m]
-            scan_data[0:2,0] =delay_time
+            file_name = str(delay_time)+'us.csv'
+            full_file_name =os.path.join(dir_name,file_name)
 
             while not is_871_locked(WL_871):
                 print("871 is Out of Lock")
@@ -173,43 +174,30 @@ class HeatingRateMeasurement(EnvExperiment):
 
                 # blue sideband
                 AOM_435 = _RED_SIDEBANDS[n]
-                scan_data[0,1] = AOM_435
+                scan_data[n,0] = AOM_435
 
                 DDS.set_frequency(port=0, frequency=AOM_435,
                                   amplitude=DDS_AMP, phase=0)
                 time.sleep(0.02)
                 temp_data1 = self.HeatingRate(
                     DelayTime=delay_time, RabiTime=rabi_time)
-                scan_data[0,n+2] = temp_data1
+                scan_data[n,1] = temp_data1
                 print("Event Count:%s" % temp_data1)
 
                 # blue sidebands
                 AOM_435 = _BLUE_SIDEBANDS[n]
-                scan_data[1,1] = AOM_435
+                scan_data[n,2] = AOM_435
                 DDS.set_frequency(port=0, frequency=AOM_435,
                                   amplitude=DDS_AMP, phase=0)
                 time.sleep(0.02)
                 time.sleep(0.02)
                 temp_data2 = self.HeatingRate(DelayTime=delay_time, RabiTime=rabi_time)
-                scan_data[1,n+2] = temp_data2
+                scan_data[n,3] = temp_data2
 
                 print("Event Count:%s" % temp_data2)
 
-
-            # try to calculate the phonon number
-            red_data = scan_data[0,2:-2].min()
-            blue_data = scan_data[1,2:-2].min()
-            scan_data[0,-2] = red_data
-            scan_data[1,-2] = blue_data
-
-            phonon_number = -1
-            if red_data*blue_data!=0:
-                phonon_number = (100-red_data)/(red_data-blue_data)
-            scan_data[0,-1] = phonon_number
-            scan_data[1,-1] = phonon_number
-
             # save data
-            with open(file_name,'a',newline='') as t:
+            with open(full_file_name,'a',newline='') as t:
                 file = csv.writer(t)
                 file.writerows(scan_data)
         
