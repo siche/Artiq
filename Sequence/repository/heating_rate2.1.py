@@ -72,7 +72,7 @@ class HeatingRateMeasurement(EnvExperiment):
 
                 # 0.0 doppler cooling
                 self.cooling.sw.on()
-                delay(1*ms)
+                delay(2*ms)
                 self.cooling.sw.off()
                 delay(1*us)
 
@@ -141,7 +141,7 @@ class HeatingRateMeasurement(EnvExperiment):
         rabi_time = 75.0
         delay_time = 0.0
 
-        _RED_SIDEBAND = 238.145
+        _RED_SIDEBAND = 238.152
         _BLUE_SIDEBAND = 241.804
         WL_871 = 871.034655
 
