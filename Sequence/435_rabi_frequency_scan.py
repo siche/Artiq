@@ -10,7 +10,6 @@ from save_data import save_file
 import matplotlib.pyplot as plt
 from wlm_web import wlm_web
 
-
 from image_processing import has_ion
 from ttl_client import shutter
 from SMB100B import SMB100B
@@ -170,11 +169,11 @@ class KasliTester(EnvExperiment):
         self.pre_set()
 
         pmt_on()
-        init_fre = 239.99
+        init_fre = 241.86
         DDS_AMP = 0.65
         lock_point = 871.034654
         scan_step = 0.001/5
-        rabi_time = 7
+        rabi_time = 50
         N = 5*20
         run_times = 200
 
