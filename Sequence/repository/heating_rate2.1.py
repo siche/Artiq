@@ -8,7 +8,7 @@ import numpy as np
 import time,os,csv
 from artiq.experiment import *
 import matplotlib.pyplot as plt
-from dds import *
+from dds2 import *
 from tqdm import trange
 from wlm_web import wlm_web
 
@@ -57,7 +57,7 @@ class HeatingRateMeasurement(EnvExperiment):
         # self.set_dataset("SBCData", np.full(100, 0), broadcast=True)
 
     @kernel
-    def HeatingRate(self, DelayTime=0.0, RabiTime=20.0):
+    def HeatingRate(self, DelayTime=0.0, RabiTime=20.0,RunTimes=200):
         # initialize dds
         self.core.break_realtime()
         self.dds1_435.sw.off()
@@ -67,7 +67,7 @@ class HeatingRateMeasurement(EnvExperiment):
         photon_number = 0
 
         # 对于每一个frequency测量100次
-        for j in range(100):
+        for j in range(RunTimes):
             with sequential:
 
                 # 0.0 doppler cooling
@@ -124,25 +124,29 @@ class HeatingRateMeasurement(EnvExperiment):
         self.pre_set()
 
         # heating rate measurement
-        # DDS parametr
-        DDS_AMP = 0.5
-        aom_scan_step = 0.001
+        # DDS parameter
+
+        aom_scan_step = 0.001/2
 
         # Scan parametr
         # N：the number of frequency
         # M: the number of delay times
-        N = 200
-        M = 5
+        N = 100
+        M = 10
+        RepeatTime = 200
         frequency_scan_step = 2500
-        delay_time_start = 12500
+        delay_time_start = 0
 
         delay_times = np.linspace(delay_time_start,delay_time_start+(M-1)*frequency_scan_step,M)
 
         rabi_time = 75.0
         delay_time = 0.0
 
-        _RED_SIDEBAND = 238.152
-        _BLUE_SIDEBAND = 241.804
+        _RED_SIDEBAND = 238.1565
+        _BLUE_SIDEBAND = 241.850
+        _RED_AMP = 0.695
+        _BLUE_AMP = 0.700
+
         WL_871 = 871.034655
 
         aom_scan_steps = np.arange(0, N*aom_scan_step, aom_scan_step)
@@ -178,7 +182,7 @@ class HeatingRateMeasurement(EnvExperiment):
                 scan_data[n,0] = AOM_435
 
                 DDS.set_frequency(port=0, frequency=AOM_435,
-                                  amplitude=DDS_AMP, phase=0)
+                                  amplitude=_RED_AMP, phase=0)
                 time.sleep(0.02)
                 temp_data1 = self.HeatingRate(
                     DelayTime=delay_time, RabiTime=rabi_time)
@@ -189,10 +193,9 @@ class HeatingRateMeasurement(EnvExperiment):
                 AOM_435 = _BLUE_SIDEBANDS[n]
                 scan_data[n,2] = AOM_435
                 DDS.set_frequency(port=0, frequency=AOM_435,
-                                  amplitude=DDS_AMP, phase=0)
+                                  amplitude=_BLUE_AMP, phase=0)
                 time.sleep(0.02)
-                time.sleep(0.02)
-                temp_data2 = self.HeatingRate(DelayTime=delay_time, RabiTime=rabi_time)
+                temp_data2 = self.HeatingRate(DelayTime=delay_time, RabiTime=rabi_time,RunTimes=RepeatTime)
                 scan_data[n,3] = temp_data2
 
                 print("Event Count:%s" % temp_data2)

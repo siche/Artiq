@@ -1,0 +1,54 @@
+{
+    "dds0": {
+        "label": "866",
+        "output": true,
+        "frequency": 150.0,
+        "amplitude": 0.29,
+        "phase": 0.0,
+        "fm_mod": {
+            "mod_enbale": false,
+            "mod_freq_range": 10.0,
+            "mod_freq_step": 0.001,
+            "scan_time": 1.0
+        }
+    },
+    "dds1": {
+        "label": "854",
+        "output": true,
+        "frequency": 150.0,
+        "amplitude": 0.61,
+        "phase": 0.0,
+        "fm_mod": {
+            "mod_enbale": false,
+            "mod_freq_range": 10.0,
+            "mod_freq_step": 0.001,
+            "scan_time": 1.0
+        }
+    },
+    "dds2": {
+        "label": "397-c",
+        "output": true,
+        "frequency": 260.0,
+        "amplitude": 0.2,
+        "phase": 0.0,
+        "fm_mod": {
+            "mod_enbale": false,
+            "mod_freq_range": 10.0,
+            "mod_freq_step": 0.001,
+            "scan_time": 1.0
+        }
+    },
+    "dds3": {
+        "label": "None",
+        "output": false,
+        "frequency": 10.0,
+        "amplitude": 0.3,
+        "phase": 0.0,
+        "fm_mod": {
+            "mod_enbale": false,
+            "mod_freq_range": 10.0,
+            "mod_freq_step": 0.001,
+            "scan_time": 1.0
+        }
+    }
+}

@@ -3,6 +3,7 @@ import signal, atexit, win32api, win32con
 
 import numpy as np
 from tqdm import trange
+from dds2 import *
 
 from artiq.experiment import *
 from save_data import save_file
@@ -23,6 +24,7 @@ shutter_399 = shutter(com=2)
 
 ccd_on = flip_mirror.on
 pmt_on = flip_mirror.off
+DDS = dds_controller('COM5')
 # dds_435 = DDS_AD9910()
 
 
@@ -168,12 +170,13 @@ class KasliTester(EnvExperiment):
         self.pre_set()
 
         pmt_on()
-        init_fre = 238.44
+        init_fre = 239.99
+        DDS_AMP = 0.65
         lock_point = 871.034654
-        scan_step = 0.001/2
-        rabi_time = 50
-        N = 80
-        run_times = 100
+        scan_step = 0.001/5
+        rabi_time = 7
+        N = 5*20
+        run_times = 200
 
         file_name = 'data\\Rabi_AOM_fre_Scan'+str(init_fre)+'-'+\
                      str(float(init_fre+N*scan_step))+'.csv'
@@ -186,7 +189,8 @@ class KasliTester(EnvExperiment):
         for i in trange(N):
 
             AOM_435 = init_fre+scan_step*i  # - 0.001*N/2
-
+            DDS.set_frequency(port=0, frequency=AOM_435,
+                                  amplitude=DDS_AMP, phase=0)
             # wait for 871 to be locked
             while not is_871_locked(lock_point):
                 print('Laser is locking...')

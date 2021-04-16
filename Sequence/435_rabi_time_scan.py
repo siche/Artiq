@@ -9,7 +9,7 @@ from save_data import save_file
 import matplotlib.pyplot as plt
 from wlm_web import wlm_web
 
-
+from dds2 import *
 from image_processing import has_ion
 from ttl_client import shutter
 from CurrentWebClient import current_web
@@ -17,6 +17,7 @@ from CurrentWebClient import current_web
 wm = wlm_web()
 wl_871 = 0.0
 curr = current_web()
+DDS = dds_controller('COM5')
 
 shutter_370 = shutter(com=0)
 flip_mirror = shutter(com=1)
@@ -155,13 +156,15 @@ class KasliTester(EnvExperiment):
         # AOM_435 Red Phonon Sideband 239.0195
         # AOM_435 = 239.965-22.52968/2
         t1 = time.time()
-        AOM_435 = 238.470
+        AOM_435 = 241.850
+        DDS_AMP = 0.7
+        DDS.set_frequency(frequency=AOM_435, amplitude=DDS_AMP)
         lock_point = 871.034655
         init_value = 0
-        scan_step = 2
-        N = 75
+        scan_step = 1
+        N = 40
         run_times = 200
-        amp = 0.5
+        
 
         self.pre_set()
         pmt_on()
@@ -175,9 +178,7 @@ class KasliTester(EnvExperiment):
         data[0, :] = np.linspace(init_value, init_value+scan_step*(N-1), N)
 
         # drive AOM
-        code = "conda activate base && python dds.py " + \
-            str(AOM_435) + ' ' + str(amp)
-        os.system(code)
+       
        
         # scab iteration
         for i in trange(N):
