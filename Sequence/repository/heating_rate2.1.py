@@ -132,14 +132,14 @@ class HeatingRateMeasurement(EnvExperiment):
         # N：the number of frequency
         # M: the number of delay times
         N = 100
-        M = 40
+        M = 13
         RepeatTime = 200
         frequency_scan_step = 1000
         delay_time_start = 0
 
         delay_times = np.linspace(delay_time_start,delay_time_start+(M-1)*frequency_scan_step,M)
 
-        rabi_time = 75.0
+        rabi_time =50.0
         delay_time = 0.0
 
         _RED_SIDEBAND = 238.164

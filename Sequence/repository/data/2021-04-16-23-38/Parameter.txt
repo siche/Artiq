@@ -1,0 +1,5 @@
+RabiTime：75
+_RED_AMP = 0.695
+_BLUE_AMP = 0.700
+RepatTime = 200
+ 
