@@ -313,8 +313,10 @@ if __name__ == "__main__":
     dds = DDS_AD9910([0])
     dds.open('com5')
     t1 =time.time()
-    dds.setFrequency(dds_port=0,frequency=240)
-    dds.setAmplitude(dds_port=0,amplitude=1)
+    fre = 241.783
+    amp = 0.6
+    dds.setFrequency(dds_port=0,frequency=fre)
+    dds.setAmplitude(dds_port=0,amplitude=amp)
     dds.setOnOff(dds_port=0,onoff=True)
     print("Time cost:%.3f" % (time.time()-t1))
                                                                                                                                                                                                            

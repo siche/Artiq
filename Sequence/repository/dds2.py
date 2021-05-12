@@ -82,7 +82,7 @@ class dds_controller(object):
         # update
         self.ser.write(struct.pack('B',32*port+128))
         # turn on dds
-        time.sleep(0.05)
+        # time.sleep(0.05)
         
         self.ser.close()
         # print(ampm)

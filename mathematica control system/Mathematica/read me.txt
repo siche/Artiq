@@ -1,0 +1,6 @@
+include.m文件定义了Include函数，Include可以直接在内核运行其它被Include调用的.nb文件，这些.nb文件所有单元需要初始化。
+
+FundamentalTasks.nb是做实验的notebook模板。
+
+一般Include包含的文件有Labview.m（通过mathematica调用Labview的vi）以及Data.nb，Sequence.nb，Sequencer.nb，Wave.nb等
+

@@ -1,0 +1,753 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     28841,        745]
+NotebookOptionsPosition[     28501,        730]
+NotebookOutlinePosition[     28858,        746]
+CellTagsIndexPosition[     28815,        743]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"ClearAll", "[", "WaveString", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"WaveString", "[", "wave_List", "]"}], ":=", 
+    RowBox[{"CtrlSignalValue", "[", 
+     RowBox[{
+      RowBox[{"awg", "@", "\"\<Wave String\>\""}], ",", 
+      RowBox[{"ExportWaveString", "@", "wave"}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ClearAll", "[", "WaveFile", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"WaveFile", "[", 
+     RowBox[{"file_String", ",", 
+      RowBox[{"wave_List:", 
+       RowBox[{"{", "}"}]}]}], "]"}], ":=", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"wave", "=!=", 
+         RowBox[{"{", "}"}]}], ",", 
+        RowBox[{"ExportWaveFile", "[", 
+         RowBox[{"file", ",", "wave"}], "]"}]}], "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"CtrlSignalValue", "[", 
+       RowBox[{
+        RowBox[{"awg", "@", "\"\<Wave File\>\""}], ",", 
+        RowBox[{"DataPath", "@", "file"}]}], "]"}]}], ")"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ClearAll", "[", "WaveRow", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"WaveRow", "[", 
+     RowBox[{"row_Integer", ",", 
+      RowBox[{"segment_Integer:", "0"}]}], "]"}], ":=", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"CtrlSignalValue", "[", 
+       RowBox[{
+        RowBox[{"awg", "@", "\"\<Row\>\""}], ",", "row"}], "]"}], ";", 
+      RowBox[{"CtrlSignalValue", "[", 
+       RowBox[{
+        RowBox[{"awg", "@", "\"\<Segment\>\""}], ",", "segment"}], "]"}], 
+      ";"}], ")"}]}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ClearAll", "[", 
+   RowBox[{"AWG", ",", "AWGPT"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"AWG", "[", "0", "]"}], "[", 
+    RowBox[{"x_", ",", "_"}], "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"CtrlSignalValue", "[", 
+      RowBox[{
+       RowBox[{"awg", "@", "\"\<Segment\>\""}], ",", "x"}], "]"}], ";", 
+     RowBox[{"Pause", "[", "0.2", "]"}], ";"}], ")"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"AWG", "[", "1", "]"}], "[", 
+    RowBox[{"x_", ",", "_"}], "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"CtrlSignalValue", "[", 
+      RowBox[{
+       RowBox[{"awg", "@", "\"\<Frequency (MHz)\>\""}], ",", "x"}], "]"}], 
+     ";", 
+     RowBox[{"Pause", "[", "0.2", "]"}], ";"}], ")"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"AWG", "[", "2", "]"}], "[", 
+    RowBox[{"x_", ",", "seq_"}], "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", "wave", "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"CtrlSignalValue", "[", 
+       RowBox[{
+        RowBox[{"awg", "@", "\"\<Duration (us)\>\""}], ",", "x"}], "]"}], ";", 
+      RowBox[{"Pause", "[", "0.2", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"wave", "=", 
+       RowBox[{"CtrlGetValue", "[", 
+        RowBox[{"awg", "@", "\"\<Wave\>\""}], "]"}]}], ";", 
+      RowBox[{"ReplacePart", "[", 
+       RowBox[{"seq", ",", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"First", "@", 
+             RowBox[{"FirstPosition", "[", 
+              RowBox[{"seq", ",", "_AWG"}], "]"}]}], "+", "1"}], ",", "1"}], 
+          "}"}], "\[Rule]", " ", 
+         RowBox[{"Total", "@", 
+          RowBox[{"Total", "@", 
+           RowBox[{"wave", "\[LeftDoubleBracket]", 
+            RowBox[{"All", ",", 
+             RowBox[{"{", 
+              RowBox[{"2", ",", "5"}], "}"}]}], 
+            "\[RightDoubleBracket]"}]}]}]}]}], "]"}]}]}], 
+    "\[IndentingNewLine]", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"AWG", "[", "5", "]"}], "[", 
+    RowBox[{"x_", ",", "seq_"}], "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", "wave", "}"}], ",", 
+     RowBox[{
+      RowBox[{"CtrlSignalValue", "[", 
+       RowBox[{
+        RowBox[{"awg", "@", "\"\<Gap (us)\>\""}], ",", "x"}], "]"}], ";", 
+      RowBox[{"Pause", "[", "0.2", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"wave", "=", 
+       RowBox[{"CtrlGetValue", "[", 
+        RowBox[{"awg", "@", "\"\<Wave\>\""}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"ReplacePart", "[", 
+       RowBox[{"seq", ",", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"First", "@", 
+             RowBox[{"FirstPosition", "[", 
+              RowBox[{"seq", ",", "_AWG"}], "]"}]}], "+", "1"}], ",", "1"}], 
+          "}"}], "\[Rule]", " ", 
+         RowBox[{"Total", "@", 
+          RowBox[{"Total", "@", 
+           RowBox[{"wave", "\[LeftDoubleBracket]", 
+            RowBox[{"All", ",", 
+             RowBox[{"{", 
+              RowBox[{"2", ",", "5"}], "}"}]}], 
+            "\[RightDoubleBracket]"}]}]}]}]}], "]"}]}]}], 
+    "\[IndentingNewLine]", 
+    RowBox[{"(*", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Total", "@", 
+         RowBox[{"Total", "@", 
+          RowBox[{
+           RowBox[{"CtrlGetValue", "[", 
+            RowBox[{"awg", "@", "\"\<Wave\>\""}], "]"}], 
+           "\[LeftDoubleBracket]", 
+           RowBox[{"All", ",", 
+            RowBox[{"{", 
+             RowBox[{"2", ",", "5"}], "}"}]}], "\[RightDoubleBracket]"}]}]}], 
+        ">", 
+        RowBox[{
+         RowBox[{"CtrlGetValue", "[", 
+          RowBox[{"awg", "@", "\"\<Wave\>\""}], "]"}], "\[LeftDoubleBracket]", 
+         RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}]}], ",", 
+       RowBox[{"Insert", "[", 
+        RowBox[{
+         RowBox[{"ReplacePart", "[", 
+          RowBox[{"seq", ",", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"First", "@", 
+                RowBox[{"FirstPosition", "[", 
+                 RowBox[{"seq", ",", "_AWG"}], "]"}]}], "+", "1"}], ",", 
+              "1"}], "}"}], "\[Rule]", 
+            RowBox[{
+             RowBox[{"CtrlGetValue", "[", 
+              RowBox[{"awg", "@", "\"\<Wave\>\""}], "]"}], 
+             "\[LeftDoubleBracket]", 
+             RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}]}]}], "]"}], 
+         ",", 
+         RowBox[{"Zero", "[", 
+          RowBox[{
+           RowBox[{"Total", "@", 
+            RowBox[{"Total", "@", 
+             RowBox[{
+              RowBox[{"CtrlGetValue", "[", 
+               RowBox[{"awg", "@", "\"\<Wave\>\""}], "]"}], 
+              "\[LeftDoubleBracket]", 
+              RowBox[{"All", ",", 
+               RowBox[{"{", 
+                RowBox[{"2", ",", "5"}], "}"}]}], 
+              "\[RightDoubleBracket]"}]}]}], "-", 
+           RowBox[{
+            RowBox[{"CtrlGetValue", "[", 
+             RowBox[{"awg", "@", "\"\<Wave\>\""}], "]"}], 
+            "\[LeftDoubleBracket]", 
+            RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}]}], "]"}], ",", 
+         RowBox[{
+          RowBox[{"First", "@", 
+           RowBox[{"FirstPosition", "[", 
+            RowBox[{"seq", ",", "_AWG"}], "]"}]}], "+", "2"}]}], "]"}], ",", 
+       RowBox[{"ReplacePart", "[", 
+        RowBox[{"seq", ",", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"First", "@", 
+              RowBox[{"FirstPosition", "[", 
+               RowBox[{"seq", ",", "_AWG"}], "]"}]}], "+", "1"}], ",", "1"}], 
+           "}"}], "\[Rule]", 
+          RowBox[{
+           RowBox[{"CtrlGetValue", "[", 
+            RowBox[{"awg", "@", "\"\<Wave\>\""}], "]"}], 
+           "\[LeftDoubleBracket]", 
+           RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}]}]}], "]"}]}], 
+      "]"}], "*)"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"AWG", "[", 
+    RowBox[{"wave", ":", 
+     RowBox[{"{", "__List", "}"}]}], "]"}], ":=", 
+   RowBox[{
+    RowBox[{"CallVI", "[", 
+     RowBox[{"\"\<D:\\\\LabVIEW\\\\SpectrumAWG\\\\Wave.vi\>\"", ",", 
+      RowBox[{"{", "\"\<Wave\>\"", "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"MakeNETObject", "[", 
+          RowBox[{"MakeNETObject", "/@", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"Round", "[", 
+              RowBox[{
+               RowBox[{
+               "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+               ",", "0.0001"}], "]"}], ",", 
+             RowBox[{"Round", "[", 
+              RowBox[{
+               RowBox[{
+               "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+               ",", "0.001"}], "]"}], ",", 
+             RowBox[{"Round", "[", 
+              RowBox[{
+               RowBox[{
+               "#", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}], 
+               ",", "0.001"}], "]"}], ",", 
+             RowBox[{"Round", "[", 
+              RowBox[{
+               RowBox[{
+               "#", "\[LeftDoubleBracket]", "4", "\[RightDoubleBracket]"}], 
+               ",", "0.001"}], "]"}], ",", 
+             RowBox[{"Round", "[", 
+              RowBox[{
+               RowBox[{
+               "#", "\[LeftDoubleBracket]", "5", "\[RightDoubleBracket]"}], 
+               ",", "0.001"}], "]"}], ",", 
+             RowBox[{"ToFormulaString", "@", 
+              RowBox[{
+              "#", "\[LeftDoubleBracket]", "6", "\[RightDoubleBracket]"}]}]}],
+             "}"}]}], "]"}], "&"}], "/@", "wave"}], "}"}]}], "]"}], 
+    "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"AWG", "[", 
+      RowBox[{
+       RowBox[{"wave", ":", 
+        RowBox[{"{", "__List", "}"}]}], ",", 
+       RowBox[{"pos", ":", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"_Integer", ",", "_Integer"}], "}"}], ".."}]}]}], "]"}], 
+     "[", 
+     RowBox[{"x_", ",", "seq_"}], "]"}], ":=", 
+    RowBox[{"ReplacePart", "[", 
+     RowBox[{"seq", ",", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"First", "@", 
+           RowBox[{"FirstPosition", "[", 
+            RowBox[{"seq", ",", "_AWG"}], "]"}]}], "+", "1"}], ",", "1"}], 
+        "}"}], "\[Rule]", " ", 
+       RowBox[{"Total", "@", 
+        RowBox[{"Total", "@", 
+         RowBox[{
+          RowBox[{"AWG", "[", 
+           RowBox[{"ReplacePart", "[", 
+            RowBox[{"wave", ",", 
+             RowBox[{
+              RowBox[{"{", "pos", "}"}], "\[Rule]", "x"}]}], "]"}], "]"}], 
+          "\[LeftDoubleBracket]", 
+          RowBox[{"All", ",", 
+           RowBox[{"{", 
+            RowBox[{"2", ",", "5"}], "}"}]}], 
+          "\[RightDoubleBracket]"}]}]}]}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"AWG", "[", "expr_", "]"}], "[", 
+      RowBox[{"x_", ",", "seq_"}], "]"}], ":=", 
+     RowBox[{"ReplacePart", "[", 
+      RowBox[{"seq", ",", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"First", "@", 
+            RowBox[{"FirstPosition", "[", 
+             RowBox[{"seq", ",", "_AWG"}], "]"}]}], "+", "1"}], ",", "1"}], 
+         "}"}], "\[Rule]", " ", 
+        RowBox[{"Total", "@", 
+         RowBox[{"Total", "@", 
+          RowBox[{
+           RowBox[{"AWG", "[", 
+            RowBox[{"expr", "[", "x", "]"}], "]"}], "\[LeftDoubleBracket]", 
+           RowBox[{"All", ",", 
+            RowBox[{"{", 
+             RowBox[{"2", ",", "5"}], "}"}]}], 
+           "\[RightDoubleBracket]"}]}]}]}]}], "]"}]}], ";"}], "*)"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"AWG", "[", 
+    RowBox[{
+     RowBox[{"wave0", ":", 
+      RowBox[{"{", "__List", "}"}]}], ",", 
+     RowBox[{"wave1", ":", 
+      RowBox[{"{", "__List", "}"}]}]}], "]"}], ":=", 
+   RowBox[{
+    RowBox[{"CallVI", "[", 
+     RowBox[{"\"\<D:\\\\LabVIEW\\\\SpectrumAWG\\\\Wave2.vi\>\"", ",", 
+      RowBox[{"{", 
+       RowBox[{"\"\<Wave0\>\"", ",", "\"\<Wave1\>\""}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          RowBox[{"MakeNETObject", "[", 
+           RowBox[{"MakeNETObject", "/@", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"Round", "[", 
+               RowBox[{
+                RowBox[{
+                "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+                ",", "0.0001"}], "]"}], ",", 
+              RowBox[{"Round", "[", 
+               RowBox[{
+                RowBox[{
+                "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+                ",", "0.001"}], "]"}], ",", 
+              RowBox[{"Round", "[", 
+               RowBox[{
+                RowBox[{
+                "#", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}], 
+                ",", "0.001"}], "]"}], ",", 
+              RowBox[{"Round", "[", 
+               RowBox[{
+                RowBox[{
+                "#", "\[LeftDoubleBracket]", "4", "\[RightDoubleBracket]"}], 
+                ",", "0.001"}], "]"}], ",", 
+              RowBox[{"Round", "[", 
+               RowBox[{
+                RowBox[{
+                "#", "\[LeftDoubleBracket]", "5", "\[RightDoubleBracket]"}], 
+                ",", "0.001"}], "]"}], ",", 
+              RowBox[{"ToFormulaString", "@", 
+               RowBox[{
+               "#", "\[LeftDoubleBracket]", "6", 
+                "\[RightDoubleBracket]"}]}]}], "}"}]}], "]"}], "&"}], "/@", 
+         "wave0"}], ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"MakeNETObject", "[", 
+           RowBox[{"MakeNETObject", "/@", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"Round", "[", 
+               RowBox[{
+                RowBox[{
+                "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+                ",", "0.0001"}], "]"}], ",", 
+              RowBox[{"Round", "[", 
+               RowBox[{
+                RowBox[{
+                "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+                ",", "0.001"}], "]"}], ",", 
+              RowBox[{"Round", "[", 
+               RowBox[{
+                RowBox[{
+                "#", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}], 
+                ",", "0.001"}], "]"}], ",", 
+              RowBox[{"Round", "[", 
+               RowBox[{
+                RowBox[{
+                "#", "\[LeftDoubleBracket]", "4", "\[RightDoubleBracket]"}], 
+                ",", "0.001"}], "]"}], ",", 
+              RowBox[{"Round", "[", 
+               RowBox[{
+                RowBox[{
+                "#", "\[LeftDoubleBracket]", "5", "\[RightDoubleBracket]"}], 
+                ",", "0.001"}], "]"}], ",", 
+              RowBox[{"ToFormulaString", "@", 
+               RowBox[{
+               "#", "\[LeftDoubleBracket]", "6", 
+                "\[RightDoubleBracket]"}]}]}], "}"}]}], "]"}], "&"}], "/@", 
+         "wave1"}]}], "}"}]}], "]"}], "\[LeftDoubleBracket]", 
+    RowBox[{"1", ";;", "2"}], "\[RightDoubleBracket]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"AWG", "[", 
+    RowBox[{
+     RowBox[{"wave0", ":", 
+      RowBox[{"{", "__List", "}"}]}], ",", 
+     RowBox[{"pos0", ":", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"_Integer", ",", "_Integer"}], "}"}], ".."}]}], ",", 
+     RowBox[{"wave1", ":", 
+      RowBox[{"{", "__List", "}"}]}], ",", 
+     RowBox[{"pos1", ":", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"_Integer", ",", "_Integer"}], "}"}], ".."}]}]}], "]"}], "[", 
+   RowBox[{"x_", ",", "seq_"}], "]"}], ":=", 
+  RowBox[{"ReplacePart", "[", 
+   RowBox[{"seq", ",", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"First", "@", 
+         RowBox[{"FirstPosition", "[", 
+          RowBox[{"seq", ",", "_AWG"}], "]"}]}], "+", "1"}], ",", "1"}], 
+      "}"}], "\[Rule]", " ", 
+     RowBox[{"Total", "@", 
+      RowBox[{"Total", "@", 
+       RowBox[{
+        RowBox[{"AWG", "[", 
+         RowBox[{
+          RowBox[{"ReplacePart", "[", 
+           RowBox[{"wave0", ",", 
+            RowBox[{
+             RowBox[{"{", "pos0", "}"}], "\[Rule]", "x"}]}], "]"}], ",", 
+          RowBox[{"ReplacePart", "[", 
+           RowBox[{"wave1", ",", 
+            RowBox[{
+             RowBox[{"{", "pos1", "}"}], "\[Rule]", "x"}]}], "]"}]}], "]"}], 
+        "\[LeftDoubleBracket]", 
+        RowBox[{"1", ",", "All", ",", 
+         RowBox[{"{", 
+          RowBox[{"2", ",", "5"}], "}"}]}], "\[RightDoubleBracket]"}]}]}]}]}],
+    "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"AWG", "[", 
+     RowBox[{"expr1_", ",", "expr2_"}], "]"}], "[", 
+    RowBox[{"x_", ",", "seq_"}], "]"}], ":=", 
+   RowBox[{"ReplacePart", "[", 
+    RowBox[{"seq", ",", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"First", "@", 
+          RowBox[{"FirstPosition", "[", 
+           RowBox[{"seq", ",", "_AWG"}], "]"}]}], "+", "1"}], ",", "1"}], 
+       "}"}], "\[Rule]", " ", 
+      RowBox[{"Total", "@", 
+       RowBox[{"Total", "@", 
+        RowBox[{
+         RowBox[{"AWG", "[", 
+          RowBox[{
+           RowBox[{"expr1", "[", "x", "]"}], ",", 
+           RowBox[{"expr2", "[", "x", "]"}]}], "]"}], "\[LeftDoubleBracket]", 
+         RowBox[{"1", ",", "All", ",", 
+          RowBox[{"{", 
+           RowBox[{"2", ",", "5"}], "}"}]}], 
+         "\[RightDoubleBracket]"}]}]}]}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Format", "[", 
+    RowBox[{"AWG", "[", "___", "]"}], "]"}], ":=", "AWG"}], ";", 
+  RowBox[{"(*", 
+   RowBox[{"\:53c2\:89c1", "\"\<\:5b9a\:4e49\:8f93\:51fa\:683c\:5f0f\>\""}], 
+   "*)"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"AWGPT", "[", "wave_List", "]"}], "[", 
+    RowBox[{"x_", ",", "seq_"}], "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"dseq", ",", "wave0"}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"wave0", "=", 
+       RowBox[{"AWG", "[", 
+        RowBox[{"ReplacePart", "[", 
+         RowBox[{"wave", ",", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}], "\[Rule]", "x"}]}], "]"}], 
+        "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"dseq", "=", 
+       RowBox[{
+        RowBox[{"Total", "@", 
+         RowBox[{"Total", "@", 
+          RowBox[{"wave0", "\[LeftDoubleBracket]", 
+           RowBox[{"All", ",", 
+            RowBox[{"{", 
+             RowBox[{"2", ",", "5"}], "}"}]}], "\[RightDoubleBracket]"}]}]}], 
+        "-", 
+        RowBox[{"wave0", "\[LeftDoubleBracket]", 
+         RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"dseq", ">", "0"}], ",", 
+        RowBox[{"Insert", "[", 
+         RowBox[{
+          RowBox[{"ReplacePart", "[", 
+           RowBox[{"seq", ",", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"First", "@", 
+                 RowBox[{"FirstPosition", "[", 
+                  RowBox[{"seq", ",", "_AWG"}], "]"}]}], "+", "1"}], ",", 
+               "1"}], "}"}], "\[Rule]", 
+             RowBox[{"wave0", "\[LeftDoubleBracket]", 
+              RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}]}]}], "]"}], 
+          ",", 
+          RowBox[{"Zero", "[", "dseq", "]"}], ",", 
+          RowBox[{
+           RowBox[{"First", "@", 
+            RowBox[{"FirstPosition", "[", 
+             RowBox[{"seq", ",", "_AWG"}], "]"}]}], "+", "2"}]}], "]"}], ",", 
+        RowBox[{"ReplacePart", "[", 
+         RowBox[{"seq", ",", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"First", "@", 
+               RowBox[{"FirstPosition", "[", 
+                RowBox[{"seq", ",", "_AWG"}], "]"}]}], "+", "1"}], ",", "1"}],
+             "}"}], "\[Rule]", 
+           RowBox[{"wave0", "\[LeftDoubleBracket]", 
+            RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}]}]}], "]"}]}], 
+       "]"}]}]}], "\[IndentingNewLine]", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"AWGPT", "[", 
+    RowBox[{"x_", ",", "seq_"}], "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"dseq", ",", "wave"}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"CtrlSignalValue", "[", 
+       RowBox[{
+        RowBox[{"awg", "@", "\"\<Duration (us)\>\""}], ",", "x"}], "]"}], ";", 
+      RowBox[{"Pause", "[", "0.2", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"wave", "=", 
+       RowBox[{"CtrlGetValue", "[", 
+        RowBox[{"awg", "@", "\"\<Wave\>\""}], "]"}]}], ";", 
+      RowBox[{"dseq", "=", 
+       RowBox[{
+        RowBox[{"Total", "@", 
+         RowBox[{"Total", "@", 
+          RowBox[{"wave", "\[LeftDoubleBracket]", 
+           RowBox[{"All", ",", 
+            RowBox[{"{", 
+             RowBox[{"2", ",", "5"}], "}"}]}], "\[RightDoubleBracket]"}]}]}], 
+        "-", 
+        RowBox[{"wave", "\[LeftDoubleBracket]", 
+         RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"dseq", ">", "0"}], ",", 
+        RowBox[{"Insert", "[", 
+         RowBox[{
+          RowBox[{"ReplacePart", "[", 
+           RowBox[{"seq", ",", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"First", "@", 
+                 RowBox[{"FirstPosition", "[", 
+                  RowBox[{"seq", ",", "_AWG"}], "]"}]}], "+", "1"}], ",", 
+               "1"}], "}"}], "\[Rule]", 
+             RowBox[{"wave", "\[LeftDoubleBracket]", 
+              RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}]}]}], "]"}], 
+          ",", 
+          RowBox[{"Zero", "[", "dseq", "]"}], ",", 
+          RowBox[{
+           RowBox[{"First", "@", 
+            RowBox[{"FirstPosition", "[", 
+             RowBox[{"seq", ",", "_AWG"}], "]"}]}], "+", "2"}]}], "]"}], ",", 
+        RowBox[{"ReplacePart", "[", 
+         RowBox[{"seq", ",", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"First", "@", 
+               RowBox[{"FirstPosition", "[", 
+                RowBox[{"seq", ",", "_AWG"}], "]"}]}], "+", "1"}], ",", "1"}],
+             "}"}], "\[Rule]", 
+           RowBox[{"wave", "\[LeftDoubleBracket]", 
+            RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}]}]}], "]"}]}], 
+       "]"}]}]}], "\[IndentingNewLine]", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Format", "[", 
+    RowBox[{"AWGPT", "[", "___", "]"}], "]"}], ":=", "AWGPT"}], 
+  ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{
+  3.754630547593155*^9, {3.754639826104827*^9, 3.7546398385917997`*^9}, 
+   3.754639890793779*^9, {3.7546399426653094`*^9, 3.7546399499842634`*^9}, {
+   3.7546400594954634`*^9, 3.754640155642922*^9}, {3.754640208105308*^9, 
+   3.7546402128246355`*^9}, {3.754640254529336*^9, 3.7546403073927174`*^9}, {
+   3.7546404242480607`*^9, 3.7546404377916985`*^9}, {3.75464049192871*^9, 
+   3.7546404993527355`*^9}, {3.754640569440381*^9, 3.754640615328087*^9}, {
+   3.7546410575837965`*^9, 3.754641061535821*^9}, {3.754641229455765*^9, 
+   3.7546412297535577`*^9}, {3.7546414036243887`*^9, 
+   3.7546414068630004`*^9}, {3.754710744052964*^9, 3.7547107503739376`*^9}, 
+   3.754710893462207*^9, {3.754996736398394*^9, 3.754996739021916*^9}, {
+   3.7550168161874595`*^9, 3.755016900542758*^9}, {3.7550170840326614`*^9, 
+   3.7550171725730915`*^9}, {3.7554014761831303`*^9, 3.755401539848452*^9}, {
+   3.7561193980890536`*^9, 3.7561193988570957`*^9}, {3.756177306319763*^9, 
+   3.7561773144893274`*^9}, {3.7664705514674206`*^9, 
+   3.7664705551006904`*^9}, {3.7680361201685424`*^9, 3.768036129097294*^9}, {
+   3.7680369393060875`*^9, 3.7680369685849714`*^9}, {3.76803723114741*^9, 
+   3.7680372351310067`*^9}, {3.7680373689720345`*^9, 
+   3.7680373862981243`*^9}, {3.7682666395571003`*^9, 3.768266699190711*^9}, {
+   3.768271388084875*^9, 3.7682713904718275`*^9}, {3.768271462537363*^9, 
+   3.7682714779132442`*^9}, {3.7682721901186137`*^9, 
+   3.7682722254800577`*^9}, {3.768272263048314*^9, 3.7682722677832737`*^9}, {
+   3.7682723441985893`*^9, 3.7682724125876637`*^9}, {3.7682724768710356`*^9, 
+   3.7682725551606307`*^9}, {3.768273007784204*^9, 3.7682730131754656`*^9}, {
+   3.7682730849695573`*^9, 3.7682731403129935`*^9}, 3.7682731910802145`*^9, {
+   3.768277354473524*^9, 3.7682773760745096`*^9}, {3.768277856314102*^9, 
+   3.76827785754638*^9}, {3.76827790501796*^9, 3.7682779059143443`*^9}, {
+   3.768278335900352*^9, 3.768278390074765*^9}, {3.769251642826563*^9, 
+   3.7692516837457824`*^9}, {3.7692522595456276`*^9, 3.769252262929058*^9}, {
+   3.7692523198294888`*^9, 3.7692523494494605`*^9}, {3.77011671708587*^9, 
+   3.770116780542288*^9}, {3.771062418801571*^9, 3.771062448581607*^9}, 
+   3.7710624857971306`*^9, {3.7710625545911865`*^9, 3.771062555109577*^9}, {
+   3.771115423674369*^9, 3.771115431642559*^9}, {3.7711164618013396`*^9, 
+   3.771116489466669*^9}, {3.771116533114527*^9, 3.7711165371143675`*^9}, {
+   3.771116585545206*^9, 3.77111666309715*^9}, {3.7711181453538656`*^9, 
+   3.7711183007777967`*^9}, {3.771118336121134*^9, 3.7711183634483223`*^9}, {
+   3.771118411691222*^9, 3.771118413002709*^9}, {3.771118461432466*^9, 
+   3.7711185211770678`*^9}, {3.7711185886648765`*^9, 
+   3.7711186068085446`*^9}, {3.7711188453196316`*^9, 
+   3.7711188508894677`*^9}, {3.7711189779440155`*^9, 
+   3.7711189896733294`*^9}, {3.7711197282640996`*^9, 
+   3.7711197460555973`*^9}, {3.7711288183036447`*^9, 
+   3.7711288262388906`*^9}, {3.7711290124947147`*^9, 3.771129021806658*^9}, 
+   3.7711290568182263`*^9, {3.7711291575097523`*^9, 3.7711291945100565`*^9}, {
+   3.7711293838722134`*^9, 3.771129389358375*^9}, {3.7711294325910397`*^9, 
+   3.7711294785422916`*^9}, 3.7711296099818068`*^9, 3.7711307386372976`*^9, {
+   3.771140513893938*^9, 3.771140524949958*^9}, {3.771141463477031*^9, 
+   3.7711414647243476`*^9}, {3.7711416998925767`*^9, 
+   3.7711417022283554`*^9}, {3.771141841155553*^9, 3.7711418506116943`*^9}, {
+   3.7711459517141457`*^9, 3.7711459742261953`*^9}, {3.771146100242073*^9, 
+   3.7711461214263964`*^9}, {3.7711461839044094`*^9, 3.771146205516527*^9}, {
+   3.7711463231737595`*^9, 3.771146326571951*^9}, {3.7712221554682207`*^9, 
+   3.771222157705679*^9}, {3.7712222070102663`*^9, 3.7712222117047496`*^9}, {
+   3.7712222479667144`*^9, 3.7712222488751297`*^9}, 3.7712222790885115`*^9, {
+   3.7712224595087695`*^9, 3.7712224893777003`*^9}, {3.771222526864956*^9, 
+   3.7712225412456975`*^9}, {3.7712227754559603`*^9, 
+   3.7712227795513477`*^9}, {3.77175282625727*^9, 3.7717529786163025`*^9}, {
+   3.771838514834115*^9, 3.77183855808171*^9}, {3.7718386120176783`*^9, 
+   3.7718386902493086`*^9}, 3.771838725688763*^9, {3.7718387688981757`*^9, 
+   3.771838780600794*^9}, {3.7718388123223457`*^9, 3.77183884500194*^9}, {
+   3.771838889208839*^9, 3.7718389174657784`*^9}, {3.7718460144837914`*^9, 
+   3.7718460488673277`*^9}, {3.7718461559711194`*^9, 3.771846388850416*^9}, {
+   3.77184647695116*^9, 3.7718464867308273`*^9}, {3.7718467868688354`*^9, 
+   3.7718468621067*^9}, {3.771846898661687*^9, 3.7718469349469585`*^9}, {
+   3.7718472823075447`*^9, 3.77184733020322*^9}, {3.7718474743558517`*^9, 
+   3.771847539437431*^9}, {3.7718481274589434`*^9, 3.7718481327219715`*^9}, {
+   3.786160538308428*^9, 3.786160552175365*^9}, {3.7863523952326756`*^9, 
+   3.786352410542755*^9}, 3.8049117031312866`*^9},
+ FontFamily->"Consolas",
+ FontSize->16,ExpressionUUID->"77efdfbf-3cef-4729-91ec-497a14a580aa"]
+},
+WindowSize->{899, 780},
+WindowMargins->{{Automatic, 206}, {59, Automatic}},
+FrontEndVersion->"11.3 for Microsoft Windows (64-bit) (2018\:5e743\:670828\
+\:65e5)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 27939, 708, 2017, "Input",ExpressionUUID->"77efdfbf-3cef-4729-91ec-497a14a580aa",
+ InitializationCell->True]
+}
+]
+*)
+

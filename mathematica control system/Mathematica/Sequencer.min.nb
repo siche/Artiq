@@ -1,0 +1,406 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     14468,        398]
+NotebookOptionsPosition[     14157,        384]
+NotebookOutlinePosition[     14513,        400]
+CellTagsIndexPosition[     14470,        397]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{"!", 
+      RowBox[{"ValueQ", "@", "SequencerPath"}]}], ",", 
+     RowBox[{
+     "SequencerPath", "=", 
+      "\"\<D:\\\\LabVIEW\\\\Sequencer.min\\\\Sequencer.min.vi\>\""}]}], "]"}],
+    ";"}], "\n"}], "\n", 
+ RowBox[{
+  RowBox[{"ClearAll", "[", "sequencer", "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"ClearAll", "[", "Sequencer", "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"ClearAll", "[", "SequencerFile", "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"ClearAll", "[", "SequencerString", "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"ClearAll", "[", "SequencerList", "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"ClearAll", "[", "SequencerCompiled", "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"ClearAll", "[", "SequencerRepeats", "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"ClearAll", "[", "SequencerSend", "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"ClearAll", "[", "SequencerCounts", "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"ClearAll", "[", "SequencerSweep", "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"ClearAll", "[", "TimeScanOnce", "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"ClearAll", "[", "SequencerData", "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"ClearAll", "[", "SequencerAxis", "]"}], ";"}], "\n"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"Sequencer", "[", 
+     RowBox[{"path_String:", "SequencerPath"}], "]"}], " ", ":=", " ", 
+    RowBox[{"GetAllCtrls", "@", "path"}]}], ";"}], "\n"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"SequencerFile", "[", 
+     RowBox[{"path_String:", "\"\<\>\""}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", "ctrl", "}"}], ",", "\n", 
+      RowBox[{
+       RowBox[{"ctrl", "=", 
+        RowBox[{"sequencer", "@", "\"\<Edit.Sequence.Sequence File\>\""}]}], 
+       ";", "\n", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"path", "===", "\"\<\>\""}], ",", "\n", 
+         RowBox[{"Return", "[", 
+          RowBox[{"CtrlGetValue", "[", "ctrl", "]"}], "]"}], ",", "\n", 
+         RowBox[{
+          RowBox[{"CtrlSignalValue", "[", 
+           RowBox[{"ctrl", ",", "path"}], "]"}], ";", 
+          RowBox[{"Pause", "[", "0.1", "]"}]}]}], "]"}]}]}], "\n", "]"}]}], 
+   ";"}], "\n"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"SequencerString", "[", 
+     RowBox[{"str_String:", "\"\<\>\""}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"ctrl0", ",", "ctrl"}], "}"}], ",", "\n", 
+      RowBox[{
+       RowBox[{"ctrl0", "=", 
+        RowBox[{"sequencer", "@", "\"\<Edit.Sequence.Sequence File\>\""}]}], 
+       ";", "\n", 
+       RowBox[{"ctrl", "=", 
+        RowBox[{"sequencer", "@", "\"\<Edit.Sequence.Sequence String\>\""}]}],
+        ";", "\n", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"str", "===", "\"\<\>\""}], ",", "\n", 
+         RowBox[{"Return", "[", 
+          RowBox[{"CtrlGetValue", "[", "ctrl", "]"}], "]"}], ",", "\n", 
+         RowBox[{
+          RowBox[{"CtrlSetValue", "[", 
+           RowBox[{"ctrl0", ",", " ", "\"\<\>\""}], "]"}], ";", "\n", 
+          RowBox[{"CtrlSignalValue", "[", 
+           RowBox[{"ctrl", ",", "str"}], "]"}], ";", 
+          RowBox[{"Pause", "[", "0.1", "]"}]}]}], "]"}]}]}], "\n", "]"}]}], 
+   ";"}], "\n"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"SequencerList", "[", 
+     RowBox[{"sequence_List:", 
+      RowBox[{"{", "}"}]}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"ctrl0", ",", "ctrl"}], "}"}], ",", "\n", 
+      RowBox[{
+       RowBox[{"ctrl0", "=", 
+        RowBox[{"sequencer", "@", "\"\<Edit.Sequence.Chapter (us)\>\""}]}], 
+       ";", "\n", 
+       RowBox[{"ctrl", "=", 
+        RowBox[{"sequencer", "@", "\"\<Edit.Sequence.Sequence\>\""}]}], ";", 
+       "\n", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"sequence", "===", 
+          RowBox[{"{", "}"}]}], ",", "\n", 
+         RowBox[{"Return", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"CtrlGetValue", "[", "ctrl0", "]"}], ",", 
+            RowBox[{"CtrlGetValue", "[", "ctrl", "]"}]}], "}"}], "]"}], ",", 
+         "\n", 
+         RowBox[{
+          RowBox[{"CtrlSetValue", "[", 
+           RowBox[{"ctrl0", ",", " ", 
+            RowBox[{"sequence", "[", 
+             RowBox[{"[", "1", "]"}], "]"}]}], "]"}], ";", "\n", 
+          RowBox[{"CtrlSetValue", "[", 
+           RowBox[{"ctrl", ",", " ", 
+            RowBox[{"sequence", "[", 
+             RowBox[{"[", "2", "]"}], "]"}]}], "]"}], ";", "\n", 
+          RowBox[{"ctrl", "=", 
+           RowBox[{
+           "sequencer", "@", "\"\<Edit.Sequence.Sequence File\>\""}]}], ";", 
+          "\n", 
+          RowBox[{"CtrlSetValue", "[", 
+           RowBox[{"ctrl", ",", " ", "\"\<\>\""}], "]"}], ";", "\n", 
+          RowBox[{"ctrl", "=", 
+           RowBox[{"sequencer", "@", "\"\<Edit.Sequence.Save\>\""}]}], ";", 
+          "\n", 
+          RowBox[{"CtrlSignalValue", "[", 
+           RowBox[{"ctrl", ",", " ", "True"}], "]"}], ";", "\n", 
+          RowBox[{"While", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"CtrlGetValue", "[", "ctrl", "]"}], " ", "===", " ", 
+             "True"}], ",", "Null"}], "]"}]}]}], "]"}]}]}], "\n", "]"}]}], 
+   ";"}], "\n"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"SequencerCompiled", "[", 
+     RowBox[{"sequence_String:", "\"\<\>\""}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", "ctrl", "}"}], ",", "\n", 
+      RowBox[{
+       RowBox[{"ctrl", "=", 
+        RowBox[{"sequencer", "@", "\"\<CompiledSequence\>\""}]}], ";", "\n", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"sequence", "===", "\"\<\>\""}], ",", "\n", 
+         RowBox[{"Return", "[", 
+          RowBox[{"CtrlGetValue", "[", "ctrl", "]"}], "]"}], ",", "\n", 
+         RowBox[{
+          RowBox[{"CtrlSetValue", "[", 
+           RowBox[{"ctrl", ",", " ", "sequence"}], "]"}], ";", "\n", 
+          RowBox[{"ctrl", "=", 
+           RowBox[{"sequencer", "@", "\"\<Edit.Sequence.Compile\>\""}]}], ";",
+           "\n", 
+          RowBox[{"CtrlSignalValue", "[", 
+           RowBox[{"ctrl", ",", " ", "True"}], "]"}], ";", "\n", 
+          RowBox[{"While", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"CtrlGetValue", "[", "ctrl", "]"}], " ", "===", " ", 
+             "True"}], ",", "Null"}], "]"}]}]}], "]"}]}]}], "\n", "]"}]}], 
+   ";"}], "\n"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"SequencerRepeats", "[", 
+     RowBox[{"value_Integer:", "0"}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", "ctrl", "}"}], ",", "\n", 
+      RowBox[{
+       RowBox[{"ctrl", "=", 
+        RowBox[{"sequencer", "@", "\"\<Edit.Sequence.Repeats\>\""}]}], ";", 
+       "\n", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"value", "===", "0"}], ",", "\n", 
+         RowBox[{"Return", "[", 
+          RowBox[{"CtrlGetValue", "[", "ctrl", "]"}], "]"}], ",", "\n", 
+         RowBox[{"CtrlSignalValue", "[", 
+          RowBox[{"ctrl", ",", " ", "value"}], "]"}]}], "]"}]}]}], "\n", 
+     "]"}]}], ";"}], "\n"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"SequencerSend", "[", "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", "ctrl", "}"}], ",", "\n", 
+      RowBox[{
+       RowBox[{"ctrl", "=", 
+        RowBox[{"sequencer", "@", "\"\<Scan.Time.Send\>\""}]}], ";", "\n", 
+       RowBox[{"CtrlSignalValue", "[", 
+        RowBox[{"ctrl", ",", " ", "True"}], "]"}], ";", "\n", 
+       RowBox[{"While", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"CtrlGetValue", "[", "ctrl", "]"}], " ", "===", " ", 
+          "True"}], ",", "Null"}], "]"}]}]}], "\n", "]"}]}], ";"}], 
+  "\n"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"SequencerCounts", "[", "___", "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", "ctrl", "}"}], ",", "\n", 
+      RowBox[{
+       RowBox[{"ctrl", "=", 
+        RowBox[{"sequencer", "@", "\"\<Edit.Sequence.Data\>\""}]}], ";", "\n", 
+       RowBox[{"CtrlSignalValue", "[", 
+        RowBox[{"ctrl", ",", " ", "True"}], "]"}], ";", "\n", 
+       RowBox[{"While", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"CtrlGetValue", "[", "ctrl", "]"}], " ", "===", " ", 
+          "True"}], ",", "Null"}], "]"}], ";", "\n", 
+       RowBox[{"ctrl", "=", 
+        RowBox[{"sequencer", "@", "\"\<Counts\>\""}]}], ";", "\n", 
+       RowBox[{"CtrlGetValue", "[", "ctrl", "]"}]}]}], "\n", "]"}]}], ";"}], 
+  "\n"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"SequencerSweep", "[", "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", "ctrl", "}"}], ",", "\n", 
+      RowBox[{
+       RowBox[{"ctrl", "=", 
+        RowBox[{"sequencer", "@", "\"\<Detect.PMT.Sweep\>\""}]}], ";", "\n", 
+       RowBox[{"CtrlSignalValue", "[", 
+        RowBox[{"ctrl", ",", " ", "True"}], "]"}], ";"}]}], "\n", 
+     RowBox[{"(*", " ", 
+      RowBox[{"While", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"CtrlGetValue", "[", "ctrl", "]"}], " ", "===", " ", 
+         "True"}], ",", "Null"}], "]"}], " ", "*)"}], "\n", "]"}]}], ";"}], 
+  "\n"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"TimeScanOnce", "[", 
+     RowBox[{"chapter_Integer", ",", 
+      RowBox[{"start_", "?", "NumberQ"}], ",", 
+      RowBox[{"end_", "?", "NumberQ"}], ",", 
+      RowBox[{"step_", "?", "NumberQ"}]}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", "ctrl", "}"}], ",", "\n", 
+      RowBox[{
+       RowBox[{"ctrl", "=", 
+        RowBox[{"sequencer", "@", "\"\<Scan.Time.Chapter\>\""}]}], ";", "\n", 
+       RowBox[{"CtrlSetValue", "[", 
+        RowBox[{"ctrl", ",", " ", "chapter"}], "]"}], ";", "\n", 
+       RowBox[{"ctrl", "=", 
+        RowBox[{"sequencer", "@", "\"\<Scan.Time.Start (us)\>\""}]}], ";", 
+       "\n", 
+       RowBox[{"CtrlSetValue", "[", 
+        RowBox[{"ctrl", ",", " ", "start"}], "]"}], ";", "\n", 
+       RowBox[{"ctrl", "=", 
+        RowBox[{"sequencer", "@", "\"\<Scan.Time.End (us)\>\""}]}], ";", "\n", 
+       RowBox[{"CtrlSetValue", "[", 
+        RowBox[{"ctrl", ",", " ", "end"}], "]"}], ";", "\n", 
+       RowBox[{"ctrl", "=", 
+        RowBox[{"sequencer", "@", "\"\<Scan.Time.Step (us)\>\""}]}], ";", 
+       "\n", 
+       RowBox[{"CtrlSetValue", "[", 
+        RowBox[{"ctrl", ",", " ", "step"}], "]"}], ";", "\n", 
+       RowBox[{"ctrl", "=", 
+        RowBox[{"sequencer", "@", "\"\<Scan.Time.Once\>\""}]}], ";", "\n", 
+       RowBox[{"CtrlSetValue", "[", 
+        RowBox[{"ctrl", ",", " ", "True"}], "]"}], ";", "\n", 
+       RowBox[{"ctrl", "=", 
+        RowBox[{"sequencer", "@", "\"\<Scan.Time.Time Scan\>\""}]}], ";", 
+       "\n", 
+       RowBox[{"CtrlSignalValue", "[", 
+        RowBox[{"ctrl", ",", " ", "True"}], "]"}], ";", "\n", 
+       RowBox[{"While", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"CtrlGetValue", "[", "ctrl", "]"}], " ", "===", " ", 
+          "True"}], ",", 
+         RowBox[{"(*", 
+          RowBox[{
+           RowBox[{"Pause", "[", "0.1", "]"}], ";"}], "*)"}], "Null"}], "]"}],
+        ";", "\n", 
+       RowBox[{"Pause", "[", "0.1", "]"}]}]}], "\n", "]"}]}], ";"}], 
+  "\n"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"SequencerData", "[", 
+     RowBox[{"value_String:", "\"\<\>\""}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", "ctrl", "}"}], ",", "\n", 
+      RowBox[{
+       RowBox[{"ctrl", "=", 
+        RowBox[{"sequencer", "@", "\"\<Detect.PMT.data file\>\""}]}], ";", 
+       "\n", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"value", "===", "\"\<\>\""}], ",", "\n", 
+         RowBox[{"Return", "[", 
+          RowBox[{"CtrlGetValue", "[", "ctrl", "]"}], "]"}], ",", "\n", 
+         RowBox[{"CtrlSetValue", "[", 
+          RowBox[{"ctrl", ",", " ", "value"}], "]"}]}], "]"}]}]}], "\n", 
+     "]"}]}], ";"}], "\n"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"SequencerAxis", "[", 
+     RowBox[{
+      RowBox[{"start_", "?", "NumberQ"}], ",", 
+      RowBox[{"end_", "?", "NumberQ"}], ",", 
+      RowBox[{"step_", "?", "NumberQ"}]}], "]"}], ":=", 
+    RowBox[{"(", "\n", 
+     RowBox[{
+      RowBox[{"CtrlSignalValue", "[", 
+       RowBox[{
+        RowBox[{"sequencer", "@", "\"\<Detect.PMT.Clear\>\""}], ",", "True"}],
+        "]"}], ";", "\n", 
+      RowBox[{"CallVI", "[", 
+       RowBox[{"\"\<SetXScale\>\"", ",", 
+        RowBox[{"{", 
+         RowBox[{
+         "\"\<reference\>\"", ",", "\"\<Start\>\"", ",", "\"\<End\>\"", ",", 
+          "\"\<Step\>\""}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+          "sequencer", "@", "\"\<Detect.PMT.Average Counts or States\>\""}], 
+          ",", "start", ",", "end", ",", "step"}], "}"}]}], "]"}], ";"}], 
+     "\n", ")"}]}], ";"}], "\n"}], "\n", 
+ RowBox[{
+  RowBox[{"sequencer", "=", 
+   RowBox[{"Sequencer", "[", "]"}]}], ";"}]}], "Code",
+ CellChangeTimes->{{3.738972144970717*^9, 3.7389721780980635`*^9}, {
+  3.7389722854067373`*^9, 3.738972661580241*^9}, {3.7389727060990047`*^9, 
+  3.7389728488844132`*^9}, {3.7389728875466957`*^9, 3.73897289920042*^9}, {
+  3.7389729347749453`*^9, 3.7389729528893356`*^9}, {3.7389730762879524`*^9, 
+  3.7389730871419816`*^9}, {3.738973159189513*^9, 3.7389731594385123`*^9}, {
+  3.7389732388990383`*^9, 3.738973268867508*^9}, {3.7389741396916933`*^9, 
+  3.7389741400707054`*^9}, {3.7390644530062065`*^9, 
+  3.7390645342689543`*^9}},ExpressionUUID->"636796ad-c79c-4096-9fea-\
+81b92606ef1a"]
+},
+WindowSize->{775, 833},
+WindowMargins->{{Automatic, -63}, {19, Automatic}},
+FrontEndVersion->"11.3 for Microsoft Windows (64-bit) (2018\:5e743\:67086\
+\:65e5)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 13595, 362, 2103, "Code",ExpressionUUID->"636796ad-c79c-4096-9fea-81b92606ef1a"]
+}
+]
+*)
+

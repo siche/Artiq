@@ -152,7 +152,7 @@ class KasliTester(EnvExperiment):
                 with parallel:
                     # self.detection.sw.on()
                     # 利用cooling  光作为detection
-                    self.pmt.gate_rising(300*us)
+                    self.pmt.gate_rising(400*us)
                     self.cooling.sw.on()
                     photon_number = self.pmt.count(now_mu())
                     photon_count = photon_count + photon_number
@@ -169,12 +169,13 @@ class KasliTester(EnvExperiment):
         self.pre_set()
 
         pmt_on()
-        init_fre = 238.423
-        stop_fre = 238.443
-        DDS_AMP = 0.65
-        lock_point = 871.034644
-        scan_step = 0.001/10
-        rabi_time = 60
+        init_fre = 236.255
+        stop_fre = 236.255
+        DDS_AMP = 0.85
+        lock_point = 871.034642
+        scan_step = 0.002
+        rabi_time = 200
+
         N =int((stop_fre-init_fre)/scan_step)
         run_times = 200
 

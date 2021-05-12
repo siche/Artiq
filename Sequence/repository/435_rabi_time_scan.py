@@ -2,10 +2,15 @@ import numpy as np
 import time
 from artiq.experiment import *
 import matplotlib.pyplot as plt
+from dds2 import *
 
-_RED_SIDEBAND = 238.142
-_CARRIER = 238.142
+_CARRIER = 239.978
+AMP = 0.600
 
+"""
+DDS = dds_controller("COM5")    
+DDS.set_frequency(frequency=_CARRIER, amplitude=AMP)
+"""
 class SideBandCooling(EnvExperiment):
     def build(self):
 
@@ -33,14 +38,14 @@ class SideBandCooling(EnvExperiment):
         self.dds1_435.set(_CARRIER*MHz)
         self.pumping.set(260*MHz)
 
-        self.dds1_435.set_att(18.)
+        self.dds1_435.set_att(20.)
         self.cooling.set_att(10.)
         self.pumping.set_att(18.)
 
         # define dataset
         # self.set_dataset("SBCData", np.full(100, 0), broadcast=True)
     @kernel
-    def SingleRun(self, rabi_time, run_times=200):
+    def SingleRun(self, rabi_time=20.0, run_times=200):
         # initialize dds
         self.core.break_realtime()
         # self.microwave.sw.off()
@@ -49,14 +54,20 @@ class SideBandCooling(EnvExperiment):
         # photon_count = 0
         photon_number = 0
         count = 0
-
+        """
         with sequential:
             self.cooling.sw.on()
             delay(1*ms)
             self.cooling.sw.off()
             delay(1*us)
+        """
 
         for i in range(run_times):
+            with sequential:
+                self.cooling.sw.on()
+                delay(1*ms)
+                self.cooling.sw.off()
+                delay(1*us)
             # with sequential:
 
             # cooling for 1.5 ms
@@ -202,13 +213,31 @@ class SideBandCooling(EnvExperiment):
         plt.show()
 
     def run(self):
+        
         t1 = time.time()
-        self.start = 0.0
-        self.stop = 200.0
-        self.step = 2.0
+        N = 50
+        rabi_time = 0.0
+        step = 0.5
 
-        self.pre_set()
-        self.RabiTimeScan(self.start, self.stop, self.step)
-        # self.RabiTimeScan(self.start, self.stop, self.step, run_times=100)
+        xdata = np.arange(N)
+        ydata = [None]*N
+        plt.ion()
+        fig,=plt.plot(xdata,ydata)
+        ax = plt.gca()
+
+        for i in range(N):
+            rabi_time = rabi_time + step
+            count = self.SingleRun(rabi_time=rabi_time,run_times=200)
+            ydata[i] = count
+            
+            ax.relim()
+            ax.autoscale_view(True, True, True)
+            fig.set_ydata(ydata)
+            plt.pause(1e-17)
+            plt.draw()
+            
+
         t2 = time.time()
         print("running time cost:%s" % (t2-t1))
+        plt.draw()
+        plt.pause(100)

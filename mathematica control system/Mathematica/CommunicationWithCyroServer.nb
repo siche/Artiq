@@ -1,0 +1,312 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     12169,        304]
+NotebookOptionsPosition[     10949,        274]
+NotebookOutlinePosition[     11306,        290]
+CellTagsIndexPosition[     11263,        287]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"use", " ", ".", "NET"}], " ", "assembly", " ", "to", " ", 
+    "realize", " ", "websocket", " ", "communication"}], "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"<<", "NETLink`"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+    "LoadNETAssembly", "[", "\"\<System.Net.WebSockets.Client\>\"", "]"}], 
+    ";"}], "\n", 
+   RowBox[{
+    RowBox[{"CancellationToken", "=", 
+     RowBox[{
+     "NETNew", "[", "\"\<System.Threading.CancellationToken\>\"", "]"}]}], 
+    ";"}], "\n", 
+   RowBox[{
+    RowBox[{"WebSocketMessageType", "=", 
+     RowBox[{
+     "NETNew", "[", "\"\<System.Net.WebSockets.WebSocketMessageType\>\"", 
+      "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"$cryoServerURI", "=", "\"\<ws://192.168.32.2:10000\>\""}], 
+    ";"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.8090488758537073`*^9, 3.809048887028846*^9}, {
+  3.809049073788786*^9, 3.8090490747163076`*^9}, {3.8090496776800704`*^9, 
+  3.809049680805718*^9}, {3.8091276225166984`*^9, 3.8091276500271845`*^9}, {
+  3.809129314829507*^9, 3.8091293226446233`*^9}, {3.809138882284526*^9, 
+  3.8091389087657657`*^9}, {3.8091654488409057`*^9, 3.8091654878317146`*^9}, {
+  3.820052908217111*^9, 
+  3.820052941627797*^9}},ExpressionUUID->"1bbd32bc-376c-4112-a9e3-\
+e70f3c8c100f"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"ClearAll", "[", 
+   RowBox[{"WebSocketConnect", ",", "WebSocketAbort"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"WebSocketConnect", "[", "uri_", "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", "socket", "}"}], ",", 
+     RowBox[{
+      RowBox[{"socket", "=", 
+       RowBox[{
+       "NETNew", "[", "\"\<System.Net.WebSockets.ClientWebSocket\>\"", 
+        "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"socket", "@", 
+       RowBox[{"ConnectAsync", "[", 
+        RowBox[{
+         RowBox[{"NETNew", "[", 
+          RowBox[{"\"\<System.Uri\>\"", ",", "uri"}], "]"}], ",", 
+         RowBox[{"CancellationToken", "@", "None"}]}], "]"}]}], ";", 
+      "\[IndentingNewLine]", "socket"}]}], "\[IndentingNewLine]", "]"}]}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"WebSocketAbort", "[", 
+     RowBox[{"socket_", "?", "NETObjectQ"}], "]"}], ":=", 
+    RowBox[{"socket", "@", 
+     RowBox[{"Abort", "[", "]"}]}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "WebSocketWrite", "]"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"WebSocketWrite", "[", 
+     RowBox[{
+      RowBox[{"socket_", "?", "NETObjectQ"}], ",", "JSONMessage_String"}], 
+     "]"}], ":=", 
+    RowBox[{"socket", "@", 
+     RowBox[{"SendAsync", "[", 
+      RowBox[{
+       RowBox[{"NETNew", "[", 
+        RowBox[{"\"\<System.ArraySegment<byte>\>\"", ",", 
+         RowBox[{"ToCharacterCode", "@", "JSONMessage"}]}], "]"}], ",", 
+       RowBox[{"WebSocketMessageType", "@", "Text"}], ",", "True", ",", 
+       RowBox[{"CancellationToken", "@", "None"}]}], "]"}]}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\n", 
+ RowBox[{"ClearAll", "[", "WebSocketRead", "]"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"WebSocketRead", "[", 
+    RowBox[{
+     RowBox[{"socket_", "?", "NETObjectQ"}], ",", 
+     RowBox[{"BufferSize_:", "1024"}], ",", 
+     RowBox[{"symbol_:", "False"}]}], "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", "buf", "}"}], ",", 
+     RowBox[{
+      RowBox[{"buf", "=", 
+       RowBox[{"NETNew", "[", 
+        RowBox[{"\"\<System.ArraySegment<byte>\>\"", ",", 
+         RowBox[{"ConstantArray", "[", 
+          RowBox[{"0", ",", "BufferSize"}], "]"}]}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"socket", "@", 
+       RowBox[{"ReceiveAsync", "[", 
+        RowBox[{"buf", ",", 
+         RowBox[{"CancellationToken", "@", "None"}]}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"If", "[", 
+       RowBox[{"symbol", ",", 
+        RowBox[{"ImportString", "[", 
+         RowBox[{
+          RowBox[{"FromCharacterCode", "[", 
+           RowBox[{"DeleteCases", "[", 
+            RowBox[{
+             RowBox[{"buf", "@", "Array"}], ",", "0"}], "]"}], "]"}], ",", 
+          "\"\<JSON\>\""}], "]"}], ",", 
+        RowBox[{"FromCharacterCode", "[", 
+         RowBox[{"DeleteCases", "[", 
+          RowBox[{
+           RowBox[{"buf", "@", "Array"}], ",", "0"}], "]"}], "]"}]}], 
+       "]"}]}]}], "\[IndentingNewLine]", "]"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.80912849070473*^9, 3.809128553651524*^9}, {
+   3.8091286167519073`*^9, 3.809128719939171*^9}, 3.80912918681758*^9, {
+   3.809129355270441*^9, 3.809129402685738*^9}, {3.8091294703579044`*^9, 
+   3.8091294723765106`*^9}, 3.8091295188084354`*^9, {3.8091297067352576`*^9, 
+   3.8091297079340553`*^9}, {3.809129848777693*^9, 3.8091298550299854`*^9}, 
+   3.8091299451770945`*^9, {3.809129996623619*^9, 3.8091299997831764`*^9}, {
+   3.809130352079771*^9, 3.8091303526801662`*^9}, {3.8200286136182585`*^9, 
+   3.820028654804161*^9}},
+ CellLabel->
+  "In[254]:=",ExpressionUUID->"807a081f-1d00-42c8-9b9d-da94f5c2ccd8"],
+
+Cell[BoxData[{
+ RowBox[{"cryoClient", "@", 
+  RowBox[{"Abort", "[", "]"}]}], "\n", 
+ RowBox[{"Remove", "[", "cryoClient", "]"}]}], "Input",
+ CellChangeTimes->{{3.820026788012434*^9, 3.8200267942128587`*^9}, 
+   3.820028823721614*^9},ExpressionUUID->"73029d78-7004-49b0-bf13-\
+e0c2209c90da"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"cryoClient", "=", 
+  RowBox[{"WebSocketConnect", "[", "$cryoServerURI", "]"}]}]], "Input",
+ CellChangeTimes->{{3.820026470004527*^9, 3.8200264879425745`*^9}, {
+  3.8200265752801056`*^9, 3.820026582213571*^9}, {3.820026773874227*^9, 
+  3.8200267779313827`*^9}, {3.8200274552846937`*^9, 3.82002745542432*^9}, {
+  3.820052904574848*^9, 
+  3.820052921756917*^9}},ExpressionUUID->"440660e8-2610-4ed6-8a45-\
+eb78726ec7f7"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\[LeftGuillemet]", 
+   RowBox[{"NETObject", "[", 
+    RowBox[{"System", ".", "Net", ".", "WebSockets", ".", "ClientWebSocket"}],
+     "]"}], "\[RightGuillemet]"}],
+  NETLink`Objects`NETObject$1002088716828673]], "Output",
+ CellChangeTimes->{3.820026585780037*^9, 3.820026800697524*^9, 
+  3.8200272977178984`*^9, 3.820027429965378*^9, 3.8200274621543303`*^9, 
+  3.820027501219901*^9},
+ CellLabel->
+  "Out[127]=",ExpressionUUID->"fb6f1ee7-39fa-4a53-bbb0-1e6f5cb9cd5e"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"WebSocketWrite", "[", 
+  RowBox[{"cryoClient", ",", 
+   RowBox[{"ExportString", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"\"\<wlmStatus\>\"", "->", "\"\<\>\""}], ",", 
+       RowBox[{"\"\<channelStatus\>\"", "->", "\"\<\>\""}], ",", 
+       RowBox[{"\"\<exposureMode\>\"", "->", "\"\<\>\""}], ",", 
+       RowBox[{"\"\<pidStatus\>\"", "->", "\"\<\>\""}], ",", 
+       RowBox[{"\"\<deviationChannel\>\"", "->", "\"\<\>\""}], ",", 
+       RowBox[{"\"\<pidReference\>\"", "->", "\"\<\>\""}], ",", 
+       RowBox[{"\"\<pidSettingPolarity\>\"", "->", "\"\<\>\""}], ",", 
+       RowBox[{"\"\<pidSettingOutputOffset\>\"", "->", "\"\<6,2131.0\>\""}], 
+       ",", 
+       RowBox[{"\"\<pidSettingP\>\"", "->", "\"\<\>\""}], ",", 
+       RowBox[{"\"\<pidSettingI\>\"", "->", "\"\<\>\""}], ",", 
+       RowBox[{"\"\<pidSettingD\>\"", "->", "\"\<\>\""}], ",", 
+       RowBox[{"\"\<clearPidHistory\>\"", "->", "\"\<\>\""}]}], "}"}], ",", 
+     "\"\<JSON\>\"", ",", 
+     RowBox[{"\"\<Compact\>\"", "\[Rule]", "True"}]}], "]"}]}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.8200265955848274`*^9, 3.8200266103094654`*^9}, 
+   3.82002675419683*^9, {3.8200268405190735`*^9, 3.8200268406746583`*^9}, {
+   3.8200269268273563`*^9, 3.8200269492304688`*^9}, 3.8200272845929832`*^9, {
+   3.820027886533888*^9, 3.820027899699692*^9}, {3.8200280315243006`*^9, 
+   3.820028032004019*^9}, 
+   3.820220287606462*^9},ExpressionUUID->"324c3711-c5eb-490e-b511-\
+9fe370fb613d"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\[LeftGuillemet]", 
+   RowBox[{"NETObject", "[", 
+    RowBox[{"System", ".", "Threading", ".", "Tasks", ".", 
+     RowBox[{"Task`1", "[", 
+      RowBox[{
+      "System", ".", "Threading", ".", "Tasks", ".", "VoidTaskResult"}], 
+      "]"}]}], "]"}], "\[RightGuillemet]"}],
+  NETLink`Objects`NETObject$1058036823097345]], "Output",
+ CellChangeTimes->{{3.820027486777508*^9, 3.8200275194252343`*^9}, {
+  3.8200278882283573`*^9, 3.8200279004636507`*^9}, {3.8200280287317657`*^9, 
+  3.8200280323461046`*^9}},
+ CellLabel->
+  "Out[142]=",ExpressionUUID->"651dcfdb-de39-4db4-986a-9aace0a4f059"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"WebSocketRead", "[", 
+  RowBox[{"cryoClient", ",", "1025"}], "]"}]], "Input",
+ CellChangeTimes->{{3.8200279359906797`*^9, 3.8200279454683447`*^9}, {
+  3.8200283459966593`*^9, 3.820028357195722*^9}, {3.8200287026492634`*^9, 
+  3.8200287100983496`*^9}},
+ CellLabel->
+  "In[267]:=",ExpressionUUID->"0f0078ee-581f-49fb-97c8-36b6d43781d3"],
+
+Cell[BoxData["\<\"{\\\"wavelengths\\\": \
+\\\"369.52627898293275,369.5264219469695,935.1881383511736,398.9109603003102,\
+369.5253110856032,369.53176886686487,369.5264057702493,935.1801986430266\\\", \
+\\\"frequencies\\\": \
+\\\"811.2886012468045,811.2882873718378,320.56914080257997,751.5272525335195,\
+811.29072625434,811.2765484799479,811.2883228875233,320.5718624442727\\\", \\\
+\"wlmStatus\\\": \\\"On\\\", \\\"channelStatus\\\": \
+\\\"UseNotShow,UseShow,UseNotShow,UseNotShow,UseNotShow,UseNotShow,\
+NotUseNotShow,UseNotShow\\\", \\\"exposureMode\\\": \
+\\\"Manual,Manual,Automatic,Automatic,Manual,Automatic,Manual,Automatic\\\", \
+\\\"pidStatus\\\": \\\"On\\\", \\\"deviationChannel\\\": \
+\\\"0,2,3,4,0,6,7,8\\\", \\\"pidReference\\\": \\\"= \
+935.180280,369.526422,935.188130,398.911555,363.52513,369.526333,369.525280,\
+369.5255\\\", \\\"pidSettingPolarity\\\": \
+\\\"Positive,Positive,Negative,Positive,Negative,Positive,Negative,Positive\\\
+\", \\\"pidSettingOutputOffset\\\": \
+\\\"0.0,-1030.0,0.0,0.0,0.0,2131.0,0.0,0.0\\\", \\\"pidSettingP\\\": \
+\\\"1.0,0.08,0.0,1.0,0.06,0.0,0.03,1.0\\\", \\\"pidSettingI\\\": \
+\\\"0.0,0.13,0.0,0.0,0.0,0.0,0.05,0.0\\\", \\\"pidSettingD\\\": \
+\\\"0.0,0.03,0.0,0.0,0.0,0.0,0.0,0.0\\\"}\"\>"], "Output",
+ CellChangeTimes->{3.8200287384375935`*^9},
+ CellLabel->
+  "Out[267]=",ExpressionUUID->"8f5ee204-e5c0-46c6-9e87-a06e824cf699"]
+}, Open  ]]
+},
+WindowSize->{722, 766},
+WindowMargins->{{Automatic, 50}, {Automatic, 104}},
+FrontEndVersion->"11.3 for Microsoft Windows (64-bit) (2018\:5e743\:670828\
+\:65e5)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 1367, 34, 140, "Input",ExpressionUUID->"1bbd32bc-376c-4112-a9e3-e70f3c8c100f",
+ InitializationCell->True],
+Cell[1928, 56, 3788, 96, 444, "Input",ExpressionUUID->"807a081f-1d00-42c8-9b9d-da94f5c2ccd8",
+ InitializationCell->True],
+Cell[5719, 154, 290, 6, 48, "Input",ExpressionUUID->"73029d78-7004-49b0-bf13-e0c2209c90da"],
+Cell[CellGroupData[{
+Cell[6034, 164, 440, 8, 28, "Input",ExpressionUUID->"440660e8-2610-4ed6-8a45-eb78726ec7f7"],
+Cell[6477, 174, 511, 11, 32, "Output",ExpressionUUID->"fb6f1ee7-39fa-4a53-bbb0-1e6f5cb9cd5e"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7025, 190, 1495, 29, 124, "Input",ExpressionUUID->"324c3711-c5eb-490e-b511-9fe370fb613d"],
+Cell[8523, 221, 632, 14, 32, "Output",ExpressionUUID->"651dcfdb-de39-4db4-986a-9aace0a4f059"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[9192, 240, 358, 7, 28, "Input",ExpressionUUID->"0f0078ee-581f-49fb-97c8-36b6d43781d3"],
+Cell[9553, 249, 1380, 22, 356, "Output",ExpressionUUID->"8f5ee204-e5c0-46c6-9e87-a06e824cf699"]
+}, Open  ]]
+}
+]
+*)
+

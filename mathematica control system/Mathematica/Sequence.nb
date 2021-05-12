@@ -1,0 +1,871 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     35524,        863]
+NotebookOptionsPosition[     34556,        835]
+NotebookOutlinePosition[     34913,        851]
+CellTagsIndexPosition[     34870,        848]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Declaration", "Section",
+ CellChangeTimes->{{3.596256784940527*^9, 3.5962567950771065`*^9}, {
+  3.5962568419007845`*^9, 
+  3.596256845363983*^9}},ExpressionUUID->"3871aee1-54ee-4166-b085-\
+8caeb1dea7ab"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"$SequenceSeparator", "=", "\"\<----------\\n\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"$SequenceChapters", "=", 
+    RowBox[{"{", "}"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "ImportSequenceHead", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", 
+  RowBox[{
+  "ImportSequenceBody", ",", "ImportSequenceBodyHead", ",", 
+   "ImportSequenceBodyTime"}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "ImportSequenceString", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "ImportSequenceFile", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "ExportSequenceHead", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "ExportSequenceBody", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "ExportSequenceString", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "ExportSequenceFile", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "CompileSequence", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "DecompileSequence", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "ImportCompiledSequence", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "ExportCompiledSequence", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "ExportSequencePacket", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "TicStr", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "HexToByte", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "BinToByte", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "SeqPacket", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "SeqPackets", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "SequenceFile", "]"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.6048356151448097`*^9, 3.6048356384641433`*^9}, {
+   3.621054250101595*^9, 3.6210542507986355`*^9}, {3.6231811133130207`*^9, 
+   3.623181138890483*^9}, 3.6231817736987925`*^9, 3.6234905256795564`*^9, {
+   3.624005935498312*^9, 3.624005939505541*^9}, {3.624947392185467*^9, 
+   3.624947400512943*^9}, {3.625320874901456*^9, 3.625320888365226*^9}, {
+   3.6253217163635845`*^9, 3.625321717539652*^9}, {3.6253350201815133`*^9, 
+   3.625335027349923*^9}, {3.6265229700852103`*^9, 3.626522987818225*^9}, {
+   3.626523122377921*^9, 3.626523160978129*^9}, {3.6265232044256144`*^9, 
+   3.6265232148742113`*^9}, {3.626607885885945*^9, 3.6266078979959617`*^9}, {
+   3.6266079607160497`*^9, 3.62660796099605*^9}, {3.6266080470361705`*^9, 
+   3.6266080764562116`*^9}, {3.626608246016449*^9, 3.6266082661064773`*^9}, {
+   3.6266083449465876`*^9, 3.6266083726066265`*^9}, {3.6266088617773113`*^9, 
+   3.626608871047324*^9}, {3.6266090564475837`*^9, 3.62660906107759*^9}, {
+   3.6266098957887583`*^9, 3.6266099461488295`*^9}, 3.626610172649146*^9, {
+   3.62661048213958*^9, 3.62661048243958*^9}, {3.6266119416916227`*^9, 
+   3.626611945301628*^9}, {3.6266127078626957`*^9, 3.6266127119927015`*^9}, {
+   3.626613502523808*^9, 3.6266135034838095`*^9}, {3.6266559960827417`*^9, 
+   3.626655996693777*^9}, {3.6266568200278687`*^9, 3.626656839046956*^9}, {
+   3.6281614537526045`*^9, 3.6281614575128193`*^9}, {3.6285958074720297`*^9, 
+   3.628595808665098*^9}, {3.650252856307165*^9, 3.650252887417945*^9}, {
+   3.650253194960535*^9, 3.650253269561802*^9}, {3.6502533767429323`*^9, 
+   3.650253452502266*^9}, {3.6502536569329586`*^9, 3.650253657204974*^9}, 
+   3.650256787067992*^9, {3.652092759448271*^9, 3.652092766383668*^9}, {
+   3.652092823439931*^9, 3.652092825279036*^9}, {3.6560531884802713`*^9, 
+   3.656053189320319*^9}, {3.656053405991712*^9, 3.656053406289729*^9}, {
+   3.7538452561673365`*^9, 3.753845261639926*^9}, {3.7538454328123264`*^9, 
+   3.75384543307299*^9}, {3.7763149726005793`*^9, 3.7763149835921707`*^9}, {
+   3.776315266105302*^9, 3.776315293033255*^9}, {3.80830019881161*^9, 
+   3.808300271546033*^9}, {3.80830036721211*^9, 3.8083003674674263`*^9}, {
+   3.810335741475011*^9, 3.8103357451122794`*^9}, {3.812885155473482*^9, 
+   3.8128851559452195`*^9}, {3.8128852589526577`*^9, 
+   3.8128852593256598`*^9}, {3.8172630004751844`*^9, 3.81726300239505*^9}},
+ CellLabel->
+  "In[1491]:=",ExpressionUUID->"76c0bafe-8d2e-4bc4-9447-4e5176a30a6f"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Definition", "Section",
+ CellChangeTimes->{{3.6046429445346966`*^9, 
+  3.604642957117416*^9}},ExpressionUUID->"f128593c-b173-4ec8-96ce-\
+070f15100358"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"SequenceFile", "[", 
+     RowBox[{"file_String", ",", 
+      RowBox[{"seq_List:", 
+       RowBox[{"{", "}"}]}]}], "]"}], ":=", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"seq", "=!=", 
+         RowBox[{"{", "}"}]}], ",", 
+        RowBox[{"ExportSequenceFile", "[", 
+         RowBox[{"file", ",", "seq"}], "]"}]}], "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"CtrlSignalValue", "[", 
+       RowBox[{
+        RowBox[{"sequencer", "@", "\"\<Sequence File\>\""}], ",", 
+        RowBox[{"DataPath", "@", "file"}]}], "]"}]}], ")"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"ImportSequenceHead", "[", "head_String", "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", "tokens", "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"tokens", "=", 
+        RowBox[{"StringSplit", "[", 
+         RowBox[{
+          RowBox[{"StringReplace", "[", 
+           RowBox[{"head", ",", 
+            RowBox[{"{", 
+             RowBox[{"\"\<\\n\>\"", "\[Rule]", "\"\<\>\""}], "}"}]}], "]"}], 
+          ",", 
+          RowBox[{"{", 
+           RowBox[{"\"\<(\>\"", ",", "\"\<,\>\"", ",", "\"\<)\>\""}], "}"}]}],
+          "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"Each", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{
+           RowBox[{"Transpose", "@", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"#", "+", "1"}], ",", 
+              RowBox[{"Append", "[", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{"Rest", "@", "#"}], "-", "1"}], ",", 
+                RowBox[{"-", "1"}]}], "]"}]}], "}"}]}], "&"}], "@", 
+          RowBox[{"Flatten", "@", 
+           RowBox[{"Position", "[", 
+            RowBox[{"tokens", ",", "\"\<Chapter\>\""}], "]"}]}]}], ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"tokens", "[", 
+            RowBox[{"[", "#1", "]"}], "]"}], "\[Rule]", 
+           RowBox[{"tokens", "[", 
+            RowBox[{"[", 
+             RowBox[{
+              RowBox[{"#1", "+", "1"}], ";;", "#2"}], "]"}], "]"}]}], "&"}]}],
+         "]"}]}]}], "\[IndentingNewLine]", "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"ImportSequenceBody", "[", "body_String", "]"}], ":=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"ToExpression", "[", 
+          RowBox[{"#", ",", "TraditionalForm", ",", "Hold"}], "]"}], "/.", 
+         RowBox[{"x_Symbol", "\[RuleDelayed]", 
+          RowBox[{"ToString", "[", "x", "]"}]}]}], ")"}], 
+       "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], "&"}], "/@", 
+     RowBox[{"StringSplit", "[", 
+      RowBox[{"body", ",", "\"\<\\n\>\""}], "]"}]}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"ImportSequenceBodyHead", "[", "body_String", "]"}], ":=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Head", "[", 
+         RowBox[{"#", "[", 
+          RowBox[{"[", "i", "]"}], "]"}], "]"}], "<>", "\"\< \>\"", "<>", 
+        RowBox[{"ToString", "@", "i"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", 
+         RowBox[{"Length", "@", "#"}]}], "}"}]}], "]"}], "&"}], "@", 
+    RowBox[{"ImportSequenceBody", "[", "body", "]"}]}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"ImportSequenceBodyTime", "[", "body_String", "]"}], ":=", 
+   RowBox[{
+    RowBox[{"ImportSequenceBody", "[", "body", "]"}], "[", 
+    RowBox[{"[", 
+     RowBox[{"All", ",", "1"}], "]"}], "]"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"ImportSequenceString", "[", "str_String", "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"head", ",", "body"}], "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"head", ",", "body"}], "}"}], "=", 
+        RowBox[{"StringSplit", "[", 
+         RowBox[{"str", ",", "$SequenceSeparator"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"ImportSequenceHead", "[", "head", "]"}], ",", 
+         RowBox[{"ImportSequenceBody", "[", "body", "]"}]}], "}"}]}]}], 
+     "\[IndentingNewLine]", "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"ImportSequenceFile", "[", "path_String", "]"}], ":=", 
+    RowBox[{"ImportSequenceString", "@", 
+     RowBox[{"Import", "[", 
+      RowBox[{
+       RowBox[{"DataPath", "[", "path", "]"}], ",", "\"\<TEXT\>\""}], 
+      "]"}]}]}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"ExportSequenceHead", "[", 
+     RowBox[{"lst_List", ",", 
+      RowBox[{"chapters_List:", 
+       RowBox[{"{", "}"}]}]}], "]"}], ":=", 
+    RowBox[{"StringJoin", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"\"\<Chapter(\>\"", "<>", 
+        RowBox[{"StringJoin", "@@", 
+         RowBox[{"Riffle", "[", 
+          RowBox[{
+           RowBox[{"Prepend", "[", 
+            RowBox[{
+             RowBox[{"#", "/.", 
+              RowBox[{"If", "[", 
+               RowBox[{
+                RowBox[{"chapters", "===", 
+                 RowBox[{"{", "}"}]}], ",", "$SequenceChapters", ",", 
+                "chapters"}], "]"}]}], ",", "#"}], "]"}], ",", 
+           "\"\<,\\n\>\""}], "]"}]}], "<>", "\"\<)\\n\>\""}], "&"}], "/@", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"ToString", "[", "#", "]"}], "&"}], "/@", 
+        RowBox[{"DeleteDuplicates", "[", 
+         RowBox[{"Head", "/@", "lst"}], "]"}]}], ")"}]}], "]"}]}], ";", 
+   RowBox[{"(*", 
+    RowBox[{
+    "you", " ", "can", " ", "get", " ", "the", " ", "value", " ", "from", " ",
+      "the", " ", "\"\<Chapter (us)\>\"", " ", "widget", " ", "of", " ", 
+     "\"\<sequencer.vi\>\""}], "*)"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"ExportSequenceBody", "[", "lst_List", "]"}], ":=", 
+    RowBox[{"StringJoin", "@@", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"ToString", "[", 
+         RowBox[{"seq", "[", 
+          RowBox[{"[", "0", "]"}], "]"}], "]"}], "<>", "\"\<(\>\"", "<>", 
+        RowBox[{"StringJoin", "@@", 
+         RowBox[{"Riffle", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{"ToString", "[", 
+              RowBox[{"#", ",", "CForm"}], "]"}], "&"}], "/@", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"If", "[", 
+                RowBox[{
+                 RowBox[{"IntegerQ", "[", "#", "]"}], ",", "#", ",", 
+                 RowBox[{"SetAccuracy", "[", 
+                  RowBox[{
+                   RowBox[{"Round", "[", 
+                    RowBox[{"#", ",", "0.005"}], "]"}], ",", "4"}], "]"}]}], 
+                "]"}], "&"}], "/@", 
+              RowBox[{"(", 
+               RowBox[{"List", "@@", "seq"}], ")"}]}], ")"}]}], ",", 
+           "\"\<,\>\""}], "]"}]}], "<>", "\"\<)\\n\>\""}], ",", 
+       RowBox[{"{", 
+        RowBox[{"seq", ",", "lst"}], "}"}]}], "]"}]}]}], ";", 
+   RowBox[{"(*", 
+    RowBox[{
+    "you", " ", "can", " ", "get", " ", "the", " ", "value", " ", "from", " ",
+      "the", " ", "\"\<Sequence\>\"", " ", "widget", " ", "of", " ", 
+     "\"\<sequencer.vi\>\""}], "*)"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"ExportSequenceString", "[", 
+     RowBox[{"lst_List", ",", 
+      RowBox[{"chapters_List:", 
+       RowBox[{"{", "}"}]}]}], "]"}], ":=", 
+    RowBox[{
+     RowBox[{"ExportSequenceHead", "[", 
+      RowBox[{"lst", ",", "chapters"}], "]"}], "<>", "$SequenceSeparator", "<>", 
+     RowBox[{"ExportSequenceBody", "[", "lst", "]"}]}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"ExportSequenceFile", "[", 
+     RowBox[{"path_String", ",", "lst_List", ",", 
+      RowBox[{"chapters_List:", 
+       RowBox[{"{", "}"}]}]}], "]"}], ":=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"StringQ", "[", "#", "]"}], ",", 
+        RowBox[{"Export", "[", 
+         RowBox[{
+          RowBox[{"DataPath", "[", "path", "]"}], ",", "#", ",", 
+          "\"\<TEXT\>\""}], "]"}]}], "]"}], "&"}], "@", 
+     RowBox[{"ExportSequenceString", "[", 
+      RowBox[{"lst", ",", "chapters"}], "]"}]}]}], ";", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{"Export", " ", 
+      RowBox[{"a", " ", ".", "seq"}], " ", "file", " ", "to", " ", "the", " ",
+       "pre"}], "-", 
+     RowBox[{"set", " ", "folder"}]}], "*)"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"ExportSequenceFile", "[", 
+     RowBox[{
+     "path_String", ",", "SequenceBody_String", ",", "SequenceHead_String"}], 
+     "]"}], ":=", 
+    RowBox[{"Export", "[", 
+     RowBox[{
+      RowBox[{"DataPath", "[", "path", "]"}], ",", 
+      RowBox[{
+      "SequenceHead", "<>", "$SequenceSeparator", "<>", "SequenceBody"}], 
+      ",", "\"\<TEXT\>\""}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"CompileSequence", "[", 
+     RowBox[{"lst_List", ",", 
+      RowBox[{"chapters_List:", 
+       RowBox[{"{", "}"}]}]}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"chapter", ",", "seq", ",", "head"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"head", "=", 
+          RowBox[{"ToString", "[", 
+           RowBox[{"Head", "@", "seq"}], "]"}]}], ";", "\[IndentingNewLine]", 
+         RowBox[{"head", "@@", 
+          RowBox[{"Each", "[", 
+           RowBox[{
+            RowBox[{"Transpose", "@", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"List", "@@", "seq"}], ",", 
+               RowBox[{"head", "/.", 
+                RowBox[{"If", "[", 
+                 RowBox[{
+                  RowBox[{"chapters", "===", 
+                   RowBox[{"{", "}"}]}], ",", "$SequenceChapters", ",", 
+                  "chapters"}], "]"}]}]}], "}"}]}], ",", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"If", "[", 
+                RowBox[{
+                 RowBox[{"IntegerQ", "[", "#1", "]"}], ",", "#1", ",", 
+                 RowBox[{"SetAccuracy", "[", 
+                  RowBox[{
+                   RowBox[{"Round", "[", 
+                    RowBox[{"#1", ",", "0.005"}], "]"}], ",", "4"}], "]"}]}], 
+                "]"}], ",", 
+               RowBox[{"StringReplace", "[", 
+                RowBox[{"#2", ",", 
+                 RowBox[{"\"\< \>\"", "\[Rule]", "\"\<\>\""}]}], "]"}]}], 
+              "}"}], "&"}]}], "]"}]}]}], ",", 
+        RowBox[{"{", 
+         RowBox[{"seq", ",", "lst"}], "}"}]}], "]"}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"DecompileSequence", "[", "compiled_List", "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"seqs", ",", 
+        RowBox[{"chapters", "=", 
+         RowBox[{"{", "}"}]}]}], "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"seqs", "=", 
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"AppendTo", "[", 
+            RowBox[{"chapters", ",", 
+             RowBox[{
+              RowBox[{"seq", "[", 
+               RowBox[{"[", "0", "]"}], "]"}], "\[Rule]", 
+              RowBox[{"List", "@@", 
+               RowBox[{"seq", "[", 
+                RowBox[{"[", 
+                 RowBox[{"All", ",", "2"}], "]"}], "]"}]}]}]}], "]"}], ";", 
+           RowBox[{"seq", "[", 
+            RowBox[{"[", 
+             RowBox[{"All", ",", "1"}], "]"}], "]"}]}], ",", 
+          RowBox[{"{", 
+           RowBox[{"seq", ",", "compiled"}], "}"}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{"chapters", ",", "seqs"}], "}"}]}]}], "\[IndentingNewLine]", 
+     "]"}]}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"ImportCompiledSequence", "[", "str_String", "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"seq", ",", "lines"}], "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"lines", "=", 
+          RowBox[{"StringSplit", "[", 
+           RowBox[{"seq", ",", 
+            RowBox[{"{", 
+             RowBox[{"\"\<#\>\"", ",", "\"\<\\n\>\""}], "}"}]}], "]"}]}], ";",
+          "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"lines", "[", 
+           RowBox[{"[", "1", "]"}], "]"}], "@@", 
+          RowBox[{"Each", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{
+              RowBox[{"StringSplit", "[", 
+               RowBox[{"#", ",", "\"\< \>\"", ",", "2"}], "]"}], "&"}], "/@", 
+             RowBox[{"lines", "[", 
+              RowBox[{"[", 
+               RowBox[{"2", ";;", 
+                RowBox[{"-", "1"}]}], "]"}], "]"}]}], ",", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"ToExpression", "[", 
+                RowBox[{"#1", ",", "TraditionalForm"}], "]"}], ",", "#2"}], 
+              "}"}], "&"}]}], "]"}]}]}], ",", 
+        RowBox[{"{", 
+         RowBox[{"seq", ",", 
+          RowBox[{"StringSplit", "[", 
+           RowBox[{"str", ",", "\"\<\\n\\n\>\""}], "]"}]}], "}"}]}], "]"}]}], 
+     "\[IndentingNewLine]", "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"ExportCompiledSequence", "[", "compiled_List", "]"}], ":=", 
+    "\[IndentingNewLine]", 
+    RowBox[{"StringJoin", "@@", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"\"\<#\>\"", "<>", 
+        RowBox[{"seq", "[", 
+         RowBox[{"[", "0", "]"}], "]"}], "<>", "\"\<\\n\>\"", "<>", 
+        RowBox[{"StringJoin", "@@", 
+         RowBox[{"Each", "[", 
+          RowBox[{
+           RowBox[{"List", "@@", "seq"}], ",", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"ToString", "[", 
+              RowBox[{"#1", ",", "CForm"}], "]"}], "<>", "\"\< \>\"", "<>", 
+             "#2", "<>", "\"\<\\n\>\""}], "&"}]}], "]"}]}], "<>", 
+        "\"\<\\n\>\""}], ",", 
+       RowBox[{"{", 
+        RowBox[{"seq", ",", "compiled"}], "}"}]}], "]"}]}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"TicStr", "[", 
+     RowBox[{"n_", ",", "W_"}], "]"}], ":=", "\[IndentingNewLine]", 
+    RowBox[{"FromDigits", "[", 
+     RowBox[{
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          RowBox[{"Boole", "[", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"#1", "<", "#2"}], ")"}], "||", 
+            RowBox[{"(", 
+             RowBox[{"#1", "\[GreaterEqual]", 
+              RowBox[{
+               SuperscriptBox["2", "#2"], "+", "#2"}]}], ")"}]}], "]"}], 
+          "&"}], "[", 
+         RowBox[{
+          RowBox[{"FromDigits", "[", 
+           RowBox[{
+            RowBox[{"IntegerDigits", "[", 
+             RowBox[{
+              RowBox[{
+               SuperscriptBox["2", "W"], "+", "W", "-", "n"}], ",", "2", ",", 
+              "i"}], "]"}], ",", "2"}], "]"}], ",", 
+          RowBox[{"i", "-", "1"}]}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", 
+          RowBox[{"W", "+", "1"}], ",", "1", ",", 
+          RowBox[{"-", "1"}]}], "}"}]}], "]"}], ",", "2"}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"HexToByte", "[", "hex_String", "]"}], ":=", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"HexToByte", "[", "hex", "]"}], "=", 
+      RowBox[{"IntegerDigits", "[", 
+       RowBox[{
+        RowBox[{"FromDigits", "[", 
+         RowBox[{"hex", ",", "16"}], "]"}], ",", "256", ",", 
+        RowBox[{
+         RowBox[{"StringLength", "[", "hex", "]"}], "/", "2"}]}], "]"}]}], 
+     ")"}]}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"BinToByte", "[", "bin_String", "]"}], ":=", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"BinToByte", "[", "bin", "]"}], "=", 
+      RowBox[{"IntegerDigits", "[", 
+       RowBox[{
+        RowBox[{"FromDigits", "[", 
+         RowBox[{"bin", ",", "2"}], "]"}], ",", "256", ",", 
+        RowBox[{
+         RowBox[{"StringLength", "[", "bin", "]"}], "/", "8"}]}], "]"}]}], 
+     ")"}]}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ClearAll", "[", "DecimalToHex", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"DecimalToHex", "[", 
+     RowBox[{"decimal_Integer", ",", "digits_"}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"HexConvention", ",", "dat"}], "}"}], ",", 
+      RowBox[{
+       RowBox[{"HexConvention", "=", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"\"\<10\>\"", "\[Rule]", "\"\<a\>\""}], ",", 
+          RowBox[{"\"\<11\>\"", "\[Rule]", "\"\<b\>\""}], ",", 
+          RowBox[{"\"\<12\>\"", "\[Rule]", "\"\<c\>\""}], ",", 
+          RowBox[{"\"\<13\>\"", "\[Rule]", "\"\<d\>\""}], ",", 
+          RowBox[{"\"\<14\>\"", "\[Rule]", "\"\<e\>\""}], ",", 
+          RowBox[{"\"\<15\>\"", "\[Rule]", "\"\<f\>\""}]}], "}"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"dat", "=", 
+        RowBox[{"ToString", "/@", 
+         RowBox[{"PadLeft", "[", 
+          RowBox[{
+           RowBox[{"IntegerDigits", "[", 
+            RowBox[{"decimal", ",", "16"}], "]"}], ",", "digits"}], "]"}]}]}],
+        ";", "\[IndentingNewLine]", 
+       RowBox[{"StringJoin", "[", 
+        RowBox[{"dat", "/.", "HexConvention"}], "]"}]}]}], 
+     "\[IndentingNewLine]", "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"SeqPacket", "[", 
+     RowBox[{"duration_Integer", ",", 
+      RowBox[{"state_String:", 
+       RowBox[{"StringJoin", "@@", 
+        RowBox[{"ConstantArray", "[", 
+         RowBox[{"\"\<0\>\"", ",", "32"}], "]"}]}]}]}], "]"}], ":=", 
+    "\[IndentingNewLine]", 
+    RowBox[{"Join", "[", 
+     RowBox[{
+      RowBox[{"HexToByte", "@", "\"\<40\>\""}], ",", 
+      RowBox[{"IntegerDigits", "[", 
+       RowBox[{
+        RowBox[{"TicStr", "[", 
+         RowBox[{
+          RowBox[{"duration", "-", "1"}], ",", "40"}], "]"}], ",", "256", ",",
+         "5"}], "]"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Length", "[", "#", "]"}], "\[Equal]", "3"}], ",", 
+          RowBox[{"Insert", "[", 
+           RowBox[{"#", ",", "0", ",", "3"}], "]"}], ",", "#"}], "]"}], "&"}],
+        "@", 
+       RowBox[{"BinToByte", "@", "state"}]}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"SeqPackets", "[", 
+     RowBox[{"seq_List", ",", 
+      RowBox[{"repeats_Integer:", "100"}], ",", 
+      RowBox[{"trig_Symbol:", "False"}]}], "]"}], ":=", 
+    RowBox[{"Join", "[", 
+     RowBox[{
+      RowBox[{"HexToByte", "@", 
+       RowBox[{"If", "[", 
+        RowBox[{"trig", ",", "\"\<80\>\"", ",", "\"\<90\>\""}], "]"}]}], ",", 
+      RowBox[{"ConstantArray", "[", 
+       RowBox[{"0", ",", "6"}], "]"}], ",", 
+      RowBox[{"IntegerDigits", "[", 
+       RowBox[{"repeats", ",", "256", ",", "3"}], "]"}], ",", 
+      RowBox[{"Flatten", "@", 
+       RowBox[{"Each", "[", 
+        RowBox[{"seq", ",", "SeqPacket"}], "]"}]}], 
+      RowBox[{"(*", 
+       RowBox[{
+       "this", " ", "list", " ", "is", " ", "related", " ", "to", " ", "the", 
+        " ", "duration", " ", "of", " ", "each", " ", "command", " ", "in", 
+        " ", "the", " ", "sequence"}], "*)"}], ",", 
+      RowBox[{"Flatten", "@", 
+       RowBox[{"ConstantArray", "[", 
+        RowBox[{
+         RowBox[{"SeqPacket", "[", "1", "]"}], ",", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"Length", "[", "seq", "]"}], "\[LessEqual]", " ", "12"}], 
+           ",", 
+           RowBox[{"12", "-", 
+            RowBox[{"Length", "[", "seq", "]"}]}], ",", 
+           RowBox[{"Mod", "[", 
+            RowBox[{
+             RowBox[{"-", 
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{"Length", "[", "seq", "]"}], "+", "3"}], ")"}]}], ",",
+              "5"}], "]"}]}], "]"}]}], "]"}]}], ",", 
+      RowBox[{"SeqPacket", "[", "8", "]"}], ",", 
+      RowBox[{"SeqPacket", "[", "2", "]"}], ",", 
+      RowBox[{"ReplacePart", "[", 
+       RowBox[{
+        RowBox[{"SeqPacket", "[", "1", "]"}], ",", 
+        RowBox[{"1", "\[Rule]", "96"}]}], "]"}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+   "directly", " ", "write", " ", "the", " ", "bytes", " ", "to", " ", "the", 
+    " ", "sequencer"}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"ExportSequencePacket", "[", 
+    RowBox[{"compiled_List", ",", 
+     RowBox[{"repeats_Integer:", "100"}], ",", 
+     RowBox[{"trig_Symbol:", "False"}]}], "]"}], ":=", 
+   RowBox[{"SeqPackets", "[", 
+    RowBox[{
+     RowBox[{"Each", "[", 
+      RowBox[{
+       RowBox[{"Flatten", "[", 
+        RowBox[{
+         RowBox[{"Each", "[", 
+          RowBox[{"compiled", ",", "List"}], "]"}], ",", "1"}], "]"}], ",", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"Round", "[", 
+           RowBox[{"#1", "/", "0.005"}], "]"}], ",", "#2"}], "}"}], "&"}]}], 
+      "]"}], ",", "repeats", ",", "trig"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"ExportSequencePacket", "[", 
+    RowBox[{"lst_List", ",", 
+     RowBox[{"chapters_List:", 
+      RowBox[{"{", "}"}]}], ",", 
+     RowBox[{"repeats_Integer:", "100"}], ",", 
+     RowBox[{"trig_Symbol:", "False"}]}], "]"}], ":=", "\[IndentingNewLine]", 
+   RowBox[{"ExportSequencePacket", "[", 
+    RowBox[{
+     RowBox[{"CompileSequence", "[", 
+      RowBox[{"lst", ",", "chapters"}], "]"}], ",", "repeats", ",", "trig"}], 
+    "]"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.623027171851948*^9, 3.6230272261950564`*^9}, {
+   3.6230272793310957`*^9, 3.623027304867556*^9}, {3.6230273513072124`*^9, 
+   3.6230273516502323`*^9}, {3.623027456458227*^9, 3.623027475505316*^9}, {
+   3.6230275473454237`*^9, 3.623027617496436*^9}, {3.6230277174241505`*^9, 
+   3.623027734672137*^9}, {3.6230277759915*^9, 3.6230277808957806`*^9}, {
+   3.6230278151597404`*^9, 3.623027844024391*^9}, {3.6230278740641084`*^9, 
+   3.6230279161665163`*^9}, {3.6231810746978116`*^9, 3.623181105561577*^9}, {
+   3.6231813013617764`*^9, 3.623181302953867*^9}, 3.6231813522266855`*^9, {
+   3.626607933906012*^9, 3.626607935516014*^9}, {3.6266079893460894`*^9, 
+   3.626608010366119*^9}, {3.6266081899963703`*^9, 3.6266082313064284`*^9}, {
+   3.626608280946498*^9, 3.626608288796509*^9}, {3.6266083822166395`*^9, 
+   3.6266084698967624`*^9}, {3.6266088124672422`*^9, 
+   3.6266088529572988`*^9}, {3.6266088969873605`*^9, 3.626608902087367*^9}, {
+   3.6266089655074563`*^9, 3.62660896840746*^9}, {3.6266090076975155`*^9, 
+   3.626609049087573*^9}, {3.6266090942676363`*^9, 3.626609128347684*^9}, 
+   3.6266092619578714`*^9, {3.6266093043379307`*^9, 3.626609308357936*^9}, {
+   3.626609388208048*^9, 3.6266094479281316`*^9}, {3.626609521928235*^9, 
+   3.626609623628378*^9}, 3.626609655848423*^9, {3.626609709448498*^9, 
+   3.626609731858529*^9}, {3.626609828768665*^9, 3.626609841578683*^9}, {
+   3.626609920518793*^9, 3.626610106829054*^9}, {3.626610176069151*^9, 
+   3.6266101763491516`*^9}, {3.626610566769698*^9, 3.6266105867497263`*^9}, 
+   3.626611009600318*^9, 3.626611376150831*^9, {3.626611533361051*^9, 
+   3.626611533981052*^9}, {3.626611798291422*^9, 3.6266119342216125`*^9}, {
+   3.6266127184027104`*^9, 3.6266127650527754`*^9}, {3.626612827012862*^9, 
+   3.6266129680930595`*^9}, {3.6266131560333233`*^9, 
+   3.6266131785633545`*^9}, {3.6266135261738415`*^9, 
+   3.6266135266638417`*^9}, {3.626655757295084*^9, 3.626655770606845*^9}, {
+   3.6266558158514333`*^9, 3.626655954389357*^9}, {3.626656085446853*^9, 
+   3.626656089312074*^9}, {3.626656134576663*^9, 3.626656139402939*^9}, {
+   3.6266562097799644`*^9, 3.6266564895819683`*^9}, {3.626656604793558*^9, 
+   3.6266566393675356`*^9}, {3.6266567282786207`*^9, 3.626656733230904*^9}, {
+   3.6266568590571012`*^9, 3.626656974320694*^9}, {3.6266570047874365`*^9, 
+   3.626657048197919*^9}, {3.626657098615803*^9, 3.6266571153367596`*^9}, {
+   3.6266572050328894`*^9, 3.6266572252210445`*^9}, {3.626657262110154*^9, 
+   3.6266572708576546`*^9}, {3.626657490997246*^9, 3.6266574931623697`*^9}, {
+   3.6266575557109475`*^9, 3.6266576062248363`*^9}, {3.626657662561059*^9, 
+   3.6266576920347447`*^9}, {3.6266578023120522`*^9, 3.6266578763122845`*^9}, 
+   3.626657945241227*^9, {3.6266580163582945`*^9, 3.62665801855342*^9}, {
+   3.626658051989333*^9, 3.6266580524273577`*^9}, {3.6266580840691676`*^9, 
+   3.626658127506652*^9}, {3.626658243403281*^9, 3.626658272033919*^9}, {
+   3.62665837678691*^9, 3.6266583925978146`*^9}, {3.62665843202407*^9, 
+   3.6266585429064116`*^9}, {3.626658578858468*^9, 3.6266585848918133`*^9}, {
+   3.6266586213578987`*^9, 3.6266586220319376`*^9}, {3.626658850851025*^9, 
+   3.6266588511560426`*^9}, {3.6281612805776997`*^9, 3.6281613169777813`*^9}, 
+   3.6281614507074304`*^9, {3.6283325748221703`*^9, 3.628332588371945*^9}, {
+   3.6285957659206533`*^9, 3.6285958004496284`*^9}, {3.628607138517129*^9, 
+   3.6286071407092543`*^9}, {3.6502527717233276`*^9, 
+   3.6502528369730597`*^9}, {3.6502528990296087`*^9, 
+   3.6502529482274227`*^9}, {3.6502529851625357`*^9, 3.650253002833546*^9}, {
+   3.6502530378775506`*^9, 3.6502530520053587`*^9}, {3.650253094377782*^9, 
+   3.650253185665004*^9}, {3.650253469583243*^9, 3.650253471088329*^9}, {
+   3.65025352740155*^9, 3.650253607935156*^9}, {3.6502536385349064`*^9, 
+   3.650253650598596*^9}, {3.650255767360668*^9, 3.650255805745864*^9}, {
+   3.650255836313612*^9, 3.6502558506904345`*^9}, 3.6502567790995364`*^9, {
+   3.6560531954556704`*^9, 3.656053258883298*^9}, {3.656053345651261*^9, 
+   3.65605334650731*^9}, {3.6560534023975067`*^9, 3.656053403012542*^9}, {
+   3.6561346305174894`*^9, 3.656134650478631*^9}, {3.6561347885505285`*^9, 
+   3.6561348195663023`*^9}, {3.6563257699310384`*^9, 3.656325819018846*^9}, {
+   3.6588111775516014`*^9, 3.6588111854390526`*^9}, {3.658811582287751*^9, 
+   3.6588115840808535`*^9}, {3.7763149999414277`*^9, 
+   3.7763150006395597`*^9}, {3.7763152574195404`*^9, 3.776315285390704*^9}, {
+   3.7813913574879904`*^9, 3.7813913734602675`*^9}, {3.7861682232173753`*^9, 
+   3.7861682752872057`*^9}, {3.7861683366442137`*^9, 
+   3.7861683930624228`*^9}, {3.7861684253032503`*^9, 
+   3.7861684746713023`*^9}, {3.786168640910985*^9, 3.7861686424797926`*^9}, {
+   3.8083010596467314`*^9, 3.808301060330901*^9}, {3.8083030820648804`*^9, 
+   3.808303087089439*^9}, {3.808303123721442*^9, 3.8083031519060435`*^9}, {
+   3.8083032182036877`*^9, 3.8083032198622494`*^9}, {3.8088655246552067`*^9, 
+   3.8088655863202424`*^9}, {3.810335626387887*^9, 3.810335672645141*^9}, {
+   3.81033572049314*^9, 3.810335724119439*^9}, 3.812859142639312*^9, {
+   3.812859686848881*^9, 3.8128597605018473`*^9}, 3.812860336078165*^9, {
+   3.812885079871729*^9, 3.8128851004556637`*^9}, {3.812885141016157*^9, 
+   3.81288514255903*^9}, {3.8128852759821014`*^9, 3.812885277102105*^9}, 
+   3.812885318209137*^9, {3.8128854030018826`*^9, 3.8128854031534767`*^9}, {
+   3.8172630083900175`*^9, 3.817263043692609*^9}, {3.817432850852125*^9, 
+   3.8174329617884502`*^9}, 3.8174330422921605`*^9, {3.817434002513667*^9, 
+   3.817434006796214*^9}, {3.8174340461958485`*^9, 3.817434082138727*^9}},
+ CellLabel->
+  "In[1512]:=",ExpressionUUID->"2389cce3-72ef-4d67-a635-924b13c505d8"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["End", "Section",
+ CellChangeTimes->{{3.6046429928574605`*^9, 
+  3.604642995613618*^9}},ExpressionUUID->"ae3fd009-6dcf-4193-927f-\
+cf9c654a64f1"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"$SequenceChapters", "=", 
+   RowBox[{"First", "@", 
+    RowBox[{"ImportSequenceFile", "[", "\"\<Sequence/Head.seq\>\"", "]"}]}]}],
+   ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.6046437797924705`*^9, 3.6046437831126604`*^9}, {
+   3.604834055114581*^9, 3.604834055482602*^9}, {3.650255256017421*^9, 
+   3.650255259177602*^9}, {3.6502552944336185`*^9, 3.6502552977938104`*^9}, {
+   3.6502553369690514`*^9, 3.650255382528657*^9}, {3.652131971036045*^9, 
+   3.6521319714190674`*^9}, {3.6560506286398563`*^9, 
+   3.6560506291038833`*^9}, {3.7538452865321226`*^9, 3.753845287735324*^9}, 
+   3.8172630476590014`*^9},
+ CellLabel->
+  "In[1402]:=",ExpressionUUID->"0607ffd2-012d-4803-98dd-75f19d4923d3"]
+}, Open  ]]
+},
+WindowSize->{707, 796},
+WindowMargins->{{Automatic, 453}, {Automatic, 13}},
+FrontEndVersion->"11.3 for Microsoft Windows (64-bit) (2018\:5e743\:670828\
+\:65e5)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 209, 4, 67, "Section",ExpressionUUID->"3871aee1-54ee-4166-b085-8caeb1dea7ab"],
+Cell[792, 28, 4301, 70, 444, "Input",ExpressionUUID->"76c0bafe-8d2e-4bc4-9447-4e5176a30a6f",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5130, 103, 157, 3, 67, "Section",ExpressionUUID->"f128593c-b173-4ec8-96ce-070f15100358"],
+Cell[5290, 108, 28310, 699, 2433, "Input",ExpressionUUID->"2389cce3-72ef-4d67-a635-924b13c505d8",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[33637, 812, 150, 3, 67, "Section",ExpressionUUID->"ae3fd009-6dcf-4193-927f-cf9c654a64f1"],
+Cell[33790, 817, 750, 15, 44, "Input",ExpressionUUID->"0607ffd2-012d-4803-98dd-75f19d4923d3",
+ InitializationCell->True]
+}, Open  ]]
+}
+]
+*)
+

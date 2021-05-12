@@ -1,0 +1,413 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     16717,        405]
+NotebookOptionsPosition[     15657,        376]
+NotebookOutlinePosition[     16014,        392]
+CellTagsIndexPosition[     15971,        389]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Needs", "[", "\"\<NETLink`\>\"", "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"LoadNETAssembly", "[", "\"\<NationalInstruments.VisaNS\>\"", "]"}],
+   ";"}], "\n", 
+ RowBox[{
+  RowBox[{"LoadNETType", "@", "\"\<NationalInstruments.VisaNS.Parity\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+  "LoadNETType", "@", "\"\<NationalInstruments.VisaNS.StopBitType\>\""}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+  "LoadNETType", "@", "\"\<NationalInstruments.VisaNS.FlowControlTypes\>\""}],
+   ";"}]}], "Code",
+ CellChangeTimes->{
+  3.6046428559376287`*^9, {3.604642912614871*^9, 3.604642912974891*^9}, {
+   3.6046436073876095`*^9, 3.604643617059163*^9}, {3.6046436584015274`*^9, 
+   3.604643659289578*^9}, 3.6313521394171896`*^9, {3.650254934900054*^9, 
+   3.650254974132298*^9}, {3.650261263672039*^9, 3.6502612723905377`*^9}, {
+   3.6502615091500797`*^9, 3.6502615094060946`*^9}, {3.6502628533079615`*^9, 
+   3.650262853588977*^9}, {3.650262888740988*^9, 3.6502629034598293`*^9}, {
+   3.756016150843028*^9, 3.756016153010798*^9}},
+ CellLabel->
+  "In[268]:=",ExpressionUUID->"23cc9679-7c1c-4aa6-8bab-658ef533c919"],
+
+Cell[CellGroupData[{
+
+Cell["Declaration", "Section",
+ CellChangeTimes->{{3.596256784940527*^9, 3.5962567950771065`*^9}, {
+  3.5962568419007845`*^9, 
+  3.596256845363983*^9}},ExpressionUUID->"ced7407e-f069-4122-a142-\
+f9dad98fc4f5"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"SerialDevices", "=", 
+    RowBox[{"<|", "|>"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"SerialParity", "=", 
+   RowBox[{"<|", 
+    RowBox[{"0", "\[Rule]", "NationalInstruments`VisaNS`Parity`None"}], 
+    "|>"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"SerialStopBits", "=", 
+    RowBox[{"<|", 
+     RowBox[{
+      RowBox[{"1", "->", "NationalInstruments`VisaNS`StopBitType`One"}], ",", 
+      RowBox[{"2", "->", "NationalInstruments`VisaNS`StopBitType`Two"}]}], 
+     "|>"}]}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "SerialDevice", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "SerialOpen", "]"}], "\n", 
+ RowBox[{"ClearAll", "[", "SerialClose", "]"}], "\n", 
+ RowBox[{"ClearAll", "[", "SerialWrite", "]"}], "\n", 
+ RowBox[{"ClearAll", "[", "SerialRead", "]"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.582065653762785*^9, 3.5820656542178416`*^9}, {
+   3.582066015137226*^9, 3.5820660856533737`*^9}, {3.5820661349626083`*^9, 
+   3.5820661735667343`*^9}, {3.582066419433499*^9, 3.582066423360976*^9}, {
+   3.582067527097211*^9, 3.5820675923134637`*^9}, {3.626162893972453*^9, 
+   3.626162917987827*^9}, {3.626163162794829*^9, 3.6261631740664735`*^9}, {
+   3.6261633150085354`*^9, 3.6261633600641117`*^9}, {3.6261634301211195`*^9, 
+   3.6261634468120737`*^9}, {3.626163796789091*^9, 3.6261638168452387`*^9}, 
+   3.626164029854422*^9, {3.626165019486026*^9, 3.626165019654035*^9}, {
+   3.6261652044206033`*^9, 3.626165204580612*^9}, {3.6261656494170556`*^9, 
+   3.6261657528399715`*^9}, 3.6261660010111656`*^9, {3.6261676870276003`*^9, 
+   3.6261677037705584`*^9}, {3.6261678710491257`*^9, 3.626167876114415*^9}, {
+   3.626167915480667*^9, 3.6261679165527287`*^9}, {3.6261682236962957`*^9, 
+   3.6261682239763117`*^9}, {3.6261688140750637`*^9, 
+   3.6261688303229933`*^9}, {3.626180076255314*^9, 3.626180136614766*^9}, {
+   3.626180517851572*^9, 3.62618052462696*^9}, {3.6261807759933367`*^9, 
+   3.626180779953563*^9}, {3.626180849185523*^9, 3.626180853033743*^9}, {
+   3.626180945145012*^9, 3.6261809553845973`*^9}, {3.626181031287939*^9, 
+   3.626181031518952*^9}, {3.6261811692958326`*^9, 3.626181174311119*^9}, {
+   3.626770626157817*^9, 3.6267706298460274`*^9}, {3.626770759399438*^9, 
+   3.6267707890781355`*^9}, {3.650253791599661*^9, 3.6502539360279217`*^9}, {
+   3.6502540003396006`*^9, 3.6502540673794346`*^9}, {3.650254103330491*^9, 
+   3.6502541141231084`*^9}, {3.650254239266266*^9, 3.6502543161836653`*^9}, {
+   3.650254709405156*^9, 3.650254712278321*^9}, {3.650261313118867*^9, 
+   3.6502614230721564`*^9}, {3.6502615049338384`*^9, 3.650261505294859*^9}, {
+   3.650262925373083*^9, 3.6502629329405155`*^9}, {3.651801048168112*^9, 
+   3.651801054792491*^9}, {3.6521502459313097`*^9, 3.6521502534267387`*^9}, {
+   3.6521502921159515`*^9, 3.652150311595065*^9}, {3.6521503419628024`*^9, 
+   3.652150345219989*^9}, {3.652152482753172*^9, 3.6521524910716476`*^9}, {
+   3.6566525659551353`*^9, 3.656652567019196*^9}, {3.7560161582743797`*^9, 
+   3.756016161667212*^9}},
+ CellLabel->
+  "In[334]:=",ExpressionUUID->"e61d852d-d95e-4084-bcf4-bdec44338c30"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Definition", "Section",
+ CellChangeTimes->{{3.6046429445346966`*^9, 
+  3.604642957117416*^9}},ExpressionUUID->"e79f5344-52d6-4c81-8f66-\
+f962f8dfbda4"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"SerialDevice", "[", 
+    RowBox[{"port_", "?", "NETLink`NETObjectQ"}], "]"}], ":=", "port"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"SerialDevice", "[", "name_String", "]"}], ":=", 
+   RowBox[{"SerialDevices", "[", "name", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"SerialDevice", "[", "id_Integer", "]"}], ":=", 
+    RowBox[{
+    "SerialDevices", "\[LeftDoubleBracket]", "id", 
+     "\[RightDoubleBracket]"}]}], ";"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"\:6ce8\:610fname\:662fNI", " ", "visa\:8d44\:6e90\:540d"}], 
+    "\:ff0c", 
+    RowBox[{
+    "\:53ef\:4ee5\:6253\:5f00NI", " ", 
+     "MAX\:627e\:8bbe\:5907\:5bf9\:5e94\:7684\:540d\:79f0"}]}], 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"SerialOpen", "[", 
+     RowBox[{"name_String", ",", 
+      RowBox[{"baudrate_Integer:", "4000000"}], ",", 
+      RowBox[{"databits_Integer:", "8"}], ",", 
+      RowBox[{"stopbits_Integer:", "2"}], ",", 
+      RowBox[{"parity_Integer:", "0"}]}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", "port", "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"KeyExistsQ", "[", 
+          RowBox[{"SerialDevices", ",", "name"}], "]"}], ",", 
+         RowBox[{"Return", "@", 
+          RowBox[{"SerialDevices", "@", "name"}]}]}], "]"}], ";", "\n", 
+       RowBox[{"port", "=", 
+        RowBox[{"NETLink`NETNew", "[", 
+         RowBox[{
+         "\"\<NationalInstruments.VisaNS.SerialSession\>\"", ",", "name"}], 
+         "]"}]}], ";", "\n", 
+       RowBox[{
+        RowBox[{"port", "@", "BaudRate"}], "=", "baudrate"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"port", "@", "DataBits"}], "=", "databits"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"port", "@", "Parity"}], "=", 
+        RowBox[{"SerialParity", "@", "parity"}]}], ";", "\n", 
+       RowBox[{
+        RowBox[{"port", "@", "StopBits"}], "=", 
+        RowBox[{"SerialStopBits", "@", "stopbits"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"port", "@", "FlowControl"}], "=", 
+          "NationalInstruments`VisaNS`FlowControlTypes`None"}], ";"}], "*)"}],
+        "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"port", "@", 
+         StyleBox["DefaultBufferSize",
+          FontWeight->"Bold"]}], 
+        StyleBox["=",
+         FontWeight->"Bold"], 
+        StyleBox["409600",
+         FontWeight->"Bold"]}], 
+       StyleBox[";",
+        FontWeight->"Bold"], "\n", 
+       RowBox[{"(*", 
+        RowBox[{
+         RowBox[{"port", "@", 
+          RowBox[{"Open", "[", "]"}]}], ";", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"port", "@", "DtrEnable"}], "=", "True"}], ";"}], "*)"}], 
+       "\n", 
+       RowBox[{
+        RowBox[{"SerialDevices", "[", "name", "]"}], "=", "port"}]}]}], "\n", 
+     "]"}]}], ";"}], "\n"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"SerialClose", "[", 
+    RowBox[{"port_", "?", "NETLink`NETObjectQ"}], "]"}], ":=", 
+   RowBox[{"(", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"port", "@", 
+      RowBox[{"Clear", "[", "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"port", "@", 
+      RowBox[{"Dispose", "[", "]"}]}], ";", "\n", 
+     RowBox[{"NETLink`ReleaseNETObject", "[", "port", "]"}]}], "\n", ")"}]}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"SerialClose", "[", "name_String", "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"SerialClose", "@", 
+      RowBox[{"SerialDevices", "[", "name", "]"}]}], ";", 
+     RowBox[{"SerialDevices", "=", 
+      RowBox[{"Delete", "[", 
+       RowBox[{"SerialDevices", ",", "name"}], "]"}]}], ";"}], ")"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"SerialClose", "[", "]"}], ":=", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"SerialClose", "/@", 
+       RowBox[{"Keys", "[", "SerialDevices", "]"}]}], ";"}], ")"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"SerialWrite", "[", 
+    RowBox[{"dev_", ",", "str_String"}], "]"}], ":=", 
+   RowBox[{
+    RowBox[{"SerialDevice", "[", "dev", "]"}], "@", 
+    RowBox[{"Write", "[", "str", 
+     RowBox[{"(*", 
+      RowBox[{"<>", "\"\<\\n\>\""}], "*)"}], "]"}]}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"SerialWrite", "[", 
+     RowBox[{"dev_", ",", "chars_List"}], "]"}], ":=", 
+    RowBox[{
+     RowBox[{"SerialDevice", "[", "dev", "]"}], "@", 
+     RowBox[{"Write", "[", "chars", 
+      RowBox[{"(*", 
+       RowBox[{",", "0", ",", 
+        RowBox[{"Length", "[", "chars", "]"}]}], "*)"}], "]"}]}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"SerialRead", "[", 
+    RowBox[{"dev_", ",", 
+     RowBox[{"len_Integer:", "1"}]}], "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"port", "=", 
+        RowBox[{"SerialDevice", "[", "dev", "]"}]}], ",", "buf", ",", "cnt", 
+       ",", 
+       RowBox[{"r", "=", 
+        RowBox[{"{", "}"}]}]}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"cnt", "=", "len"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"While", "[", 
+       RowBox[{
+        RowBox[{"cnt", ">", "0"}], ",", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"buf", "=", 
+          RowBox[{"port", "@", 
+           RowBox[{"ReadByteArray", "[", 
+            RowBox[{"port", "@", 
+             StyleBox["AvailableNumber",
+              FontWeight->"Bold"]}], "]"}]}]}], ";", "\[IndentingNewLine]", 
+         RowBox[{"cnt", "-=", 
+          RowBox[{"Length", "@", "buf"}]}], ";", "\[IndentingNewLine]", 
+         RowBox[{"r", "=", 
+          RowBox[{"Join", "[", 
+           RowBox[{"r", ",", "buf"}], "]"}]}]}]}], "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{
+        RowBox[{"buf", "=", 
+         RowBox[{"NETLink`MakeNETObject", "[", 
+          RowBox[{
+           RowBox[{"ConstantArray", "[", 
+            RowBox[{"0", ",", "cnt"}], "]"}], ",", "\"\<System.Byte[]\>\""}], 
+          "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"port", "@", 
+         RowBox[{"Read", "[", 
+          RowBox[{"buf", ",", "0", ",", "cnt"}], "]"}]}], ";", "\n", 
+        RowBox[{"r", "=", 
+         RowBox[{"NETLink`NETObjectToExpression", "[", "buf", "]"}]}], ";", 
+        "\n", 
+        RowBox[{"NETLink`ReleaseNETObject", "[", "buf", "]"}], ";"}], "*)"}], 
+      "\[IndentingNewLine]", 
+      RowBox[{"FromCharacterCode", "@", "r"}]}]}], "\n", "]"}]}], 
+  ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{
+  3.650254278882532*^9, {3.650254334986741*^9, 3.6502543721688676`*^9}, {
+   3.6502544685283794`*^9, 3.650254492128729*^9}, {3.650254598656822*^9, 
+   3.650254609024415*^9}, {3.6502546461115365`*^9, 3.650254900486086*^9}, {
+   3.650255157484785*^9, 3.650255166532303*^9}, {3.650256201546502*^9, 
+   3.6502562029645834`*^9}, {3.650256244995987*^9, 3.6502562775008464`*^9}, {
+   3.6502563217563777`*^9, 3.650256370787182*^9}, {3.6502564018999615`*^9, 
+   3.6502564034670515`*^9}, {3.6502564439943695`*^9, 
+   3.6502564481546073`*^9}, {3.6502565440350914`*^9, 
+   3.6502566086897893`*^9}, {3.6502575429732275`*^9, 
+   3.6502575446693244`*^9}, {3.6502602162111278`*^9, 3.650260216474143*^9}, {
+   3.6502603175919266`*^9, 3.650260321031123*^9}, {3.650260802716674*^9, 
+   3.650260803748733*^9}, {3.6502612916186376`*^9, 3.650261295867881*^9}, {
+   3.6502614325767*^9, 3.650261444231366*^9}, {3.6502614752481403`*^9, 
+   3.6502616086637716`*^9}, {3.6502625828314905`*^9, 
+   3.6502627008162394`*^9}, {3.650262783125947*^9, 3.650262783846988*^9}, {
+   3.6502628331058054`*^9, 3.650262838685125*^9}, {3.6502629362857075`*^9, 
+   3.650262958925002*^9}, {3.6502632933941326`*^9, 3.6502633382346973`*^9}, {
+   3.650263401450313*^9, 3.6502634058975677`*^9}, 3.650263436209301*^9, {
+   3.6502635234022884`*^9, 3.650263602879834*^9}, 3.6518011638077264`*^9, {
+   3.6518013338574524`*^9, 3.651801364816223*^9}, {3.65213478665609*^9, 
+   3.652134836438937*^9}, {3.6521382214845505`*^9, 3.6521382221495886`*^9}, {
+   3.652150257211955*^9, 3.652150258124007*^9}, {3.6521503292370744`*^9, 
+   3.6521503816040697`*^9}, {3.6521531278300686`*^9, 
+   3.6521531299541903`*^9}, {3.6524081654294615`*^9, 3.652408192251995*^9}, 
+   3.6524083441486835`*^9, {3.652408396652686*^9, 3.6524084616444035`*^9}, {
+   3.652408542252014*^9, 3.6524085471402936`*^9}, {3.6524102849246893`*^9, 
+   3.652410298132445*^9}, {3.6566525396636314`*^9, 3.6566525446929193`*^9}, {
+   3.7560164553549776`*^9, 3.7560164555555105`*^9}, {3.7560165048602886`*^9, 
+   3.7560165050357537`*^9}, 3.756017361359948*^9, 3.7560878016353235`*^9, {
+   3.7560878701646023`*^9, 3.7560879118996763`*^9}, {3.756088151380497*^9, 
+   3.75608819700342*^9}, {3.7561197970590267`*^9, 3.7561198660335345`*^9}, {
+   3.8070521036921754`*^9, 3.8070521329110208`*^9}, {3.8070529692529554`*^9, 
+   3.8070529702562723`*^9}, {3.807053098809415*^9, 3.8070531012728257`*^9}, {
+   3.8070536439881597`*^9, 3.8070536458481846`*^9}, {3.807053822137641*^9, 
+   3.8070538525762234`*^9}, 3.8070538840879354`*^9, {3.8070761999865522`*^9, 
+   3.807076203009466*^9}, {3.8071592423711214`*^9, 3.8071592493255196`*^9}, {
+   3.8088663325027313`*^9, 3.808866351549288*^9}, {3.8088672324058027`*^9, 
+   3.808867237298713*^9}, 3.8088673475048532`*^9},
+ CellLabel->
+  "In[342]:=",ExpressionUUID->"3f6b8e1b-d8ba-4135-95bf-f1b14a6f4940"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["End", "Section",
+ CellChangeTimes->{{3.6046429928574605`*^9, 
+  3.604642995613618*^9}},ExpressionUUID->"c72fce1b-a377-4e84-ae4d-\
+8564b13cb894"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SerialClose", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.6046437797924705`*^9, 3.6046437831126604`*^9}, {
+  3.604834055114581*^9, 3.604834055482602*^9}, {3.652408232978325*^9, 
+  3.6524082403387456`*^9}, {3.75601616493089*^9, 3.756016165618719*^9}},
+ CellLabel->
+  "In[291]:=",ExpressionUUID->"17c9f96e-a318-4a4c-97a2-7c3237808d6d"]
+}, Open  ]]
+},
+WindowSize->{701, 800},
+WindowMargins->{{292, Automatic}, {Automatic, 38}},
+FrontEndVersion->"11.3 for Microsoft Windows (64-bit) (2018\:5e743\:670828\
+\:65e5)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 1154, 26, 123, "Code",ExpressionUUID->"23cc9679-7c1c-4aa6-8bab-658ef533c919"],
+Cell[CellGroupData[{
+Cell[1737, 50, 209, 4, 67, "Section",ExpressionUUID->"ced7407e-f069-4122-a142-f9dad98fc4f5"],
+Cell[1949, 56, 3251, 56, 235, "Input",ExpressionUUID->"e61d852d-d95e-4084-bcf4-bdec44338c30",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5237, 117, 157, 3, 67, "Section",ExpressionUUID->"e79f5344-52d6-4c81-8f66-f962f8dfbda4"],
+Cell[5397, 122, 9652, 233, 881, "Input",ExpressionUUID->"3f6b8e1b-d8ba-4135-95bf-f1b14a6f4940",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[15086, 360, 150, 3, 67, "Section",ExpressionUUID->"c72fce1b-a377-4e84-ae4d-8564b13cb894"],
+Cell[15239, 365, 402, 8, 44, "Input",ExpressionUUID->"17c9f96e-a318-4a4c-97a2-7c3237808d6d",
+ InitializationCell->True]
+}, Open  ]]
+}
+]
+*)
+

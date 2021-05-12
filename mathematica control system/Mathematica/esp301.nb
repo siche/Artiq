@@ -1,0 +1,2627 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     83786,       2619]
+NotebookOptionsPosition[     81421,       2567]
+NotebookOutlinePosition[     81778,       2583]
+CellTagsIndexPosition[     81735,       2580]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Pre-run:", "Subsection",
+ CellChangeTimes->{{3.8127927746761155`*^9, 3.8127927814539833`*^9}, {
+  3.8127932835328407`*^9, 
+  3.8127932836116295`*^9}},ExpressionUUID->"3cf58873-c942-449d-bf60-\
+12c2c2f5f5d8"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"esp301Assembly", "=", 
+  RowBox[{"LoadNETAssembly", "[", 
+   RowBox[{
+   "\"\<Newport.ESP301.CommandInterface.dll\>\"", ",", 
+    "\"\<C:\\\\Windows\\\\Microsoft.NET\\\\assembly\\\\GAC_64\\\\Newport.\
+ESP301.CommandInterface\\\\v4.0_2.0.0.3__9f994642f5b48132\>\""}], 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.812787195226828*^9, 3.812787208688815*^9}, {
+  3.8127872450156345`*^9, 3.812787250711397*^9}, {3.812787468167666*^9, 
+  3.8127874686613464`*^9}, {3.8127877001510725`*^9, 3.812787703138082*^9}, {
+  3.8201365779998713`*^9, 3.82013663277166*^9}},
+ CellLabel->
+  "In[380]:=",ExpressionUUID->"e60d4a0b-9d43-4f0c-b801-36edd9c58ce9"],
+
+Cell[BoxData[
+ RowBox[{"NETAssembly", "[", 
+  RowBox[{"\<\"Newport.ESP301.CommandInterface\"\>", ",", "16"}], 
+  "]"}]], "Output",
+ CellChangeTimes->{
+  3.8127872101758375`*^9, 3.8127872527918324`*^9, 3.812787469755419*^9, 
+   3.8127877103069043`*^9, {3.820136595979808*^9, 3.820136636041918*^9}},
+ CellLabel->
+  "Out[380]=",ExpressionUUID->"86f3d4b7-37d9-432c-b9a0-b598cbe56032"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"NETTypeInfo", "[", "esp301Assembly", "]"}]], "Input",
+ CellChangeTimes->{{3.81278723339572*^9, 3.812787256043135*^9}, {
+   3.812787344361868*^9, 3.8127873448705063`*^9}, 3.812787472815233*^9, 
+   3.812787712176902*^9},
+ CellLabel->
+  "In[2137]:=",ExpressionUUID->"f377da46-d2f0-4505-b305-141361a82056"],
+
+Cell[BoxData[GridBox[{
+   {
+    RowBox[{
+     RowBox[{"Assembly", ":", " "}], 
+     StyleBox["\<\"Newport.ESP301.CommandInterface\"\>",
+      FontWeight->"Bold"]}]},
+   {"\<\"Full Name: Newport.ESP301.CommandInterface, Version=2.0.0.3, \
+Culture=neutral, PublicKeyToken=9f994642f5b48132\"\>"},
+   {"\<\"Location: \
+C:\\\\WINDOWS\\\\Microsoft.Net\\\\assembly\\\\GAC_64\\\\Newport.ESP301.\
+CommandInterface\\\\v4.0_2.0.0.3__9f994642f5b48132\\\\Newport.ESP301.\
+CommandInterface.dll\"\>"},
+   {""},
+   {Cell[BoxData[
+     RowBox[{
+      RowBox[{"\[FilledCircle]", " "}], 
+      StyleBox["Classes",
+       FontSize->18,
+       FontWeight->"Bold",
+       FontSlant->"Italic"]}]],ExpressionUUID->
+     "91126a07-8011-4d3f-a2d2-c249137e3612"]},
+   {
+    RowBox[{
+     RowBox[{"class", " "}], "\<\"CommandInterfaceESP301.\"\>", 
+     StyleBox["ESP301",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{
+     RowBox[{"class", " "}], "\<\"Diagnostics.Logging.Applet.\"\>", 
+     StyleBox["FileLoggingMethod",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{
+     RowBox[{"class", " "}], "\<\"Diagnostics.Logging.Applet.\"\>", 
+     StyleBox["Log",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{
+     RowBox[{"class", " "}], "\<\"Diagnostics.Logging.Applet.\"\>", 
+     StyleBox["LoggingMethod",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{
+     RowBox[{"class", " "}], "\<\"Diagnostics.Logging.Applet.\"\>", 
+     StyleBox["LogManager",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{
+     RowBox[{"class", " "}], "\<\"Diagnostics.Logging.Applet.\"\>", 
+     StyleBox["SharedFileLoggingMethod",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{
+     RowBox[{"class", " "}], "\<\"Diagnostics.Logging.Applet.\"\>", 
+     StyleBox["SingleFileLoggingMethod",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{
+     RowBox[{"class", " "}], "\<\"Newport.Communication.VCP.\"\>", 
+     StyleBox["ErrCodes",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{
+     RowBox[{"class", " "}], "\<\"Newport.Communication.VCP.\"\>", 
+     StyleBox["Global_COM",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{
+     RowBox[{"class", " "}], "\<\"Newport.Communication.VCP.\"\>", 
+     StyleBox["InstrumentDiscoveryData",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{
+     RowBox[{"class", " "}], "\<\"Newport.Communication.VCP.\"\>", 
+     StyleBox["SerialCom",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{
+     RowBox[{"class", " "}], "\<\"Newport.Communication.VCP.\"\>", 
+     StyleBox["Utils",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{
+     RowBox[{"class", " "}], "\<\"Newport.Communication.VCP.\"\>", 
+     StyleBox["VCPWrap",
+      FontWeight->"Bold"]}]},
+   {""},
+   {Cell[BoxData[
+     RowBox[{
+      RowBox[{"\[FilledCircle]", " "}], 
+      StyleBox["Interfaces",
+       FontSize->18,
+       FontWeight->"Bold",
+       FontSlant->"Italic"]}]],ExpressionUUID->
+     "3218c7f5-877a-4ade-9259-262c979befe2"]},
+   {
+    RowBox[{
+     RowBox[{"interface", " "}], "\<\"Newport.Communication.VCP.\"\>", 
+     StyleBox["IInstrumentDiscovery",
+      FontWeight->"Bold"]}]},
+   {""},
+   {Cell[BoxData[
+     RowBox[{
+      RowBox[{"\[FilledCircle]", " "}], 
+      StyleBox["Structures",
+       FontSize->18,
+       FontWeight->"Bold",
+       FontSlant->"Italic"]}]],ExpressionUUID->
+     "ca30d1a7-81f5-461e-9747-18c73a7315e9"]},
+   {
+    RowBox[{
+     RowBox[{"struct", " "}], "\<\"Newport.Communication.VCP.\"\>", 
+     StyleBox["ePortType",
+      FontWeight->"Bold"]}]},
+   {""},
+   {Cell[BoxData[
+     RowBox[{
+      RowBox[{"\[FilledCircle]", " "}], 
+      StyleBox["Enums",
+       FontSize->18,
+       FontWeight->"Bold",
+       FontSlant->"Italic"]}]],ExpressionUUID->
+     "4b04ba50-66ef-4f83-b4ef-699a221f4f5c"]},
+   {
+    RowBox[{
+     RowBox[{"enum", " "}], "\<\"Newport.Communication.VCP.\"\>", 
+     StyleBox["ePortType",
+      FontWeight->"Bold"]}]}
+  },
+  GridBoxAlignment->{
+   "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+    "RowsIndexed" -> {}},
+  GridBoxItemSize->{
+   "Columns" -> {{All}}, "ColumnsIndexed" -> {}, "Rows" -> {{1.2}}, 
+    "RowsIndexed" -> {}}]], "Output",
+ CellChangeTimes->{3.8127877136519556`*^9},
+ AutoSpacing->False,ExpressionUUID->"c2b8392e-ac6a-43be-b0e3-4a6a15637cbb"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"esp301", "=", 
+  RowBox[{
+  "LoadNETType", "[", "\"\<CommandInterfaceESP301.ESP301\>\"", 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.812787715217767*^9, 3.8127877217243605`*^9}, {
+  3.8127878023008056`*^9, 3.8127878129004498`*^9}, {3.8127878840281725`*^9, 
+  3.812787980660664*^9}},
+ CellLabel->
+  "In[2140]:=",ExpressionUUID->"c5febfec-6063-478c-a50e-b09c059f7258"],
+
+Cell[BoxData[
+ RowBox[{"NETType", "[", 
+  RowBox[{"\<\"CommandInterfaceESP301.ESP301\"\>", ",", "154"}], 
+  "]"}]], "Output",
+ CellChangeTimes->{{3.812787972515454*^9, 3.8127879819372487`*^9}},
+ CellLabel->
+  "Out[2140]=",ExpressionUUID->"d44144cd-0a2d-45f5-8dad-d14b13fe23e8"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"NETTypeInfo", "[", "esp301", "]"}]], "Input",
+ CellChangeTimes->{{3.8127879840914855`*^9, 3.812787990915231*^9}},
+ CellLabel->
+  "In[2141]:=",ExpressionUUID->"0c9be8a4-96ca-4fb7-85c0-a46cae49f024"],
+
+Cell[BoxData[GridBox[{
+   {Cell[BoxData[
+     RowBox[{
+      RowBox[{"\[FilledCircle]", " "}], 
+      StyleBox["Type",
+       FontSize->18,
+       FontWeight->"Bold",
+       FontSlant->"Italic"]}]],ExpressionUUID->
+     "0e17a3e5-cd93-4016-8ae5-3d87bc2c6174"]},
+   {
+    RowBox[{
+     RowBox[{"class", " "}], 
+     StyleBox["\<\"CommandInterfaceESP301.ESP301\"\>",
+      FontWeight->"Bold"]}]},
+   {GridBox[{
+      {
+       RowBox[{"Inheritance", ":"}]},
+      {
+       RowBox[{"   ", "   ", "\<\"System.Object\"\>"}]},
+      {
+       RowBox[{"   ", "   ", "   ", 
+        StyleBox["\<\"CommandInterfaceESP301.ESP301\"\>",
+         FontWeight->"Bold"]}]}
+     },
+     GridBoxAlignment->{
+      "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+       "RowsIndexed" -> {}}]},
+   {
+    RowBox[{"Interfaces", " ", 
+     RowBox[{"Implemented", ":", " ", "None"}]}]},
+   {"\<\"Assembly-Qualified Name: CommandInterfaceESP301.ESP301, \
+Newport.ESP301.CommandInterface, Version=2.0.0.3, Culture=neutral, \
+PublicKeyToken=9f994642f5b48132\"\>"},
+   {"\<\"Assembly Location: \
+C:\\\\WINDOWS\\\\Microsoft.Net\\\\assembly\\\\GAC_64\\\\Newport.ESP301.\
+CommandInterface\\\\v4.0_2.0.0.3__9f994642f5b48132\\\\Newport.ESP301.\
+CommandInterface.dll\"\>"},
+   {""},
+   {Cell[BoxData[
+     RowBox[{
+      RowBox[{"\[FilledCircle]", " "}], 
+      StyleBox["Constructors",
+       FontSize->18,
+       FontWeight->"Bold",
+       FontSlant->"Italic"]}]],ExpressionUUID->
+     "d864438b-4b1d-46ff-b6b9-3aa71944c4e2"]},
+   {
+    RowBox[{
+     StyleBox["ESP301",
+      FontWeight->"Bold"], "\<\"()\"\>"}]},
+   {
+    RowBox[{
+     StyleBox["ESP301",
+      FontWeight->
+       "Bold"], "\<\"(Diagnostics.Logging.Applet.Log logData)\"\>"}]},
+   {""},
+   {Cell[BoxData[
+     RowBox[{
+      RowBox[{"\[FilledCircle]", " "}], 
+      StyleBox["Fields",
+       FontSize->18,
+       FontWeight->"Bold",
+       FontSlant->"Italic"]}]],ExpressionUUID->
+     "5de52fcd-15b0-4596-b7ea-00dc771804e1"]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_AB",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_AC",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_AE",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_AF",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_AG",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_AP",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_AU",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_BA",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_BG",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_BK",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_BL",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_BM",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_BN",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_BO",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_BP",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_BQ",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_CL",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_CO",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_DB",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_DC",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_DD",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_DE",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_DF",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_DG",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_DH",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_DL",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_DO",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_DP",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_DV",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_EO",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_EP",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_EX",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_FE",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_FP",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_FR",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_GR",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_HA",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_HB",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_HC",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_HD",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_HE",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_HF",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_HJ",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_HL",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_HN",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_HO",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_HP",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_HQ",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_HS",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_HV",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_HW",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_HX",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_HZ",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_ID",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_JH",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_JK",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_JL",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_JW",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_KD",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_KI",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_KP",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_KS",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_LC",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_LP",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_MD",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_MF",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_MO",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_MT",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_MV",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_MZ",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_OH",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_OL",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_OM",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_OR",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_PA",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_PH",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_PR",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_QD",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_QG",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_QI",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_QM",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_QP",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_QR",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_QS",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_QT",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_QV",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_RQ",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_RS",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_SA",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_SB",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_SH",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_SI",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_SK",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_SL",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_SM",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_SN",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_SR",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_SS",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_ST",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_SU",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_TB",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_TE",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_TJ",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_TP",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_TS",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_TV",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_TX",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_UF",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_UH",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_UL",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_VA",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_VB",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_VE",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_VF",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_VU",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_WP",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_WS",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_WT",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_XM",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_XX",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_ZA",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_ZB",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_ZE",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_ZF",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_ZH",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_ZS",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_ZU",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["CMD_ZZ",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"int\"\>", " ", 
+     StyleBox["FAILURE",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"string\"\>", " ", 
+     StyleBox["QMark",
+      FontWeight->"Bold"]}]},
+   {
+    RowBox[{"const", " ", "\<\"int\"\>", " ", 
+     StyleBox["SUCCESS",
+      FontWeight->"Bold"]}]},
+   {""},
+   {Cell[BoxData[
+     RowBox[{
+      RowBox[{"\[FilledCircle]", " "}], 
+      StyleBox["Methods",
+       FontSize->18,
+       FontWeight->"Bold",
+       FontSlant->"Italic"]}]],ExpressionUUID->
+     "aea8e8d7-01a5-467c-8272-f705e84ceee9"]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["AB",
+      FontWeight->"Bold"], "\<\"(out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["AC_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double acceleration, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["AC_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double acceleration, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["AE_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double deceleration, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["AE_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double deceleration, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["AF_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double \
+accelerationFeedForwardGainFactor, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["AF_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double \
+accelerationFeedForwardGainFactor, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["AG_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double acceleration, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["AG_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double acceleration, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["AP",
+      FontWeight->"Bold"], "\<\"(out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["AU_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double acceleration, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["AU_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double acceleration, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["BA_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double backlashCompensation, out \
+string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["BA_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double backlashCompensation, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["BG_Get",
+      FontWeight->
+       "Bold"], "\<\"(int bitNumber, out string program, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["BG_Set",
+      FontWeight->
+       "Bold"], "\<\"(int bitNumber, string program, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["BK_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int bitNumber, out int bitLevel, \
+out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["BK_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int bitNumber, int bitLevel, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["BL_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int value, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["BL_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int value, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["BM_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int bitNumber, out int bitLevel, \
+out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["BM_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int bitNumber, int bitLevel, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["BN_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int value, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["BN_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int value, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["BO_Get",
+      FontWeight->
+       "Bold"], "\<\"(out int hardwareLimitConfiguration, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["BO_Set",
+      FontWeight->
+       "Bold"], "\<\"(int hardwareLimitConfiguration, out string errstring)\"\
+\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["BP_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int bitNumberNeg, out int \
+bitNumberPos, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["BP_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int bitNumberNeg, int bitNumberPos, out \
+string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["BQ_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int value, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["BQ_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int value, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["CL_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int interval, out string errstring)\
+\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["CloseInstrument",
+      FontWeight->"Bold"], "\<\"()\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["CL_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int interval, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["CO_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double linearCompensation, out \
+string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["CO_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double linearCompensation, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["DB_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int deadBand, out string errstring)\
+\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["DB_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int deadBand, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["DC",
+      FontWeight->
+       "Bold"], "\<\"(int dataAcquisitionMode, int axis, int data3, int \
+data4, int dataRate, int dataNumber, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["DD",
+      FontWeight->"Bold"], "\<\"(out int status, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["DE",
+      FontWeight->"Bold"], "\<\"(int value, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["DF",
+      FontWeight->
+       "Bold"], "\<\"(out int sampleNumber, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["DG",
+      FontWeight->
+       "Bold"], "\<\"(out string data, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["DH_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double position, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["DH_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double position, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["DL",
+      FontWeight->"Bold"], "\<\"(int label, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["DO_Get",
+      FontWeight->
+       "Bold"], "\<\"(int channelNumber, out double offset, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["DO_Set",
+      FontWeight->
+       "Bold"], "\<\"(int channelNumber, double offset, out string errstring)\
+\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["DP",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double position, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["DV",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double velocity, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["EO_Get",
+      FontWeight->
+       "Bold"], "\<\"(int program, out int programNumber, out int number, out \
+string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["EO_Set",
+      FontWeight->
+       "Bold"], "\<\"(int program, int number, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["EP",
+      FontWeight->"Bold"], "\<\"(int program, out string errstring)\"\>"}]},
+   {
+    RowBox[{"virtual", " ", "\<\"bool\"\>", " ", 
+     StyleBox["Equals",
+      FontWeight->"Bold"], "\<\"(object obj)\"\>"}]},
+   {
+    RowBox[{"static", " ", "\<\"bool\"\>", " ", 
+     StyleBox["Equals",
+      FontWeight->"Bold"], "\<\"(object objA, object objB)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["EX",
+      FontWeight->
+       "Bold"], "\<\"(int program, int number, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["FE_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double maxAllowedFollowingError, \
+out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["FE_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double maxAllowedFollowingError, out \
+string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["FP_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int displayResolution, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["FP_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int displayResolution, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["FR_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double encoderFullStepResolution, \
+out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["FR_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double encoderFullStepResolution, out \
+string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"string[]\"\>", " ", 
+     StyleBox["GetDevices",
+      FontWeight->"Bold"], "\<\"()\"\>"}]},
+   {
+    RowBox[{"virtual", " ", "\<\"int\"\>", " ", 
+     StyleBox["GetHashCode",
+      FontWeight->"Bold"], "\<\"()\"\>"}]},
+   {
+    RowBox[{"\<\"Type\"\>", " ", 
+     StyleBox["GetType",
+      FontWeight->"Bold"], "\<\"()\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["GR_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double reductionRatio, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["GR_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double reductionRatio, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HA_Get",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, out double acceleration, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HA_Set",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, double acceleration, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HB",
+      FontWeight->
+       "Bold"], "\<\"(out System.Collections.Generic.List`1[[System.String, \
+mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]] \
+groups, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HC_Get",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, out double firstCoordinate, out double \
+secondCoordinate, out double arcSweepAngle, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HC_Set",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, double firstCoordinate, double \
+secondCoordinate, double arcSweepAngle, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HD_Get",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, out double deceleration, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HD_Set",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, double deceleration, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HE_Get",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, out double deceleration, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HE_Set",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, double deceleration, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HF_Get",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, out int status, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HF_Set",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HJ_Get",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, out double vectorJerk, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HJ_Set",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, double vectorJerk, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HL_Get",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, out \
+System.Collections.Generic.List`1[[System.Double, mscorlib, Version=4.0.0.0, \
+Culture=neutral, PublicKeyToken=b77a5c561934e089]] targets, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HL_Set",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, \
+System.Collections.Generic.List`1[System.Double] targets, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HN_Get",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, out \
+System.Collections.Generic.List`1[[System.Int32, mscorlib, Version=4.0.0.0, \
+Culture=neutral, PublicKeyToken=b77a5c561934e089]] axes, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HN_Set",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, \
+System.Collections.Generic.List`1[System.Int32] axes, out string errstring)\"\
+\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HO_Get",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, out int status, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HO_Set",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HP",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, out \
+System.Collections.Generic.List`1[[System.Double, mscorlib, Version=4.0.0.0, \
+Culture=neutral, PublicKeyToken=b77a5c561934e089]] positions, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HQ_Get",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, out double bufferLevel, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HQ_Set",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, double bufferLevel, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HS_Get",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, out int status, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HS_Set",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HV_Get",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, out double velocity, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HV_Set",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, double velocity, out string errstring)\
+\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HW",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, double delay, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HX",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["HZ",
+      FontWeight->
+       "Bold"], "\<\"(int groupNumber, out int nbAxis, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["ID",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out string modelNumber, out string \
+serialNumber, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["JH_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double highSpeed, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["JH_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double highSpeed, out string errstring)\
+\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["JK_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double jerk, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["JK_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double jerk, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["JL",
+      FontWeight->
+       "Bold"], "\<\"(int label, int loopCount, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["JW_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double lowSpeed, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["JW_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double lowSpeed, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["KD_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double derivativeGain, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["KD_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double derivativeGain, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["KI_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double integralGain, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["KI_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double integralGain, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["KP_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double proportionalGain, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["KP_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double proportionalGain, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["KS_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double saturationLevel, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["KS_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double saturationLevel, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["LC_Get",
+      FontWeight->
+       "Bold"], "\<\"(out int lockOption, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["LC_Set",
+      FontWeight->"Bold"], "\<\"(int lockOption, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["LP",
+      FontWeight->
+       "Bold"], "\<\"(int program, out \
+System.Collections.Generic.List`1[[System.String, mscorlib, Version=4.0.0.0, \
+Culture=neutral, PublicKeyToken=b77a5c561934e089]] programs, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["MD",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int status, out string errstring)\"\
+\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["MF_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int status, out string errstring)\"\
+\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["MF_Set",
+      FontWeight->"Bold"], "\<\"(int axisNumber, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["MO_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int status, out string errstring)\"\
+\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["MO_Set",
+      FontWeight->"Bold"], "\<\"(int axisNumber, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["MT_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int status, out string errstring)\"\
+\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["MT_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, string direction, out string errstring)\
+\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["MV_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int status, out string errstring)\"\
+\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["MV_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, string direction, out string errstring)\
+\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["MZ_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int status, out string errstring)\"\
+\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["MZ_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, string direction, out string errstring)\
+\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["OH_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double highSpeed, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["OH_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double highSpeed, out string errstring)\
+\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["OL_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double lowSpeed, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["OL_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double lowSpeed, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["OM_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int mode, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["OM_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int mode, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["OpenInstrument",
+      FontWeight->"Bold"], "\<\"(string strDeviceKey, int iBaudrate)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["OR",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int mode, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["PA_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double position, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["PA_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double position, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["PH",
+      FontWeight->
+       "Bold"], "\<\"(out int status1, out int status2, out string errstring)\
+\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["PR",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double increment, out string errstring)\
+\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["QD",
+      FontWeight->"Bold"], "\<\"(int axisNumber, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["QG_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double gearConstant, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["QG_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double gearConstant, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["QI_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double motorCurrent, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["QI_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double motorCurrent, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["QM_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int motorType, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["QM_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int motorType, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["QP",
+      FontWeight->"Bold"], "\<\"(out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["QR_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int delay, out int \
+reductionPercentage, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["QR_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int delay, int reductionPercentage, out \
+string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["QS_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int microStep, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["QS_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int microStep, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["QT_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double tachometerGain, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["QT_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double tachometerGain, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["QV_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double motorVoltage, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["QV_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double motorVoltage, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"static", " ", "\<\"bool\"\>", " ", 
+     StyleBox["ReferenceEquals",
+      FontWeight->"Bold"], "\<\"(object objA, object objB)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["RQ",
+      FontWeight->
+       "Bold"], "\<\"(int interruptNumber, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["RS",
+      FontWeight->"Bold"], "\<\"(out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["SA_Get",
+      FontWeight->
+       "Bold"], "\<\"(out int address, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["SA_Set",
+      FontWeight->"Bold"], "\<\"(int address, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["SB_Get",
+      FontWeight->
+       "Bold"], "\<\"(out int hardwareLimitConfiguration, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["SB_Set",
+      FontWeight->
+       "Bold"], "\<\"(int hardwareLimitConfiguration, out string errstring)\"\
+\>"}]},
+   {
+    RowBox[{"\<\"void\"\>", " ", 
+     StyleBox["SetTerminators",
+      FontWeight->
+       "Bold"], "\<\"(string strTerminatorWrite, string \
+strTerminatorRead)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["SH_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double homePresetPosition, out \
+string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["SH_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double homePresetPosition, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["SI_Get",
+      FontWeight->
+       "Bold"], "\<\"(out int velocity, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["SI_Set",
+      FontWeight->"Bold"], "\<\"(int velocity, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["SK_Get",
+      FontWeight->
+       "Bold"], "\<\"(out double coefficient1, out double coefficient2, out \
+string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["SK_Set",
+      FontWeight->
+       "Bold"], "\<\"(double coefficient1, double coefficient2, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["SL_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double limit, out string errstring)\
+\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["SL_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double limit, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["SM",
+      FontWeight->"Bold"], "\<\"(out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["SN_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int unit, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["SN_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int unit, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["SR_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double limit, out string errstring)\
+\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["SR_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double limit, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["SS_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int masterAxis, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["SS_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int masterAxis, out string errstring)\"\
+\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["ST",
+      FontWeight->"Bold"], "\<\"(int axisNumber, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["SU_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double encoderResolution, out \
+string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["SU_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double encoderResolution, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["TB",
+      FontWeight->
+       "Bold"], "\<\"(out string errorCode, out string timestamp, out string \
+errorMessage, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["TE",
+      FontWeight->
+       "Bold"], "\<\"(out string errorCode, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["TJ_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int homeMode, out string errstring)\
+\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["TJ_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int homeMode, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"virtual", " ", "\<\"string\"\>", " ", 
+     StyleBox["ToString",
+      FontWeight->"Bold"], "\<\"()\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["TP",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double position, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["TS",
+      FontWeight->
+       "Bold"], "\<\"(out string code, out int[,] arrayBit, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["TV",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double velocity, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["TX",
+      FontWeight->
+       "Bold"], "\<\"(out string code, out int[,] arrayBit, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["UF",
+      FontWeight->"Bold"], "\<\"(out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["UF",
+      FontWeight->"Bold"], "\<\"(int axisNumber, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["UH",
+      FontWeight->"Bold"], "\<\"(int bitNumber, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["UL",
+      FontWeight->"Bold"], "\<\"(int bitNumber, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["VA_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double velocity, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["VA_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double velocity, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["VB_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double baseVelocity, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["VB_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double baseVelocity, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["VE",
+      FontWeight->
+       "Bold"], "\<\"(out string controllerVersion, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["VF_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double velocityFeedForwardGain, out \
+string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["VF_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double velocityFeedForwardGain, out \
+string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["VU_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out double maxVelocity, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["VU_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double maxVelocity, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["WP",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, double position, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["WriteToInstrument",
+      FontWeight->
+       "Bold"], "\<\"(string command, ref string response, int stage)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["WS",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int delay, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["WT",
+      FontWeight->"Bold"], "\<\"(int delay, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["XM",
+      FontWeight->
+       "Bold"], "\<\"(out string availableStorageSpace, out string errstring)\
+\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["XX",
+      FontWeight->"Bold"], "\<\"(int program, out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["ZA_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int amplifierIOConfiguration, out \
+string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["ZA_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int amplifierIOConfiguration, out \
+string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["ZB_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int feedbackConfiguration, out \
+string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["ZB_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int feedbackConfiguration, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["ZE_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int estopConfiguration, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["ZE_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int estopConfiguration, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["ZF_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int followingErrorConfiguration, \
+out string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["ZF_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int followingErrorConfiguration, out \
+string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["ZH_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int hardwareLimitConfiguration, out \
+string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["ZH_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int hardwareLimitConfiguration, out \
+string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["ZS_Get",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, out int softwareLimitConfiguration, out \
+string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["ZS_Set",
+      FontWeight->
+       "Bold"], "\<\"(int axisNumber, int softwareLimitConfiguration, out \
+string errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["ZU",
+      FontWeight->
+       "Bold"], "\<\"(out int espSystemConfiguration, out string errstring)\"\
+\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["ZZ_Get",
+      FontWeight->
+       "Bold"], "\<\"(out int systemConfiguration, out string \
+errstring)\"\>"}]},
+   {
+    RowBox[{"\<\"int\"\>", " ", 
+     StyleBox["ZZ_Set",
+      FontWeight->
+       "Bold"], "\<\"(int systemConfiguration, out string errstring)\"\>"}]}
+  },
+  GridBoxAlignment->{
+   "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+    "RowsIndexed" -> {}},
+  GridBoxItemSize->{
+   "Columns" -> {{All}}, "ColumnsIndexed" -> {}, "Rows" -> {{1.2}}, 
+    "RowsIndexed" -> {}}]], "Output",
+ CellChangeTimes->{3.812787991380985*^9},
+ AutoSpacing->False,ExpressionUUID->"d97d6d8f-594c-490e-bd6b-f7b453c42a1f"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"esp301Obj", "=", 
+  RowBox[{"NETNew", "[", "esp301", "]"}]}]], "Input",
+ CellChangeTimes->{{3.812788039084371*^9, 3.812788065821843*^9}, {
+  3.812788144067524*^9, 3.81278815306645*^9}},
+ CellLabel->
+  "In[2142]:=",ExpressionUUID->"115c8a2c-1f66-43a0-b4ce-33fd3c02f5a7"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\[LeftGuillemet]", 
+   RowBox[{"NETObject", "[", 
+    RowBox[{"CommandInterfaceESP301", ".", "ESP301"}], "]"}], 
+   "\[RightGuillemet]"}],
+  NETLink`Objects`NETObject$991774570971137]], "Output",
+ CellChangeTimes->{3.812788484290372*^9},
+ CellLabel->
+  "Out[2142]=",ExpressionUUID->"050135c5-e23e-494a-827b-5815ede39ca9"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"esp301Obj", "@", 
+  RowBox[{"GetDevices", "[", "]"}]}]], "Input",
+ CellChangeTimes->{{3.812788486345873*^9, 3.812788542494666*^9}, {
+  3.8127885930713644`*^9, 3.812788611235772*^9}, {3.8127887252836766`*^9, 
+  3.812788730163621*^9}},
+ CellLabel->
+  "In[2156]:=",ExpressionUUID->"2da0e38c-cebd-462d-8ee0-0a93cc557b08"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"COM18\"\>", ",", "\<\"COM21\"\>", ",", "\<\"COM13\"\>", 
+   ",", "\<\"COM16\"\>", ",", "\<\"COM23\"\>", ",", "\<\"COM1\"\>", 
+   ",", "\<\"COM17\"\>"}], "}"}]], "Output",
+ CellChangeTimes->{3.812789824110362*^9},
+ CellLabel->
+  "Out[2156]=",ExpressionUUID->"5026d71f-c4e6-4f73-b889-94c309fc45ae"]
+}, Open  ]],
+
+Cell[BoxData[{
+ RowBox[{"Clear", "[", 
+  RowBox[{"esp301GUI", ",", "Initializeesp301Par"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"esp301GUI", "[", "port_String", "]"}], ":=", 
+   RowBox[{"Column", "[", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"Row", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"Button", "[", 
+          RowBox[{"\"\<Open\>\"", ",", 
+           RowBox[{"esp301Obj", "@", 
+            RowBox[{"OpenInstrument", "[", 
+             RowBox[{"port", ",", "921600"}], "]"}]}]}], "]"}], ",", 
+         RowBox[{"Button", "[", 
+          RowBox[{"\"\<Close\>\"", ",", 
+           RowBox[{"esp301Obj", "@", 
+            RowBox[{"CloseInstrument", "[", "]"}]}]}], "]"}]}], "}"}], "]"}], 
+      ",", 
+      RowBox[{"Row", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"TextCell", "[", "\"\<Axis 1:\>\"", "]"}], ",", 
+         RowBox[{"Panel", "[", 
+          RowBox[{
+           RowBox[{"EventHandler", "[", 
+            RowBox[{
+             RowBox[{"InputField", "[", 
+              RowBox[{
+               RowBox[{"Dynamic", "[", 
+                RowBox[{"SetAccuracy", "[", 
+                 RowBox[{"pos1", ",", "5"}], "]"}], "]"}], ",", 
+               RowBox[{"ImageSize", "\[Rule]", 
+                RowBox[{"{", 
+                 RowBox[{"50", ",", "20"}], "}"}]}], ",", 
+               RowBox[{"FrameMargins", "\[Rule]", "Tiny"}]}], "]"}], ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"\"\<UpArrowKeyDown\>\"", "\[RuleDelayed]", 
+                RowBox[{"(", 
+                 RowBox[{
+                  RowBox[{"pos1", "=", 
+                   RowBox[{"pos1", "+", "mstep1"}]}], ";", 
+                  RowBox[{"esp301Obj", "@", 
+                   RowBox[{"PAUSet", 
+                    StyleBox["[",
+                    FontWeight->"Bold"], 
+                    RowBox[{"1", ",", "pos1", ",", "esp301ErrorString"}], 
+                    "]"}]}]}], ")"}]}], ",", 
+               RowBox[{"\"\<DownArrowKeyDown\>\"", "\[RuleDelayed]", 
+                RowBox[{"(", 
+                 RowBox[{
+                  RowBox[{"pos1", "=", 
+                   RowBox[{"pos1", "-", "mstep1"}]}], ";", 
+                  RowBox[{"esp301Obj", "@", 
+                   RowBox[{"PAUSet", "[", 
+                    RowBox[{"1", ",", "pos1", ",", "esp301ErrorString"}], 
+                    "]"}]}]}], ")"}]}], ",", 
+               RowBox[{"\"\<LeftArrowKeyDown\>\"", "\[RuleDelayed]", 
+                RowBox[{"(", 
+                 RowBox[{"If", "[", 
+                  RowBox[{
+                   RowBox[{"mstep1", "<", "1"}], ",", 
+                   RowBox[{"mstep1", "=", 
+                    RowBox[{"mstep1", "*", "10"}]}]}], "]"}], ")"}]}], ",", 
+               RowBox[{"\"\<RightArrowKeyDown\>\"", "\[RuleDelayed]", 
+                RowBox[{"(", 
+                 RowBox[{"If", "[", 
+                  RowBox[{
+                   RowBox[{"mstep1", ">", "0.0001"}], ",", 
+                   RowBox[{"mstep1", "=", 
+                    RowBox[{"mstep1", "*", "0.1"}]}]}], "]"}], ")"}]}]}], 
+              "}"}]}], "]"}], ",", 
+           RowBox[{"FrameMargins", "\[Rule]", "Tiny"}]}], "]"}], ",", 
+         RowBox[{"Panel", "[", 
+          RowBox[{
+           RowBox[{"Dynamic", "[", 
+            RowBox[{
+             RowBox[{"ToString", "[", 
+              RowBox[{"SetAccuracy", "[", 
+               RowBox[{"mstep1", ",", "5"}], "]"}], "]"}], "<>", 
+             "\"\< V\>\""}], "]"}], ",", 
+           RowBox[{"FrameMargins", "\[Rule]", "Medium"}]}], "]"}], ",", 
+         RowBox[{"Button", "[", 
+          RowBox[{"\"\<Stop\>\"", ",", 
+           RowBox[{"esp301Obj", "@", 
+            RowBox[{"ST", "[", 
+             RowBox[{"1", ",", "esp301ErrorString"}], "]"}]}]}], "]"}]}], 
+        "}"}], "]"}], ",", 
+      RowBox[{"Row", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"TextCell", "[", "\"\<Axis 2:\>\"", "]"}], ",", 
+         RowBox[{"Panel", "[", 
+          RowBox[{
+           RowBox[{"EventHandler", "[", 
+            RowBox[{
+             RowBox[{"InputField", "[", 
+              RowBox[{
+               RowBox[{"Dynamic", "[", 
+                RowBox[{"SetAccuracy", "[", 
+                 RowBox[{"pos2", ",", "5"}], "]"}], "]"}], ",", 
+               RowBox[{"ImageSize", "\[Rule]", 
+                RowBox[{"{", 
+                 RowBox[{"50", ",", "20"}], "}"}]}], ",", 
+               RowBox[{"FrameMargins", "\[Rule]", "Tiny"}]}], "]"}], ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"\"\<UpArrowKeyDown\>\"", "\[RuleDelayed]", 
+                RowBox[{"(", 
+                 RowBox[{
+                  RowBox[{"pos2", "=", 
+                   RowBox[{"pos2", "+", "mstep2"}]}], ";", 
+                  RowBox[{"esp301Obj", "@", 
+                   RowBox[{"PAUSet", "[", 
+                    RowBox[{"2", ",", "pos2", ",", "esp301ErrorString"}], 
+                    "]"}]}]}], ")"}]}], ",", 
+               RowBox[{"\"\<DownArrowKeyDown\>\"", "\[RuleDelayed]", 
+                RowBox[{"(", 
+                 RowBox[{
+                  RowBox[{"pos2", "=", 
+                   RowBox[{"pos2", "-", "mstep2"}]}], ";", 
+                  RowBox[{"esp301Obj", "@", 
+                   RowBox[{"PAUSet", "[", 
+                    RowBox[{"2", ",", "pos2", ",", "esp301ErrorString"}], 
+                    "]"}]}]}], ")"}]}], ",", 
+               RowBox[{"\"\<LeftArrowKeyDown\>\"", "\[RuleDelayed]", 
+                RowBox[{"(", 
+                 RowBox[{"If", "[", 
+                  RowBox[{
+                   RowBox[{"mstep2", "<", "1"}], ",", 
+                   RowBox[{"mstep2", "=", 
+                    RowBox[{"mstep2", "*", "10"}]}]}], "]"}], ")"}]}], ",", 
+               RowBox[{"\"\<RightArrowKeyDown\>\"", "\[RuleDelayed]", 
+                RowBox[{"(", 
+                 RowBox[{"If", "[", 
+                  RowBox[{
+                   RowBox[{"mstep2", ">", "0.0001"}], ",", 
+                   RowBox[{"mstep2", "=", 
+                    RowBox[{"mstep2", "*", "0.1"}]}]}], "]"}], ")"}]}]}], 
+              "}"}]}], "]"}], ",", 
+           RowBox[{"FrameMargins", "\[Rule]", "Tiny"}]}], "]"}], ",", 
+         RowBox[{"Panel", "[", 
+          RowBox[{
+           RowBox[{"Dynamic", "[", 
+            RowBox[{
+             RowBox[{"ToString", "[", 
+              RowBox[{"SetAccuracy", "[", 
+               RowBox[{"mstep2", ",", "5"}], "]"}], "]"}], "<>", 
+             "\"\< V\>\""}], "]"}], ",", 
+           RowBox[{"FrameMargins", "\[Rule]", "Medium"}]}], "]"}], ",", 
+         RowBox[{"Button", "[", 
+          RowBox[{"\"\<Stop\>\"", ",", 
+           RowBox[{"esp301Obj", "@", 
+            RowBox[{"ST", "[", 
+             RowBox[{"2", ",", "esp301ErrorString"}], "]"}]}]}], "]"}]}], 
+        "}"}], "]"}], ",", 
+      RowBox[{"Row", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"TextCell", "[", "\"\<Axis 3:\>\"", "]"}], ",", 
+         RowBox[{"Panel", "[", 
+          RowBox[{
+           RowBox[{"EventHandler", "[", 
+            RowBox[{
+             RowBox[{"InputField", "[", 
+              RowBox[{
+               RowBox[{"Dynamic", "[", 
+                RowBox[{"SetAccuracy", "[", 
+                 RowBox[{"pos3", ",", "5"}], "]"}], "]"}], ",", 
+               RowBox[{"ImageSize", "\[Rule]", 
+                RowBox[{"{", 
+                 RowBox[{"50", ",", "20"}], "}"}]}], ",", 
+               RowBox[{"FrameMargins", "\[Rule]", "Tiny"}]}], "]"}], ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"\"\<UpArrowKeyDown\>\"", "\[RuleDelayed]", 
+                RowBox[{"(", 
+                 RowBox[{
+                  RowBox[{"pos3", "=", 
+                   RowBox[{"pos3", "+", "mstep3"}]}], ";", 
+                  RowBox[{"esp301Obj", "@", 
+                   RowBox[{"PAUSet", "[", 
+                    RowBox[{"3", ",", "pos3", ",", "esp301ErrorString"}], 
+                    "]"}]}]}], ")"}]}], ",", 
+               RowBox[{"\"\<DownArrowKeyDown\>\"", "\[RuleDelayed]", 
+                RowBox[{"(", 
+                 RowBox[{
+                  RowBox[{"pos3", "=", 
+                   RowBox[{"pos3", "-", "mstep3"}]}], ";", 
+                  RowBox[{"esp301Obj", "@", 
+                   RowBox[{"PAUSet", "[", 
+                    RowBox[{"3", ",", "pos3", ",", "esp301ErrorString"}], 
+                    "]"}]}]}], ")"}]}], ",", 
+               RowBox[{"\"\<LeftArrowKeyDown\>\"", "\[RuleDelayed]", 
+                RowBox[{"(", 
+                 RowBox[{"If", "[", 
+                  RowBox[{
+                   RowBox[{"mstep3", "<", "1"}], ",", 
+                   RowBox[{"mstep3", "=", 
+                    RowBox[{"mstep3", "*", "10"}]}]}], "]"}], ")"}]}], ",", 
+               RowBox[{"\"\<RightArrowKeyDown\>\"", "\[RuleDelayed]", 
+                RowBox[{"(", 
+                 RowBox[{"If", "[", 
+                  RowBox[{
+                   RowBox[{"mstep3", ">", "0.0001"}], ",", 
+                   RowBox[{"mstep3", "=", 
+                    RowBox[{"mstep3", "*", "0.1"}]}]}], "]"}], ")"}]}]}], 
+              "}"}]}], "]"}], ",", 
+           RowBox[{"FrameMargins", "\[Rule]", "Tiny"}]}], "]"}], ",", 
+         RowBox[{"Panel", "[", 
+          RowBox[{
+           RowBox[{"Dynamic", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"ToString", "[", 
+               RowBox[{"SetAccuracy", "[", 
+                RowBox[{"mstep3", ",", "5"}], "]"}], "]"}], "<>", 
+              "\"\< V\>\""}], ",", 
+             RowBox[{"Initialization", "\[RuleDelayed]", 
+              RowBox[{"Initializeesp301Par", "[", "]"}]}]}], "]"}], ",", 
+           RowBox[{"FrameMargins", "\[Rule]", "Medium"}]}], "]"}], ",", 
+         RowBox[{"Button", "[", 
+          RowBox[{"\"\<Stop\>\"", ",", 
+           RowBox[{"esp301Obj", "@", 
+            RowBox[{"ST", "[", 
+             RowBox[{"3", ",", "esp301ErrorString"}], "]"}]}]}], "]"}]}], 
+        "}"}], "]"}]}], "}"}], "]"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Initializeesp301Par", "[", "]"}], ":=", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{"!", 
+     RowBox[{"NumberQ", "@", "pos1"}]}], ",", 
+    RowBox[{
+     RowBox[{"pos1", "=", 
+      RowBox[{"pos2", "=", 
+       RowBox[{"pos3", "=", "0"}]}]}], ";", 
+     RowBox[{"mstep1", "=", 
+      RowBox[{"mstep2", "=", 
+       RowBox[{"mstep3", "=", "0.001"}]}]}]}]}], "]"}]}]}], "Input",
+ CellChangeTimes->{{3.812792181369308*^9, 3.8127923285356145`*^9}, {
+  3.8127923629296045`*^9, 3.812792409041249*^9}, {3.812792450605058*^9, 
+  3.8127924542094164`*^9}, {3.8127925581074724`*^9, 3.8127927271193376`*^9}, {
+  3.812792855075035*^9, 3.8127929084283066`*^9}, {3.812793040760297*^9, 
+  3.812793224208543*^9}, {3.812793344064909*^9, 3.812793373337599*^9}, {
+  3.8127934050148563`*^9, 3.8127935313837986`*^9}, {3.812793604645811*^9, 
+  3.8127936206300507`*^9}, {3.8127936595449467`*^9, 3.812793683416087*^9}},
+ CellLabel->
+  "In[2200]:=",ExpressionUUID->"63e7ea39-bce9-4e4c-b730-8bcc22087913"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Test:", "Subsection",
+ CellChangeTimes->{{3.812793291452654*^9, 
+  3.8127932945483723`*^9}},ExpressionUUID->"3e0f64e6-73cc-48e9-849c-\
+ff977df091f9"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"esp301GUI", "[", "\"\<COM23\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.8127933018508368`*^9, 3.812793310101764*^9}},
+ CellLabel->
+  "In[2203]:=",ExpressionUUID->"ef5bf24c-6c80-4986-a9e0-60e20a79664d"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {
+     TemplateBox[{
+      ButtonBox["\"Open\"", ButtonFunction :> $CellContext`esp301Obj[
+          $CellContext`OpenInstrument["COM23", 921600]], Appearance -> 
+        Automatic, Evaluator -> Automatic, Method -> "Preemptive"],ButtonBox[
+       "\"Close\"", ButtonFunction :> $CellContext`esp301Obj[
+          $CellContext`CloseInstrument[]], Appearance -> Automatic, Evaluator -> 
+        Automatic, Method -> "Preemptive"]},
+      "RowDefault"]},
+    {
+     TemplateBox[{InterpretationBox[
+        Cell["Axis 1:"], 
+        TextCell["Axis 1:"]],PanelBox[
+        TagBox[
+         InputFieldBox[
+          Dynamic[
+           SetAccuracy[$CellContext`pos1, 5]], FrameMargins -> Tiny, 
+          ImageSize -> {50, 20}], 
+         EventHandlerTag[{
+          "UpArrowKeyDown" :> ($CellContext`pos1 = $CellContext`pos1 + \
+$CellContext`mstep1; $CellContext`esp301Obj[
+              $CellContext`PAUSet[
+              1, $CellContext`pos1, $CellContext`esp301ErrorString]]), 
+           "DownArrowKeyDown" :> ($CellContext`pos1 = $CellContext`pos1 - \
+$CellContext`mstep1; $CellContext`esp301Obj[
+              $CellContext`PAUSet[
+              1, $CellContext`pos1, $CellContext`esp301ErrorString]]), 
+           "LeftArrowKeyDown" :> 
+           If[$CellContext`mstep1 < 
+             1, $CellContext`mstep1 = $CellContext`mstep1 10], 
+           "RightArrowKeyDown" :> 
+           If[$CellContext`mstep1 > 
+             0.0001, $CellContext`mstep1 = $CellContext`mstep1 0.1], Method -> 
+           "Preemptive", PassEventsDown -> Automatic, PassEventsUp -> True}]],
+         FrameMargins -> Tiny],PanelBox[
+        DynamicBox[
+         ToBoxes[
+          StringJoin[
+           ToString[
+            SetAccuracy[$CellContext`mstep1, 5]], " V"], StandardForm]], 
+        FrameMargins -> Medium],ButtonBox[
+       "\"Stop\"", ButtonFunction :> $CellContext`esp301Obj[
+          $CellContext`ST[1, $CellContext`esp301ErrorString]], Appearance -> 
+        Automatic, Evaluator -> Automatic, Method -> "Preemptive"]},
+      "RowDefault"]},
+    {
+     TemplateBox[{InterpretationBox[
+        Cell["Axis 2:"], 
+        TextCell["Axis 2:"]],PanelBox[
+        TagBox[
+         InputFieldBox[
+          Dynamic[
+           SetAccuracy[$CellContext`pos2, 5]], ImageSize -> {50, 20}, 
+          FrameMargins -> Tiny], 
+         EventHandlerTag[{
+          "UpArrowKeyDown" :> ($CellContext`pos2 = $CellContext`pos2 + \
+$CellContext`mstep2; $CellContext`esp301Obj[
+              $CellContext`PAUSet[
+              2, $CellContext`pos2, $CellContext`esp301ErrorString]]), 
+           "DownArrowKeyDown" :> ($CellContext`pos2 = $CellContext`pos2 - \
+$CellContext`mstep2; $CellContext`esp301Obj[
+              $CellContext`PAUSet[
+              2, $CellContext`pos2, $CellContext`esp301ErrorString]]), 
+           "LeftArrowKeyDown" :> 
+           If[$CellContext`mstep2 < 
+             1, $CellContext`mstep2 = $CellContext`mstep2 10], 
+           "RightArrowKeyDown" :> 
+           If[$CellContext`mstep2 > 
+             0.0001, $CellContext`mstep2 = $CellContext`mstep2 0.1], Method -> 
+           "Preemptive", PassEventsDown -> Automatic, PassEventsUp -> True}]],
+         FrameMargins -> Tiny],PanelBox[
+        DynamicBox[
+         ToBoxes[
+          StringJoin[
+           ToString[
+            SetAccuracy[$CellContext`mstep2, 5]], " V"], StandardForm]], 
+        FrameMargins -> Medium],ButtonBox[
+       "\"Stop\"", ButtonFunction :> $CellContext`esp301Obj[
+          $CellContext`ST[2, $CellContext`esp301ErrorString]], Appearance -> 
+        Automatic, Evaluator -> Automatic, Method -> "Preemptive"]},
+      "RowDefault"]},
+    {
+     TemplateBox[{InterpretationBox[
+        Cell["Axis 3:"], 
+        TextCell["Axis 3:"]],PanelBox[
+        TagBox[
+         InputFieldBox[
+          Dynamic[
+           SetAccuracy[$CellContext`pos3, 5]], ImageSize -> {50, 20}, 
+          FrameMargins -> Tiny], 
+         EventHandlerTag[{
+          "UpArrowKeyDown" :> ($CellContext`pos3 = $CellContext`pos3 + \
+$CellContext`mstep3; $CellContext`esp301Obj[
+              $CellContext`PAUSet[
+              3, $CellContext`pos3, $CellContext`esp301ErrorString]]), 
+           "DownArrowKeyDown" :> ($CellContext`pos3 = $CellContext`pos3 - \
+$CellContext`mstep3; $CellContext`esp301Obj[
+              $CellContext`PAUSet[
+              3, $CellContext`pos3, $CellContext`esp301ErrorString]]), 
+           "LeftArrowKeyDown" :> 
+           If[$CellContext`mstep3 < 
+             1, $CellContext`mstep3 = $CellContext`mstep3 10], 
+           "RightArrowKeyDown" :> 
+           If[$CellContext`mstep3 > 
+             0.0001, $CellContext`mstep3 = $CellContext`mstep3 0.1], Method -> 
+           "Preemptive", PassEventsDown -> Automatic, PassEventsUp -> True}]],
+         FrameMargins -> Tiny],PanelBox[
+        DynamicBox[
+         ToBoxes[
+          StringJoin[
+           ToString[
+            SetAccuracy[$CellContext`mstep3, 5]], " V"], StandardForm], 
+         Initialization :> $CellContext`Initializeesp301Par[]], FrameMargins -> 
+        Medium],ButtonBox["\"Stop\"", ButtonFunction :> $CellContext`esp301Obj[
+          $CellContext`ST[3, $CellContext`esp301ErrorString]], Appearance -> 
+        Automatic, Evaluator -> Automatic, Method -> "Preemptive"]},
+      "RowDefault"]}
+   },
+   DefaultBaseStyle->"Column",
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Column"]], "Output",
+ CellChangeTimes->{3.8127933106822114`*^9, 3.8127936340800695`*^9, 
+  3.8127936901510696`*^9},
+ CellLabel->
+  "Out[2203]=",ExpressionUUID->"49d749c7-b8b3-46b7-b73b-52d0015524cd"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"2.", "/", 
+    RowBox[{"(", 
+     RowBox[{"2", "^", "18"}], ")"}]}], "/", "0.001"}], "*", "3"}]], "Input",
+ CellChangeTimes->{{3.8127942156682253`*^9, 3.812794284972824*^9}, {
+  3.8127943282779765`*^9, 3.812794328342803*^9}},
+ CellLabel->
+  "In[2209]:=",ExpressionUUID->"d1318596-6ae9-44ae-9d42-447ffe7b530c"],
+
+Cell[BoxData["0.02288818359375`"], "Output",
+ CellChangeTimes->{{3.812794223995948*^9, 3.8127942855133786`*^9}, 
+   3.812794328733757*^9},
+ CellLabel->
+  "Out[2209]=",ExpressionUUID->"43647265-a1e2-4832-b601-c723f0951c91"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{724, 721},
+WindowMargins->{{Automatic, 53}, {124, Automatic}},
+FrontEndVersion->"11.3 for Microsoft Windows (64-bit) (2018\:5e743\:670828\
+\:65e5)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 213, 4, 53, "Subsection",ExpressionUUID->"3cf58873-c942-449d-bf60-12c2c2f5f5d8"],
+Cell[CellGroupData[{
+Cell[818, 30, 662, 13, 67, "Input",ExpressionUUID->"e60d4a0b-9d43-4f0c-b801-36edd9c58ce9"],
+Cell[1483, 45, 380, 8, 32, "Output",ExpressionUUID->"86f3d4b7-37d9-432c-b9a0-b598cbe56032"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1900, 58, 326, 6, 28, "Input",ExpressionUUID->"f377da46-d2f0-4505-b305-141361a82056"],
+Cell[2229, 66, 4215, 136, 563, "Output",ExpressionUUID->"c2b8392e-ac6a-43be-b0e3-4a6a15637cbb"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[6481, 207, 391, 9, 24, "Input",ExpressionUUID->"c5febfec-6063-478c-a50e-b09c059f7258"],
+Cell[6875, 218, 277, 6, 32, "Output",ExpressionUUID->"d44144cd-0a2d-45f5-8dad-d14b13fe23e8"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[7189, 229, 221, 4, 24, "Input",ExpressionUUID->"0c9be8a4-96ca-4fb7-85c0-a46cae49f024"],
+Cell[7413, 235, 54788, 1863, 7394, "Output",ExpressionUUID->"d97d6d8f-594c-490e-bd6b-f7b453c42a1f"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[62238, 2103, 293, 6, 24, "Input",ExpressionUUID->"115c8a2c-1f66-43a0-b4ce-33fd3c02f5a7"],
+Cell[62534, 2111, 366, 9, 32, "Output",ExpressionUUID->"050135c5-e23e-494a-827b-5815ede39ca9"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[62937, 2125, 341, 7, 28, "Input",ExpressionUUID->"2da0e38c-cebd-462d-8ee0-0a93cc557b08"],
+Cell[63281, 2134, 340, 7, 32, "Output",ExpressionUUID->"5026d71f-c4e6-4f73-b889-94c309fc45ae"]
+}, Open  ]],
+Cell[63636, 2144, 11028, 254, 827, "Input",ExpressionUUID->"63e7ea39-bce9-4e4c-b730-8bcc22087913"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[74701, 2403, 155, 3, 53, "Subsection",ExpressionUUID->"3e0f64e6-73cc-48e9-849c-ff977df091f9"],
+Cell[CellGroupData[{
+Cell[74881, 2410, 226, 4, 28, "Input",ExpressionUUID->"ef5bf24c-6c80-4986-a9e0-60e20a79664d"],
+Cell[75110, 2416, 5665, 127, 158, "Output",ExpressionUUID->"49d749c7-b8b3-46b7-b73b-52d0015524cd"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[80812, 2548, 356, 9, 28, "Input",ExpressionUUID->"d1318596-6ae9-44ae-9d42-447ffe7b530c"],
+Cell[81171, 2559, 222, 4, 32, "Output",ExpressionUUID->"43647265-a1e2-4832-b601-c723f0951c91"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+

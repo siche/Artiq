@@ -56,7 +56,6 @@ class KasliTester(EnvExperiment):
         self.setattr_device('core')
         self.detection = self.get_device(dds_channel[0])
         self.cooling = self.get_device(dds_channel[1])
-        self.microwave = self.get_device(dds_channel[2])
         self.pumping = self.get_device(dds_channel[3])
         self.pmt = self.get_device('ttl0')
         self.ttl_935_AOM = self.get_device('ttl4')
@@ -69,24 +68,20 @@ class KasliTester(EnvExperiment):
         self.core.break_realtime()
         self.cooling.init()
         self.detection.init()
-        self.microwave.init()
         self.pumping.init()
 
         self.cooling.set(250*MHz)
         self.detection.set(260*MHz)
-        self.microwave.set(400.*MHz)
         self.pumping.set(260*MHz)
 
         self.detection.set_att(20.)
         self.cooling.set_att(10.)
-        self.microwave.set_att(0.)
         self.pumping.set_att(18.)
 
     @kernel
     def run_sequence(self, rabi_time, run_times=100):
         # initialize dds
         self.core.break_realtime()
-        self.microwave.sw.off()
         self.pumping.sw.off()
 
         photon_count = 0
@@ -156,13 +151,13 @@ class KasliTester(EnvExperiment):
         # AOM_435 Red Phonon Sideband 239.0195
         # AOM_435 = 239.965-22.52968/2
         t1 = time.time()
-        AOM_435 = 238.140
-        DDS_AMP = 0.7
+        AOM_435 = 236.259
+        DDS_AMP = 0.8
         DDS.set_frequency(frequency=AOM_435, amplitude=DDS_AMP)
-        lock_point = 871.034644
+        lock_point = 871.034640
         init_value = 0
-        scan_step = 2
-        N = 40
+        scan_step = 1
+        N = 100
         run_times = 200
         
 

@@ -1,0 +1,1398 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     57234,       1390]
+NotebookOptionsPosition[     55643,       1353]
+NotebookOutlinePosition[     55999,       1369]
+CellTagsIndexPosition[     55956,       1366]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Basis", "Section",
+ CellChangeTimes->{{3.815803348262788*^9, 
+  3.8158033489429684`*^9}},ExpressionUUID->"7cefb275-1ea6-407b-b7db-\
+1814cbca7d1b"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Needs", "[", "\"\<NETLink`\>\"", "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+   "LoadNETAssembly", "[", "\"\<NationalInstruments.VisaNS\>\"", "]"}], ";"}],
+   "\n", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+     "\"\<NationalInstruments.VisaNS.TcpipSession\>\"", " ", "and", "\n", 
+      " ", "\"\<NationalInstruments.VisaNS.MessageBasedSession\>\"", " ", 
+      "are", " ", "both", " ", "okay"}], ";", "\n", " ", 
+     RowBox[{
+      RowBox[{
+      "but", " ", "the", " ", "latter", " ", "can", " ", "deal", " ", "with", 
+       " ", "VXI"}], "-", "11"}]}], ",", " ", 
+    RowBox[{
+     RowBox[{"HiSLIP", " ", "and", " ", "Socket", " ", "communication"}], ";",
+      " ", "\n", " ", 
+     RowBox[{
+      RowBox[{
+      "the", " ", "former", " ", "can", " ", "only", " ", "deal", " ", "with",
+        " ", "VXI"}], "-", 
+      RowBox[{"11", " ", 
+       RowBox[{"protocol", ".", " ", "\n", "For"}], " ", "more", " ", 
+       "details"}]}]}], ",", " ", 
+    RowBox[{
+    "please", " ", "refer", " ", "to", " ", 
+     "\"\<SMB100A operating manual\>\""}]}], "*)"}], "\n"}], "\n", 
+ RowBox[{
+  RowBox[{"SocketDevices", "=", 
+   RowBox[{"<|", "|>"}]}], ";"}], "\n", 
+ RowBox[{"ClearAll", "[", "SocketDeviceOpen", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"SocketDeviceOpen", "[", "ipWithPort_String", "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"SocketDevices", "[", "ipWithPort", "]"}], "=", 
+     RowBox[{"NETNew", "[", 
+      RowBox[{"\"\<NationalInstruments.VisaNS.MessageBasedSession\>\"", ",", 
+       RowBox[{
+       "\"\<TCPIP::\>\"", "<>", "ipWithPort", "<>", "\"\<::SOCKET\>\""}]}], 
+      "]"}]}], ")"}]}], ";"}], "\n", 
+ RowBox[{"ClearAll", "[", "SocketDeviceClose", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"SocketDeviceClose", "[", "dev_", "]"}], ":=", 
+   RowBox[{"dev", "@", 
+    RowBox[{"Dispose", "[", "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"SocketDeviceClose", "[", "ip_String", "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"SocketDeviceClose", "@", 
+      RowBox[{"SocketDevices", "[", "ip", "]"}]}], ";", 
+     RowBox[{"SocketDevices", "=", 
+      RowBox[{"Delete", "[", 
+       RowBox[{"SocketDevices", ",", "ip"}], "]"}]}]}], ")"}]}], 
+  ";"}]}], "Code",
+ CellChangeTimes->{
+  3.6046428559376287`*^9, {3.604642912614871*^9, 3.604642912974891*^9}, {
+   3.6046436073876095`*^9, 3.604643617059163*^9}, {3.6046436584015274`*^9, 
+   3.604643659289578*^9}, {3.6240762867884974`*^9, 3.624076297100087*^9}, {
+   3.6240789992076387`*^9, 3.6240790018547907`*^9}, {3.62557243573942*^9, 
+   3.6255724360594378`*^9}, {3.625572470699419*^9, 3.62557248207507*^9}, {
+   3.6255746708682613`*^9, 3.625574674732483*^9}, 3.6313525623423796`*^9, 
+   3.650799054668191*^9, {3.7390650838235483`*^9, 3.7390650850935507`*^9}, {
+   3.815811512717125*^9, 3.815811534164749*^9}, {3.815811629637345*^9, 
+   3.8158116317726326`*^9}},
+ CellLabel->
+  "In[3254]:=",ExpressionUUID->"64646098-d43a-4cf2-9a9f-915b797ee586"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["RF (VXI-11 devices)", "Section",
+ CellChangeTimes->{{3.815811363822468*^9, 3.8158113751212425`*^9}, 
+   3.815811409212018*^9},ExpressionUUID->"481bbe3f-aa3e-4fae-b0b7-\
+33802d780f75"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"RFDevices", "=", 
+   RowBox[{"<|", "|>"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "RFDevice", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "RFOpen", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "RFClose", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "RFWrite", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "RFRead", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "RFFrequency", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "RFAmplitude", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ClearAll", "[", "RFFrequencyScan", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ClearAll", "[", "RFOutput", "]"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RFDevice", "[", 
+    RowBox[{"dev_", "?", "NETLink`NETObjectQ"}], "]"}], ":=", "dev"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RFDevice", "[", "name_String", "]"}], ":=", 
+   RowBox[{"RFDevices", "[", "name", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"RFDevice", "[", "id_Integer", "]"}], ":=", 
+    RowBox[{
+    "RFDevices", "\[LeftDoubleBracket]", "id", "\[RightDoubleBracket]"}]}], 
+   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RFOpen", "[", "ip_String", "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"RFDevices", "[", "ip", "]"}], "=", 
+     RowBox[{"NETLink`NETNew", "[", 
+      RowBox[{"\"\<NationalInstruments.VisaNS.MessageBasedSession\>\"", ",", 
+       RowBox[{
+       "\"\<TCPIP::\>\"", "<>", "ip", "<>", "\"\<::INST0::INSTR\>\""}]}], 
+      "]"}]}], ")"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RFOpen", "[", "id_Integer", "]"}], ":=", 
+   RowBox[{"RFOpen", "[", 
+    RowBox[{
+     RowBox[{"Keys", "[", "RFDevices", "]"}], "\[LeftDoubleBracket]", "id", 
+     "\[RightDoubleBracket]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"RFOpen", "[", "]"}], ":=", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"RFOpen", "/@", 
+       RowBox[{"Keys", "[", "RFDevices", "]"}]}], ";"}], ")"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RFClose", "[", "dev_", "]"}], ":=", 
+   RowBox[{"dev", "@", 
+    RowBox[{"Dispose", "[", "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RFClose", "[", "ip_String", "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"RFClose", "@", 
+      RowBox[{"RFDevices", "[", "ip", "]"}]}], ";"}], 
+    RowBox[{"(*", 
+     RowBox[{
+      RowBox[{"RFDevices", "=", 
+       RowBox[{"Delete", "[", 
+        RowBox[{"RFDevices", ",", "ip"}], "]"}]}], ";"}], "*)"}], ")"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RFClose", "[", "id_Integer", "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"RFClose", "@", 
+      RowBox[{
+      "RFDevices", "\[LeftDoubleBracket]", "id", "\[RightDoubleBracket]"}]}], 
+     ";"}], 
+    RowBox[{"(*", 
+     RowBox[{
+      RowBox[{"RFDevices", "=", 
+       RowBox[{"Delete", "[", 
+        RowBox[{"RFDevices", ",", "id"}], "]"}]}], ";"}], "*)"}], ")"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"RFClose", "[", "]"}], ":=", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"RFClose", "/@", 
+       RowBox[{"Keys", "[", "RFDevices", "]"}]}], ";"}], ")"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RFWrite", "[", 
+    RowBox[{"dev_", ",", "str_String"}], "]"}], ":=", 
+   RowBox[{
+    RowBox[{"RFDevice", "[", "dev", "]"}], "@", 
+    RowBox[{"Write", "[", "str", 
+     RowBox[{"(*", 
+      RowBox[{"<>", "\"\<\\n\>\""}], "*)"}], "]"}]}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"RFWrite", "[", 
+     RowBox[{"dev_", ",", "chars_List"}], "]"}], ":=", 
+    RowBox[{
+     RowBox[{"RFDevice", "[", "dev", "]"}], "@", 
+     RowBox[{"Write", "[", "chars", 
+      RowBox[{"(*", 
+       RowBox[{",", "0", ",", 
+        RowBox[{"Length", "[", "chars", "]"}]}], "*)"}], "]"}]}]}], ";"}], 
+  "\n"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"RFRead", "[", "dev_", "]"}], ":=", 
+    RowBox[{
+     RowBox[{"RFDevice", "[", "dev", "]"}], "@", 
+     RowBox[{"ReadString", "[", "]"}]}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RFFrequency", "[", 
+    RowBox[{"dev_", ",", 
+     RowBox[{"freq", ":", 
+      RowBox[{"(", 
+       RowBox[{"_", "?", "NumericQ"}], ")"}], ":", "0"}]}], "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"r", ",", "d", ",", "n"}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"freq", "===", "0"}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"dev", "@", 
+         RowBox[{"Write", "[", "\"\<SOURce:FREQuency:CW?\\n\>\"", "]"}]}], 
+        ";", "\[IndentingNewLine]", 
+        RowBox[{"r", "=", 
+         RowBox[{"dev", "@", 
+          RowBox[{"ReadString", "[", "]"}]}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"ToExpression", "@", 
+          RowBox[{"StringReplace", "[", 
+           RowBox[{"r", ",", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"d", ":", 
+                RowBox[{
+                 RowBox[{"{", 
+                  RowBox[{"DigitCharacter", ",", "\"\<.\>\""}], "}"}], 
+                 ".."}]}], "~~", "\"\<E\>\"", "~~", 
+               RowBox[{"n", ":", 
+                RowBox[{
+                 RowBox[{"{", 
+                  RowBox[{
+                  "DigitCharacter", ",", "\"\<+\>\"", ",", "\"\<-\>\""}], 
+                  "}"}], ".."}]}]}], "\[RuleDelayed]", 
+              RowBox[{"d", "<>", "\"\<*10^\>\"", "<>", "n"}]}], "}"}]}], 
+           "]"}]}], "/", 
+         SuperscriptBox["10.", "6"]}]}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"r", "=", 
+         RowBox[{"StringReplace", "[", 
+          RowBox[{
+           RowBox[{"ToString", "[", 
+            RowBox[{
+             RowBox[{
+              SuperscriptBox["10", "6"], "freq"}], ",", "FortranForm"}], 
+            "]"}], ",", 
+           RowBox[{
+            RowBox[{
+            "RegularExpression", "[", "\"\<([0-9\\\\.])e([0-9\\\\+-])\>\"", 
+             "]"}], "->", " ", "\"\<$1E$2\>\""}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"dev", "@", 
+         RowBox[{"Write", "[", 
+          RowBox[{
+          "\"\<SOURce:FREQuency:CW \>\"", "<>", "r", "<>", "\"\<\\n\>\""}], 
+          "]"}]}], ";"}]}], "\[IndentingNewLine]", "]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RFFrequency", "[", 
+    RowBox[{"ip_String", ",", 
+     RowBox[{"freq", ":", 
+      RowBox[{"(", 
+       RowBox[{"_", "?", "NumericQ"}], ")"}], ":", "0"}]}], "]"}], ":=", 
+   RowBox[{"RFFrequency", "[", 
+    RowBox[{
+     RowBox[{"RFDevices", "[", "ip", "]"}], ",", "freq"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"RFFrequency", "[", 
+     RowBox[{"id_Integer", ",", 
+      RowBox[{"freq", ":", 
+       RowBox[{"(", 
+        RowBox[{"_", "?", "NumericQ"}], ")"}], ":", "0"}]}], "]"}], ":=", 
+    RowBox[{"RFFrequency", "[", 
+     RowBox[{
+      RowBox[{"RFDevices", "[", 
+       RowBox[{"[", "id", "]"}], "]"}], ",", "freq"}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RFAmplitude", "[", 
+    RowBox[{"dev_", ",", 
+     RowBox[{"dbm_:", "\"\<?\>\""}]}], "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"r", ",", "d", ",", "n"}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"dbm", "===", "\"\<?\>\""}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"dev", "@", 
+         RowBox[{"Write", "[", "\"\<SOURce:POWer:POWer?\\n\>\"", "]"}]}], ";",
+         "\[IndentingNewLine]", 
+        RowBox[{"r", "=", 
+         RowBox[{"dev", "@", 
+          RowBox[{"ReadString", "[", "]"}]}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"ToExpression", "@", 
+         RowBox[{"StringReplace", "[", 
+          RowBox[{"r", ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"d", ":", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"DigitCharacter", ",", "\"\<.\>\""}], "}"}], 
+                ".."}]}], "~~", "\"\<E\>\"", "~~", 
+              RowBox[{"n", ":", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{
+                 "DigitCharacter", ",", "\"\<+\>\"", ",", "\"\<-\>\""}], 
+                 "}"}], ".."}]}]}], "\[RuleDelayed]", 
+             RowBox[{"d", "<>", "\"\<*10^\>\"", "<>", "n"}]}], "}"}]}], 
+          "]"}]}]}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"NumberQ", "@", "dbm"}], ",", 
+          RowBox[{
+           RowBox[{"r", "=", 
+            RowBox[{"StringReplace", "[", 
+             RowBox[{
+              RowBox[{"ToString", "[", 
+               RowBox[{"dbm", ",", "FortranForm"}], "]"}], ",", 
+              RowBox[{
+               RowBox[{
+               "RegularExpression", "[", "\"\<([0-9\\\\.])e([0-9\\\\+-])\>\"",
+                 "]"}], "->", " ", "\"\<$1E$2\>\""}]}], "]"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"dev", "@", 
+            RowBox[{"Write", "[", 
+             RowBox[{
+             "\"\<SOURce:POWer:POWer \>\"", "<>", "r", "<>", "\"\<\\n\>\""}], 
+             "]"}]}]}], ",", 
+          RowBox[{"Print", "[", "\"\<Error\>\"", "]"}]}], "]"}], ";"}]}], 
+      "\[IndentingNewLine]", "]"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RFAmplitude", "[", 
+    RowBox[{"ip_String", ",", 
+     RowBox[{"dbm_:", "\"\<?\>\""}]}], "]"}], ":=", 
+   RowBox[{"RFAmplitude", "[", 
+    RowBox[{
+     RowBox[{"RFDevices", "[", "ip", "]"}], ",", "dbm"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"RFAmplitude", "[", 
+     RowBox[{"id_Integer", ",", 
+      RowBox[{"dbm_:", "\"\<?\>\""}]}], "]"}], ":=", 
+    RowBox[{"RFAmplitude", "[", 
+     RowBox[{
+      RowBox[{"RFDevices", "[", 
+       RowBox[{"[", "id", "]"}], "]"}], ",", "dbm"}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"RFFrequencyScan", "[", 
+     RowBox[{"dev_", ",", 
+      RowBox[{"start_", "?", "NumericQ"}], ",", 
+      RowBox[{"end_", "?", "NumericQ"}], ",", 
+      RowBox[{"step_", "?", "NumericQ"}]}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"datafile", "=", 
+         RowBox[{"NewData", "[", "\"\<RFScan-\>\"", "]"}]}], ",", 
+        RowBox[{"counts", "=", "\"\<\>\""}], ",", "now"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"SequencerAxis", "[", 
+        RowBox[{"start", ",", "end", ",", "step"}], "]"}], ";", "\n", 
+       RowBox[{"SequencerData", "[", "datafile", "]"}], ";", "\n", 
+       RowBox[{"AppendData", "[", 
+        RowBox[{"datafile", ",", " ", 
+         RowBox[{"{", "\n", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"\"\<Sequence\>\"", ",", 
+             RowBox[{
+              RowBox[{"CtrlGetValue", "@", 
+               RowBox[{
+               "sequencer", "@", "\"\<Edit.Sequence.Chapter (us)\>\""}]}], 
+              "<>", "\"\<\\n----------\\n\>\"", "<>", 
+              RowBox[{"CtrlGetValue", "@", 
+               RowBox[{
+               "sequencer", "@", "\"\<Edit.Sequence.Sequence\>\""}]}]}]}], 
+            "}"}], ",", "\n", 
+           RowBox[{"{", 
+            RowBox[{
+            "\"\<Parameter\>\"", ",", " ", "\"\<Frequency (MHz)\>\""}], "}"}],
+            ",", " ", "\[IndentingNewLine]", 
+           RowBox[{"{", 
+            RowBox[{"\"\<Start\>\"", ",", " ", 
+             RowBox[{"ToString", "[", "start", "]"}]}], "}"}], ",", " ", "\n", 
+           RowBox[{"{", 
+            RowBox[{"\"\<End\>\"", ",", " ", 
+             RowBox[{"ToString", "[", "end", "]"}]}], "}"}], ",", " ", "\n", 
+           RowBox[{"{", 
+            RowBox[{"\"\<Step\>\"", ",", " ", 
+             RowBox[{"ToString", "[", "step", "]"}]}], "}"}]}], "}"}]}], 
+        "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{
+         RowBox[{"Print", "[", "\"\<RF Frequency Scan Start...\>\"", "]"}], 
+         ";"}], "*)"}], "\n", 
+       RowBox[{"Monitor", "[", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"Do", "[", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"If", "[", 
+             RowBox[{
+              RowBox[{"$Task", ".", "Global`stop"}], ",", 
+              RowBox[{"Break", "[", "]"}], ",", 
+              RowBox[{"Pause", "[", "0.01", "]"}]}], "]"}], ";", 
+            "\[IndentingNewLine]", 
+            RowBox[{"RFFrequency", "[", 
+             RowBox[{"dev", ",", "now"}], "]"}], ";", "\n", 
+            RowBox[{"counts", "=", 
+             RowBox[{"counts", "<>", 
+              RowBox[{"ToString", "[", "now", "]"}], "<>", "\"\< MHz, \>\"", "<>", 
+              RowBox[{"StringJoin", "@@", 
+               RowBox[{"Riffle", "[", 
+                RowBox[{
+                 RowBox[{"ToString", "/@", 
+                  RowBox[{"SequencerCounts", "[", "]"}]}], ",", "\"\< \>\""}],
+                 "]"}]}], "<>", "\"\<\\n\>\""}]}], ";"}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{"{", 
+            RowBox[{"now", ",", "start", ",", "end", ",", "step"}], "}"}]}], 
+          "]"}], ",", 
+         RowBox[{"ProgressIndicator", "[", 
+          RowBox[{"now", ",", 
+           RowBox[{"{", 
+            RowBox[{"start", ",", "end"}], "}"}]}], "]"}]}], "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"AppendData", "[", 
+        RowBox[{"datafile", ",", " ", 
+         RowBox[{"{", 
+          RowBox[{"{", 
+           RowBox[{"\"\<Counts\>\"", ",", " ", "counts"}], "}"}], "}"}]}], 
+        "]"}], ";", "\n", 
+       RowBox[{"(*", 
+        RowBox[{
+         RowBox[{"Print", "[", "\"\<RF Frequency Scan Finish.\>\"", "]"}], 
+         ";"}], "*)"}], "\n", "datafile"}]}], "\[IndentingNewLine]", "]"}]}], 
+   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RFOutput", "[", 
+    RowBox[{"dev_", ",", "state_Integer"}], "]"}], ":=", 
+   RowBox[{"dev", "@", 
+    RowBox[{"Write", "[", 
+     RowBox[{"\"\<OUTPut \>\"", "<>", 
+      RowBox[{"ToString", "[", "state", "]"}], "<>", "\"\<\\n\>\""}], 
+     "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RFOutput", "[", 
+    RowBox[{"dev_", ",", "True"}], "]"}], ":=", 
+   RowBox[{"RFOutput", "[", 
+    RowBox[{"dev", ",", "1"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RFOutput", "[", 
+    RowBox[{"dev_", ",", "False"}], "]"}], ":=", 
+   RowBox[{"RFOutput", "[", 
+    RowBox[{"dev", ",", "0"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RFOutput", "[", 
+    RowBox[{"ip_String", ",", "state_"}], "]"}], ":=", 
+   RowBox[{"RFOutput", "[", 
+    RowBox[{
+     RowBox[{"RFDevices", "[", "ip", "]"}], ",", "state"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RFOutput", "[", 
+    RowBox[{"id_Integer", ",", "state_"}], "]"}], ":=", 
+   RowBox[{"RFOutput", "[", 
+    RowBox[{
+     RowBox[{"RFDevices", "[", 
+      RowBox[{"[", "id", "]"}], "]"}], ",", "state"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RFOutput", "[", "state_", "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"RFOutput", "[", 
+        RowBox[{"#", ",", "state"}], "]"}], "&"}], "/@", 
+      RowBox[{"Values", "[", "RFDevices", "]"}]}], ";"}], ")"}]}], 
+  ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.623027171851948*^9, 3.6230272261950564`*^9}, {
+   3.6230272793310957`*^9, 3.623027304867556*^9}, {3.6230273513072124`*^9, 
+   3.6230273516502323`*^9}, {3.623027456458227*^9, 3.623027475505316*^9}, {
+   3.6230275473454237`*^9, 3.623027617496436*^9}, {3.6230277174241505`*^9, 
+   3.623027734672137*^9}, {3.6230277759915*^9, 3.6230277808957806`*^9}, {
+   3.6230278151597404`*^9, 3.623027844024391*^9}, {3.6230278740641084`*^9, 
+   3.6230279161665163`*^9}, {3.6231810746978116`*^9, 3.623181105561577*^9}, {
+   3.6231813013617764`*^9, 3.623181302953867*^9}, 3.6231813522266855`*^9, {
+   3.624077412651893*^9, 3.624077566331683*^9}, {3.6240776000676126`*^9, 
+   3.6240777381875124`*^9}, {3.6240777751796284`*^9, 3.624077821492277*^9}, {
+   3.624077929555458*^9, 3.6240779794593124`*^9}, {3.624078109347742*^9, 
+   3.6240781973547754`*^9}, {3.624078234954926*^9, 3.6240783469223304`*^9}, {
+   3.624078742800973*^9, 3.6240787444820695`*^9}, 3.6240788169842167`*^9, {
+   3.6240791574246883`*^9, 3.6240791651341295`*^9}, {3.6240797545968447`*^9, 
+   3.6240797584520655`*^9}, 3.624079874588708*^9, {3.6240804496836014`*^9, 
+   3.624080460242205*^9}, 3.6240805436109734`*^9, {3.624080688995289*^9, 
+   3.6240807330908113`*^9}, {3.6240869876455517`*^9, 3.624087002694412*^9}, {
+   3.6255725013331714`*^9, 3.625572729555225*^9}, {3.6255728448898215`*^9, 
+   3.6255728993139343`*^9}, {3.6255729318737965`*^9, 
+   3.6255729839047728`*^9}, {3.625573015472578*^9, 3.6255730457843122`*^9}, {
+   3.6255734012056413`*^9, 3.625573454734703*^9}, {3.6255734879496026`*^9, 
+   3.6255734931899023`*^9}, {3.625574101723708*^9, 3.6255741061069593`*^9}, {
+   3.6255742565935664`*^9, 3.625574276743719*^9}, {3.6255743431915197`*^9, 
+   3.6255746501900787`*^9}, {3.625574707477356*^9, 3.62557478151159*^9}, {
+   3.625574823396986*^9, 3.6255749030348887`*^9}, 3.6255749692116737`*^9, {
+   3.625576140938693*^9, 3.6255761809539814`*^9}, {3.625576215641966*^9, 
+   3.6255762200822196`*^9}, {3.625576401716608*^9, 3.625576410066086*^9}, {
+   3.6255852153507195`*^9, 3.6255852287434855`*^9}, {3.625585388711635*^9, 
+   3.6255854339832244`*^9}, 3.625585464957996*^9, {3.625585519592121*^9, 
+   3.6255856230700397`*^9}, {3.6255868824670677`*^9, 
+   3.6255868885394154`*^9}, {3.625878932548377*^9, 3.625879191586193*^9}, {
+   3.6502543790672626`*^9, 3.6502544622750216`*^9}, {3.650254496482978*^9, 
+   3.650254584225997*^9}, {3.6502546214741273`*^9, 3.650254625090334*^9}, {
+   3.650260824973947*^9, 3.6502608303982573`*^9}, {3.650798992469633*^9, 
+   3.6507989960628386`*^9}, {3.6524099831334276`*^9, 3.65241000206151*^9}, {
+   3.652410037055512*^9, 3.652410150110978*^9}, {3.652410227294393*^9, 
+   3.652410275415145*^9}, {3.657117471501066*^9, 3.6571175054520082`*^9}, {
+   3.6571177641798067`*^9, 3.657117768012026*^9}, {3.65711811058062*^9, 
+   3.657118111789689*^9}, {3.6618322861250544`*^9, 3.661832292949445*^9}, {
+   3.739065161733824*^9, 3.739065228195339*^9}, {3.7805527128186436`*^9, 
+   3.78055273286007*^9}, {3.7805528187564573`*^9, 3.7805528356413217`*^9}, {
+   3.7805532722133045`*^9, 3.7805533314838657`*^9}, {3.7805533797727833`*^9, 
+   3.7805533881882877`*^9}, {3.7805534543215046`*^9, 3.780553467486313*^9}, {
+   3.7805537674943495`*^9, 3.780553778123936*^9}, {3.78055381002865*^9, 
+   3.7805538224364815`*^9}, {3.7805538629262486`*^9, 
+   3.7805538753500366`*^9}, {3.780553958037003*^9, 3.7805539711000834`*^9}, {
+   3.7805540208530874`*^9, 3.7805540840212297`*^9}, {3.7805541941029654`*^9, 
+   3.7805542261243687`*^9}, {3.780554300646161*^9, 3.780554307981553*^9}, {
+   3.807395818418831*^9, 3.807395836148431*^9}, 3.8073958814443254`*^9, {
+   3.8073960605554543`*^9, 3.8073960698525963`*^9}, 3.8073961717182465`*^9, {
+   3.8073962693507605`*^9, 3.8073963117753353`*^9}, {3.8073963470709677`*^9, 
+   3.807396348815304*^9}, {3.807396592135761*^9, 3.807396615899226*^9}, {
+   3.807396804252635*^9, 3.8073968508856897`*^9}, {3.8073968885905786`*^9, 
+   3.8073970170714035`*^9}, {3.807397167164241*^9, 3.8073972097328825`*^9}, {
+   3.8158114369438314`*^9, 3.815811509382047*^9}, {3.815811639320441*^9, 
+   3.81581164102588*^9}},
+ CellLabel->
+  "In[3262]:=",ExpressionUUID->"0beca6f1-e339-49ae-ad5c-0832f57854b7"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Laser (socket devices)", "Section",
+ CellChangeTimes->{{3.815803360233764*^9, 3.815803368175518*^9}, {
+  3.8158113758133907`*^9, 3.815811387449238*^9}, {3.8158114178678627`*^9, 
+  3.815811419348901*^9}},ExpressionUUID->"ace5649b-ac11-4266-9f83-\
+64985575cda0"],
+
+Cell[BoxData[{
+ RowBox[{"ClearAll", "[", "LaserConnect", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"LaserConnect", "[", "ipWithPort_String", "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"dev", "=", 
+        RowBox[{"SocketDeviceOpen", "[", "ipWithPort", "]"}]}], "}"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"dev", "@", "TerminationCharacterEnabled"}], "=", "True"}], 
+       ";", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"dev", "@", "TerminationCharacter"}], "=", 
+        RowBox[{
+         RowBox[{"ToCharacterCode", "[", "\"\<>\>\"", "]"}], "[", 
+         RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"dev", "@", "DefaultBufferSize"}], "=", "16500"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{"dev", ",", 
+         RowBox[{"dev", "@", 
+          RowBox[{"ReadString", "[", "]"}]}]}], "}"}]}]}], 
+     "\[IndentingNewLine]", "]"}]}], ";"}], "\[IndentingNewLine]", "\n", 
+  RowBox[{"(*", 
+   RowBox[{
+   "\:4ee5\:4e0b\:51fd\:6570\:6d89\:53ca\:7684\:547d\:4ee4\:4ecetoptica", " ",
+     "command", " ", "manual\:4e2d\:627e"}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{"Clear", "[", "LaserSignalDisp", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"LaserSignalDisp", "[", 
+     RowBox[{
+      RowBox[{"dev_", "?", "NETObjectQ"}], ",", 
+      RowBox[{"plotrange_:", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"-", "0.02"}], ",", "0.02"}], "}"}]}]}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"dat", ",", "xdat", ",", "ydat", ",", "a", ",", "b"}], "}"}], 
+      ",", 
+      RowBox[{
+       RowBox[{"dev", "@", 
+        RowBox[{
+        "Write", "[", "\"\<(param-ref 'laser1:scope:data)\\n\>\"", "]"}]}], 
+       ";", "\[IndentingNewLine]", 
+       RowBox[{"Pause", "[", "0.01", "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"dat", "=", 
+        RowBox[{"dev", "@", 
+         RowBox[{"ReadString", "[", "]"}]}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"dat", "=", 
+        RowBox[{"Partition", "[", 
+         RowBox[{
+          RowBox[{"Normal", "@", 
+           RowBox[{"BaseDecode", "@", "dat"}]}], ",", "4098"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"dev", "@", 
+        RowBox[{
+        "Write", "[", "\"\<(param-ref 'laser1:dl:pc:voltage-set)\\n\>\"", 
+         "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"a", "=", 
+        RowBox[{"ToExpression", "@", 
+         RowBox[{"StringTake", "[", 
+          RowBox[{
+           RowBox[{"dev", "@", 
+            RowBox[{"ReadString", "[", "]"}]}], ",", 
+           RowBox[{"{", 
+            RowBox[{"2", ",", 
+             RowBox[{"-", "3"}]}], "}"}]}], "]"}]}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"dev", "@", 
+        RowBox[{
+        "Write", "[", "\"\<(param-ref 'laser1:scan:amplitude)\\n\>\"", 
+         "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"b", "=", 
+        RowBox[{"ToExpression", "@", 
+         RowBox[{"StringTake", "[", 
+          RowBox[{
+           RowBox[{"dev", "@", 
+            RowBox[{"ReadString", "[", "]"}]}], ",", 
+           RowBox[{"{", 
+            RowBox[{"2", ",", 
+             RowBox[{"-", "3"}]}], "}"}]}], "]"}]}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"xdat", "=", 
+        RowBox[{"ImportString", "[", 
+         RowBox[{
+          RowBox[{"FromCharacterCode", "[", 
+           RowBox[{"dat", "[", 
+            RowBox[{"[", 
+             RowBox[{"3", ",", 
+              RowBox[{"7", ";;", 
+               RowBox[{"-", "1"}]}]}], "]"}], "]"}], "]"}], ",", 
+          "\"\<Real32\>\""}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"ydat", "=", 
+        RowBox[{"ImportString", "[", 
+         RowBox[{
+          RowBox[{"FromCharacterCode", "[", 
+           RowBox[{"dat", "[", 
+            RowBox[{"[", 
+             RowBox[{"1", ",", 
+              RowBox[{"7", ";;", 
+               RowBox[{"-", "1"}]}]}], "]"}], "]"}], "]"}], ",", 
+          "\"\<Real32\>\""}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"ListLinePlot", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"xdat", ",", "ydat"}], "}"}], "\[Transpose]"}], ",", 
+         RowBox[{"PlotRange", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"a", "-", 
+               RowBox[{"b", "/", "2"}]}], ",", 
+              RowBox[{"a", "+", 
+               RowBox[{"b", "/", "2"}]}]}], "}"}], ",", "plotrange"}], 
+           "}"}]}], ",", 
+         RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+         RowBox[{"FrameLabel", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{
+           "\"\<Piezo Voltage (V)\>\"", ",", "\"\<Lock-in Out (V)\>\""}], 
+           "}"}]}], ",", 
+         RowBox[{"LabelStyle", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{"Black", ",", "Bold"}], "}"}]}], ",", 
+         RowBox[{"Background", "\[Rule]", "White"}], ",", 
+         RowBox[{"GridLines", "\[Rule]", "Automatic"}]}], "]"}]}]}], 
+     "\[IndentingNewLine]", "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"ClearAll", "[", 
+    RowBox[{
+    "Laser370Connect", ",", "Laser935Connect", ",", "Laser399Connect", ",", 
+     "LaserCCSet", ",", "LaserPCSet", ",", "LaserCCAct", ",", "LaserPCAct", 
+     ",", "LockEnable", ",", "LaserScanAmp", ",", "ScanEnable", ",", 
+     "EmissionEnable"}], "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Laser370Connect", "[", "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"Quiet", "[", 
+     RowBox[{"laser370", "@", 
+      RowBox[{"Dispose", "[", "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+    RowBox[{"laser370", "=", 
+     RowBox[{
+      RowBox[{"LaserConnect", "[", "\"\<192.168.32.4::1998\>\"", "]"}], "[", 
+      RowBox[{"[", "1", "]"}], "]"}]}], ";"}], ")"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Laser935Connect", "[", "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"Quiet", "[", 
+     RowBox[{"laser935", "@", 
+      RowBox[{"Dispose", "[", "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+    RowBox[{"laser935", "=", 
+     RowBox[{
+      RowBox[{"LaserConnect", "[", "\"\<192.168.32.7::1998\>\"", "]"}], "[", 
+      RowBox[{"[", "1", "]"}], "]"}]}], ";"}], ")"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Laser399Connect", "[", "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"Quiet", "[", 
+      RowBox[{"laser399", "@", 
+       RowBox[{"Dispose", "[", "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"laser399", "=", 
+      RowBox[{
+       RowBox[{"LaserConnect", "[", "\"\<192.168.32.5::1998\>\"", "]"}], "[", 
+       RowBox[{"[", "1", "]"}], "]"}]}], ";"}], ")"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"LaserPCSet", "[", 
+     RowBox[{"dev_", ",", "value_"}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", "r", "}"}], ",", 
+      RowBox[{
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"NumberQ", "@", "value"}], ",", 
+         RowBox[{
+          RowBox[{"dev", "@", 
+           RowBox[{"Write", "[", 
+            RowBox[{"\"\<(param-set! 'laser1:dl:pc:voltage-set \>\"", "<>", 
+             RowBox[{"ToString", "[", "value", "]"}], "<>", "\"\<)\\n\>\""}], 
+            "]"}]}], ";", 
+          RowBox[{"r", "=", 
+           RowBox[{"dev", "@", 
+            RowBox[{"ReadString", "[", "]"}]}]}]}], ",", 
+         RowBox[{
+          RowBox[{"dev", "@", 
+           RowBox[{
+           "Write", "[", "\"\<(param-ref 'laser1:dl:pc:voltage-set)\\n\>\"", 
+            "]"}]}], ";", 
+          RowBox[{"r", "=", 
+           RowBox[{"ToExpression", "@", 
+            RowBox[{"StringTake", "[", 
+             RowBox[{
+              RowBox[{"dev", "@", 
+               RowBox[{"ReadString", "[", "]"}]}], ",", 
+              RowBox[{"{", 
+               RowBox[{"2", ",", 
+                RowBox[{"-", "3"}]}], "}"}]}], "]"}]}]}]}]}], "]"}], ";", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"!", 
+          RowBox[{"(", 
+           RowBox[{"NumberQ", "@", "value"}], ")"}]}], ",", "r"}], "]"}]}]}], 
+     "]"}]}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"LaserCCSet", "[", 
+     RowBox[{"dev_", ",", "value_"}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", "r", "}"}], ",", 
+      RowBox[{
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"NumberQ", "@", "value"}], ",", 
+         RowBox[{
+          RowBox[{"dev", "@", 
+           RowBox[{"Write", "[", 
+            RowBox[{"\"\<(param-set! 'laser1:dl:cc:current-set \>\"", "<>", 
+             RowBox[{"ToString", "[", "value", "]"}], "<>", "\"\<)\\n\>\""}], 
+            "]"}]}], ";", 
+          RowBox[{"r", "=", 
+           RowBox[{"dev", "@", 
+            RowBox[{"ReadString", "[", "]"}]}]}]}], ",", 
+         RowBox[{
+          RowBox[{"dev", "@", 
+           RowBox[{
+           "Write", "[", "\"\<(param-ref 'laser1:dl:cc:current-set)\\n\>\"", 
+            "]"}]}], ";", 
+          RowBox[{"r", "=", 
+           RowBox[{"StringTake", "[", 
+            RowBox[{
+             RowBox[{"dev", "@", 
+              RowBox[{"ReadString", "[", "]"}]}], ",", 
+             RowBox[{"{", 
+              RowBox[{"2", ",", 
+               RowBox[{"-", "3"}]}], "}"}]}], "]"}]}]}]}], "]"}], ";", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"!", 
+          RowBox[{"(", 
+           RowBox[{"NumberQ", "@", "value"}], ")"}]}], ",", 
+         RowBox[{"ToExpression", "@", "r"}]}], "]"}]}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"LaserPCAct", "[", "dev_", "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"dev", "@", 
+      RowBox[{
+      "Write", "[", "\"\<(param-ref 'laser1:dl:pc:voltage-act)\\n\>\"", 
+       "]"}]}], ";", 
+     RowBox[{"Pause", "[", "0.01", "]"}], ";", 
+     RowBox[{"ToExpression", "@", 
+      RowBox[{"StringTake", "[", 
+       RowBox[{
+        RowBox[{"dev", "@", "ReadString"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"2", ",", 
+          RowBox[{"-", "3"}]}], "}"}]}], "]"}]}]}], ")"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"LaserCCAct", "[", "dev_", "]"}], ":=", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"dev", "@", 
+       RowBox[{
+       "Write", "[", "\"\<(param-ref 'laser1:dl:cc:current-act)\\n\>\"", 
+        "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"Pause", "[", "0.01", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"ToExpression", "@", 
+       RowBox[{"StringTake", "[", 
+        RowBox[{
+         RowBox[{"dev", "@", 
+          RowBox[{"ReadString", "[", "]"}]}], ",", 
+         RowBox[{"{", 
+          RowBox[{"2", ",", 
+           RowBox[{"-", "3"}]}], "}"}]}], "]"}]}]}], ")"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"LaserScanAmp", "[", 
+    RowBox[{"dev_", ",", "value_"}], "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", "r", "}"}], ",", 
+     RowBox[{
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"NumberQ", "@", "value"}], ",", 
+        RowBox[{
+         RowBox[{"dev", "@", 
+          RowBox[{"Write", "[", 
+           RowBox[{"\"\<(param-set! 'laser1:scan:amplitude \>\"", "<>", 
+            RowBox[{"ToString", "[", "value", "]"}], "<>", "\"\<)\\n\>\""}], 
+           "]"}]}], ";", "\[IndentingNewLine]", 
+         RowBox[{"r", "=", 
+          RowBox[{"dev", "@", 
+           RowBox[{"ReadString", "[", "]"}]}]}]}], ",", 
+        RowBox[{
+         RowBox[{"dev", "@", 
+          RowBox[{
+          "Write", "[", "\"\<(param-ref 'laser1:scan:amplitude)\\n\>\"", 
+           "]"}]}], ";", 
+         RowBox[{"r", "=", 
+          RowBox[{"StringTake", "[", 
+           RowBox[{
+            RowBox[{"dev", "@", 
+             RowBox[{"ReadString", "[", "]"}]}], ",", 
+            RowBox[{"{", 
+             RowBox[{"2", ",", 
+              RowBox[{"-", "3"}]}], "}"}]}], "]"}]}]}]}], "]"}], ";", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"!", 
+         RowBox[{"(", 
+          RowBox[{"NumberQ", "@", "value"}], ")"}]}], ",", 
+        RowBox[{"ToExpression", "@", "r"}]}], "]"}]}]}], "]"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"LockEnable", "[", 
+     RowBox[{"dev_", ",", 
+      RowBox[{"symbol", ":", 
+       RowBox[{"(", 
+        RowBox[{"\"\<#t\>\"", "|", "\"\<#f\>\""}], ")"}]}]}], "]"}], ":=", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"dev", "@", 
+       RowBox[{"Write", "[", 
+        RowBox[{
+        "\"\<(param-set! 'laser1:dl:lock:lock-enabled \>\"", "<>", "symbol", 
+         "<>", "\"\<)\\n\>\""}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"Pause", "[", "0.01", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"dev", "@", 
+       RowBox[{"ReadString", "[", "]"}]}], ";"}], ")"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"ScanEnable", "[", 
+     RowBox[{"dev_", ",", 
+      RowBox[{"symbol", ":", 
+       RowBox[{"(", 
+        RowBox[{"\"\<#t\>\"", "|", "\"\<#f\>\""}], ")"}]}]}], "]"}], ":=", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"dev", "@", 
+       RowBox[{"Write", "[", 
+        RowBox[{
+        "\"\<(param-set! 'laser1:scan:enabled \>\"", "<>", "symbol", "<>", 
+         "\"\<)\\n\>\""}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"Pause", "[", "0.01", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"dev", "@", 
+       RowBox[{"ReadString", "[", "]"}]}], ";"}], ")"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"EmissionEnable", "[", 
+     RowBox[{"dev_", ",", 
+      RowBox[{"symbol", ":", 
+       RowBox[{"(", 
+        RowBox[{"\"\<#t\>\"", "|", "\"\<#f\>\""}], ")"}]}]}], "]"}], ":=", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"dev", "@", 
+       RowBox[{"Write", "[", 
+        RowBox[{
+        "\"\<(param-set! 'laser1:dl:cc:enabled \>\"", "<>", "symbol", "<>", 
+         "\"\<)\\n\>\""}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"Pause", "[", "0.01", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"dev", "@", 
+       RowBox[{"ReadString", "[", "]"}]}], ";"}], ")"}]}], ";"}], 
+  "\n"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ClearAll", "[", 
+   RowBox[{
+   "InitializeLaser370Par", ",", "InitializeLaser935Par", ",", 
+    "InitializeLaser399Par"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"InitializeLaser370Par", "[", "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"s7", "=", 
+      RowBox[{"LaserPCSet", "[", 
+       RowBox[{"laser370", ",", "\"\<?\>\""}], "]"}]}], ";", 
+     RowBox[{"step9", "=", "0.01"}], ";", 
+     RowBox[{"s8", "=", 
+      RowBox[{"LaserCCSet", "[", 
+       RowBox[{"laser370", ",", "\"\<?\>\""}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"step10", "=", "0.01"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"!", 
+        RowBox[{"NumberQ", "@", "GPSPar2"}]}], ",", 
+       RowBox[{
+        RowBox[{"GetPIDSetting", "[", 
+         RowBox[{"1045", ",", "2", ",", "GPSPar1", ",", "GPSPar2"}], "]"}], 
+        ";", "\[IndentingNewLine]", 
+        RowBox[{"k0", "=", 
+         RowBox[{"GPSPar2", "/", "1000"}]}], ";", 
+        RowBox[{"step0", "=", "0.1"}]}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"GetPIDCourseNum", "[", 
+      RowBox[{"2", ",", 
+       RowBox[{"reference1", "=", 
+        RowBox[{"MakeNETObject", "[", 
+         RowBox[{
+          RowBox[{"ConstantArray", "[", 
+           RowBox[{"0", ",", "10"}], "]"}], ",", "\"\<System.SByte[]\>\""}], 
+         "]"}]}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"reference1", "=", 
+      RowBox[{"ToExpression", "@", 
+       RowBox[{"FromCharacterCode", "@", 
+        RowBox[{"NETObjectToExpression", "@", "reference1"}]}]}]}], ";"}], 
+    ")"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"InitializeLaser935Par", "[", "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"s3", "=", 
+      RowBox[{"LaserPCSet", "[", 
+       RowBox[{"laser935", ",", "\"\<?\>\""}], "]"}]}], ";", 
+     RowBox[{"step5", "=", "0.01"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"s4", "=", 
+      RowBox[{"LaserCCSet", "[", 
+       RowBox[{"laser935", ",", "\"\<?\>\""}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"step6", "=", "0.01"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"GetPIDCourseNum", "[", 
+      RowBox[{"3", ",", 
+       RowBox[{"reference2", "=", 
+        RowBox[{"MakeNETObject", "[", 
+         RowBox[{
+          RowBox[{"ConstantArray", "[", 
+           RowBox[{"0", ",", "10"}], "]"}], ",", "\"\<System.SByte[]\>\""}], 
+         "]"}]}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"reference2", "=", 
+      RowBox[{"ToExpression", "@", 
+       RowBox[{"FromCharacterCode", "@", 
+        RowBox[{"NETObjectToExpression", "@", "reference2"}]}]}]}], ";"}], 
+    "\[IndentingNewLine]", ")"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"InitializeLaser399Par", "[", "]"}], ":=", 
+   RowBox[{"(", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"s5", "=", 
+      RowBox[{"LaserPCSet", "[", 
+       RowBox[{"laser399", ",", "\"\<?\>\""}], "]"}]}], ";", 
+     RowBox[{"step7", "=", "0.01"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"s6", "=", 
+      RowBox[{"LaserCCSet", "[", 
+       RowBox[{"laser399", ",", "\"\<?\>\""}], "]"}]}], ";", 
+     RowBox[{"step8", "=", "0.01"}], ";"}], ")"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.815803472842517*^9, 3.815803501840941*^9}, {
+   3.8158035428941174`*^9, 3.8158037499033346`*^9}, {3.8158038292929535`*^9, 
+   3.8158038343803434`*^9}, 3.815804899810145*^9, {3.815805489637453*^9, 
+   3.8158054901251483`*^9}, 3.8158056039416704`*^9, {3.8158057010738263`*^9, 
+   3.81580571748991*^9}, {3.8158057884869814`*^9, 3.815805793563401*^9}, {
+   3.8158059135962934`*^9, 3.8158060563962803`*^9}, {3.815806089546598*^9, 
+   3.815806094174218*^9}, {3.8158089797139273`*^9, 3.8158090102876687`*^9}, {
+   3.815809045458581*^9, 3.8158093418187695`*^9}, {3.8158093980373745`*^9, 
+   3.8158093995722685`*^9}, 3.8158096267833323`*^9, {3.815812464108997*^9, 
+   3.8158124922935977`*^9}, {3.815812625830365*^9, 3.815812651760997*^9}, {
+   3.8158127254654384`*^9, 3.8158127303753033`*^9}, {3.8158130562106404`*^9, 
+   3.815813059871846*^9}, {3.815813113725778*^9, 3.8158131396873264`*^9}, {
+   3.815875850134863*^9, 3.815875850273494*^9}, {3.815876034646265*^9, 
+   3.81587604314852*^9}, {3.8158760913435907`*^9, 3.8158760914582834`*^9}},
+ CellLabel->
+  "In[3376]:=",ExpressionUUID->"ba8c3f25-c2eb-4c48-97e2-4db22d1892d4"],
+
+Cell[CellGroupData[{
+
+Cell["Text:", "Subsection",
+ CellChangeTimes->{{3.815809692975258*^9, 
+  3.8158096942807655`*^9}},ExpressionUUID->"d00356f3-aad1-4f05-b271-\
+0c68b928e87b"],
+
+Cell[BoxData[
+ RowBox[{"Laser370Connect", "[", "]"}]], "Input",
+ CellChangeTimes->{{3.8158094160761185`*^9, 3.815809419127954*^9}},
+ CellLabel->
+  "In[2792]:=",ExpressionUUID->"8e5bec89-2b6e-4cd5-b4f5-3f70ee25b5a4"],
+
+Cell[BoxData[
+ RowBox[{"Laser399Connect", "[", "]"}]], "Input",
+ CellChangeTimes->{{3.815809534971055*^9, 3.8158095378951235`*^9}},
+ CellLabel->
+  "In[2828]:=",ExpressionUUID->"8c87a4a5-cb7b-4bb0-a1a8-4e776c111183"],
+
+Cell[BoxData[
+ RowBox[{"Laser935Connect", "[", "]"}]], "Input",
+ CellChangeTimes->{{3.815809539661398*^9, 3.8158095456433954`*^9}},
+ CellLabel->
+  "In[2843]:=",ExpressionUUID->"0234c3c3-00a4-4c18-a59c-1c4a168584e3"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"AbsoluteTiming", "@", 
+  RowBox[{"LaserSignalDisp", "[", "laser370", "]"}]}]], "Input",
+ CellChangeTimes->{{3.815813068684271*^9, 3.8158130784311967`*^9}},
+ CellLabel->
+  "In[4984]:=",ExpressionUUID->"373f6c8a-c7c8-43bb-ab47-ea96a2578f03"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"0.094009`", ",", 
+   GraphicsBox[{{}, {{}, {}, 
+      {RGBColor[0.368417, 0.506779, 0.709798], PointSize[
+        NCache[
+         Rational[1, 120], 0.008333333333333333]], AbsoluteThickness[1.6], 
+       LineBox[CompressedData["
+1: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
+eaTeNipeRj1a1c+GfIn7b4Q3gfsisf8BghuKRg==
+        "]]}}, {}, {}, {}, {}},
+    AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
+    Axes->{True, True},
+    AxesLabel->{None, None},
+    AxesOrigin->{51.6115, 0},
+    Background->GrayLevel[1],
+    DisplayFunction->Identity,
+    Frame->{{True, True}, {True, True}},
+    FrameLabel->{{
+       FormBox["\"Lock-in Out (V)\"", TraditionalForm], None}, {
+       FormBox["\"Piezo Voltage (V)\"", TraditionalForm], None}},
+    FrameTicks->{{Automatic, Automatic}, {Automatic, Automatic}},
+    GridLines->{Automatic, Automatic},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    ImagePadding->All,
+    LabelStyle->{
+      GrayLevel[0], Bold},
+    Method->{"CoordinatesToolOptions" -> {"DisplayFunction" -> ({
+          (Identity[#]& )[
+           Part[#, 1]], 
+          (Identity[#]& )[
+           Part[#, 2]]}& ), "CopiedValueFunction" -> ({
+          (Identity[#]& )[
+           Part[#, 1]], 
+          (Identity[#]& )[
+           Part[#, 2]]}& )}},
+    PlotRange->{{51.6105, 51.810500000000005`}, {-0.02, 0.02}},
+    PlotRangeClipping->True,
+    PlotRangePadding->{{0, 0}, {0, 0}},
+    Ticks->{Automatic, Automatic}]}], "}"}]], "Output",
+ CellChangeTimes->{{3.815813079179196*^9, 3.815813128758563*^9}, {
+  3.8160601729153194`*^9, 3.8160601771270533`*^9}, {3.816060220039257*^9, 
+  3.8160602293553333`*^9}},
+ CellLabel->
+  "Out[4984]=",ExpressionUUID->"5c5b7c96-b9d4-42a5-9315-b4070eaef089"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{775, 872},
+WindowMargins->{{230, Automatic}, {Automatic, 7}},
+FrontEndVersion->"11.3 for Microsoft Windows (64-bit) (2018\:5e743\:670828\
+\:65e5)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 152, 3, 67, "Section",ExpressionUUID->"7cefb275-1ea6-407b-b7db-1814cbca7d1b"],
+Cell[735, 27, 3070, 75, 285, "Code",ExpressionUUID->"64646098-d43a-4cf2-9a9f-915b797ee586"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3842, 107, 189, 3, 67, "Section",ExpressionUUID->"481bbe3f-aa3e-4fae-b0b7-33802d780f75"],
+Cell[4034, 112, 20275, 497, 1761, "Input",ExpressionUUID->"0beca6f1-e339-49ae-ad5c-0832f57854b7",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[24346, 614, 266, 4, 67, "Section",ExpressionUUID->"ace5649b-ac11-4266-9f83-64985575cda0"],
+Cell[24615, 620, 19047, 499, 1948, "Input",ExpressionUUID->"ba8c3f25-c2eb-4c48-97e2-4db22d1892d4",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[43687, 1123, 155, 3, 53, "Subsection",ExpressionUUID->"d00356f3-aad1-4f05-b271-0c68b928e87b"],
+Cell[43845, 1128, 215, 4, 28, "Input",ExpressionUUID->"8e5bec89-2b6e-4cd5-b4f5-3f70ee25b5a4"],
+Cell[44063, 1134, 215, 4, 28, "Input",ExpressionUUID->"8c87a4a5-cb7b-4bb0-a1a8-4e776c111183"],
+Cell[44281, 1140, 215, 4, 28, "Input",ExpressionUUID->"0234c3c3-00a4-4c18-a59c-1c4a168584e3"],
+Cell[CellGroupData[{
+Cell[44521, 1148, 263, 5, 28, "Input",ExpressionUUID->"373f6c8a-c7c8-43bb-ab47-ea96a2578f03"],
+Cell[44787, 1155, 10816, 193, 136, "Output",ExpressionUUID->"5c5b7c96-b9d4-42a5-9315-b4070eaef089"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+

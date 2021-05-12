@@ -3,7 +3,15 @@ import time
 from artiq.experiment import *
 import matplotlib.pyplot as plt
 
-_RED_SIDEBAND = 238.103
+_RED_SIDEBANDS = [238.140,238.346,238.431]
+_RED_AMPS = [0.595,0.595,0.595]
+_RED_SIDEBAND = _RED_SIDEBANDS[0]
+
+_BLUE_SIDEBANDS = [241.485,241.576,241.783]
+_BLUE_AMPS = [0.6,0.601,0.6]
+
+_CARRIER = 239.955
+_CARRIER_AMP = 0.600
 
 class SideBandCooling(EnvExperiment):
     def build(self):
@@ -55,12 +63,19 @@ class SideBandCooling(EnvExperiment):
         self.microwave.sw.off()
         self.pumping.sw.off()
 
+        _RED_SIDEBANDS = [238.140,238.346,238.431]
+        _RED_AMPS = [0.595,0.595,0.595]
+        _RED_SIDEBAND = _RED_SIDEBANDS[0]
+        _CARRIER = 239.955
+
         photon_count = 0
         photon_number = 0
         count = 0
         N = 100
+
         all_count = [0]*N
         all_time = [0]*N
+
         with sequential:
 
             # 0.0 doppler cooling
@@ -78,35 +93,38 @@ class SideBandCooling(EnvExperiment):
             # sideband cooling
             # 1. turn off 935 sideband and turn on 435 for
             #    some cooling time
-            """
-            for i in range(1000):
-                with parallel:
+            for i in range(3):
+                self.dds1_435.set(_RED_SIDEBANDS[i]*MHz)
+                delay(10*us)
+                for i in range(20):
+                    with parallel:
 
-                    # 1.1 turn off 935 sideband
-                    self.ttl_935_EOM.on()
+                        # 1.1 turn off 935 sideband
+                        self.ttl_935_EOM.on()
 
-                    # 1.1 (in the same time) turn on 435
-                    # TODO:DDS profile 的切换
-                    # self.switch_to_red()
-                    self.ttl_435.off()
-                delay(50*us)
+                        # 1.1 (in the same time) turn on 435
+                        # TODO:DDS profile 的切换
+                        # self.switch_to_red()
+                        self.ttl_435.off()
+                    delay(50*us)
 
-                self.ttl_435.on()
-                # 1.2 Pumping Back
-                self.ttl_935_EOM.off()
+                    self.ttl_435.on()
+                    # 1.2 Pumping Back
+                    self.ttl_935_EOM.off()
 
-                self.pumping.sw.on()
-                delay(20*us)
-                self.pumping.sw.off()
-            """
+                    self.pumping.sw.on()
+                    delay(40*us)
+                    self.pumping.sw.off()
             # delay(*us)
             # 3 cooling result detection
             # Mainly detect the red sideband
             
+            self.dds1_435.set(_CARRIER*MHz)
+            delay(10*us)
             for i in range(N):
                 scan_time = 2*i
                 count = 0
-                for j in range(50):
+                for j in range(200):
                     with sequential:
                         
                         """
@@ -141,7 +159,7 @@ class SideBandCooling(EnvExperiment):
                         if photon_number > 1:
                             count = count + 1
                     self.ttl_935_EOM.off()
-                all_count[i] = count*2
+                all_count[i] = count
                 all_time[i] = scan_time
                 #self.mutate_dataset("SBCData", i, count)
             self.saveData(all_time, all_count)
