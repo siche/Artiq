@@ -169,8 +169,8 @@ class KasliTester(EnvExperiment):
         self.pre_set()
 
         pmt_on()
-        init_fre = 234.6
-        stop_fre = 234.70
+        init_fre = 234.0
+        stop_fre = 234.3
         DDS_AMP = 0.6
         lock_point = 871.034640
         scan_step = 0.001

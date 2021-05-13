@@ -75,18 +75,19 @@ class SideBandCooling(EnvExperiment):
 
                 for i in range(5):
                     with parallel:
-                        self.ttl_935_AOM.on()
-                        self.ttl_935_EOM.on()
+
+                        # self.ttl_935_AOM.on()
+                        # self.ttl_935_EOM.on()
                         self.ttl_435.off()
 
-                    delay(500*ms)
+                    delay(30*us)
                     self.ttl_435.on()
                     delay(1*us)
 
-                        # 1.2 Pumping Back
-                    self.ttl_935_AOM.off()
-                    self.ttl_935_EOM.off()
-                    delay(100*us)
+                    # 1.2 Pumping Back
+                    # self.ttl_935_AOM.off()
+                    # self.ttl_935_EOM.off()
+                    delay(50*us)
 
                     self.pumping.sw.on()
                     delay(40*us)
@@ -100,7 +101,7 @@ class SideBandCooling(EnvExperiment):
             # turn off 935
             # turn off 935 sideband
             self.dds1_435.set(_CARRIER*MHz)
-            delay(100*us)
+            delay(10*us)
     
             self.ttl_935_EOM.on()
             self.ttl_935_AOM.on()
