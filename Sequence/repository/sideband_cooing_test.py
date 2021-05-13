@@ -4,8 +4,8 @@ from artiq.experiment import *
 import matplotlib.pyplot as plt
 from dds2 import *
 
-_RED_SIDEBANDS = [238.140, 238.346, 238.431]
-_CARRIER = 239.9458
+_RED_SIDEBANDS = [234.412,234.735]
+_CARRIER = 236.267
 AMP = 0.600
 
 """
@@ -69,17 +69,17 @@ class SideBandCooling(EnvExperiment):
             delay(1*us)
 
             # sideband cooling
-            for i in range(3):
+            for i in range(2):
                 self.dds1_435.set(_RED_SIDEBANDS[i]*MHz)
                 delay(20*us)
 
-                for i in range(10):
+                for i in range(5):
                     with parallel:
                         self.ttl_935_AOM.on()
                         self.ttl_935_EOM.on()
                         self.ttl_435.off()
 
-                    delay(50*us)
+                    delay(500*ms)
                     self.ttl_435.on()
                     delay(1*us)
 
@@ -246,7 +246,7 @@ class SideBandCooling(EnvExperiment):
         time.sleep(0.1)
         t1 = time.time()
         N = 100
-        step = 1
+        step = 0.5
         rabi_time = 0.0
         all_count = [None]*N
         xdata = np.arange(N)

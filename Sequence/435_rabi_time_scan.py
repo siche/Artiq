@@ -151,13 +151,13 @@ class KasliTester(EnvExperiment):
         # AOM_435 Red Phonon Sideband 239.0195
         # AOM_435 = 239.965-22.52968/2
         t1 = time.time()
-        AOM_435 = 236.254
+        AOM_435 = 234.412
         DDS_AMP = 0.6
         DDS.set_frequency(frequency=AOM_435, amplitude=DDS_AMP)
         lock_point = 871.034640
-        init_value = 2.5
-        scan_step = 0.1
-        N =15
+        init_value = 0.0
+        scan_step = 4
+        N = 50
         run_times = 200
         
 

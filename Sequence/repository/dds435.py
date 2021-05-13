@@ -9,7 +9,7 @@ if os.name == "nt":
     import msvcrt
 
 
-fre = 239.9458
+fre = 236.267
 
 class KasliTester(EnvExperiment):
     def build(self):
