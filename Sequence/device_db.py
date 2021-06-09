@@ -43,7 +43,7 @@ for i in range(8):
     device_db["ttl" + str(i)] = {
         "type": "local",
         "module": "artiq.coredevice.ttl",
-        "class": "TTLInOut" if i < 4 else "TTLOut",
+        "class": "TTLInOut" if i < 2 else "TTLOut",
         "arguments": {"channel": i},
     }
 
@@ -152,9 +152,6 @@ for i in range(3):
     device_db["ttl_zotino{}_ldac".format(i)] = {
         "type": "local",
         "module": "artiq.coredevice.ttl",
-
-
-        
         "class": "TTLOut",
         "arguments": {"channel": 18+3*i}
     }

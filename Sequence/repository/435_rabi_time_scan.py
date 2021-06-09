@@ -1,16 +1,26 @@
 import numpy as np
-import time
+import time,csv
 from artiq.experiment import *
 import matplotlib.pyplot as plt
 from dds2 import *
 
-_CARRIER = 239.978
-AMP = 0.600
+_CARRIER = 241.893
+AMP = 0.8
 
 """
 DDS = dds_controller("COM5")    
 DDS.set_frequency(frequency=_CARRIER, amplitude=AMP)
 """
+
+def saveData(data):
+    # xdata = np.arange(0,200,1)
+        # Save the data as csv file
+    time_now = time.strftime("%Y-%m-%d-%H-%M")
+    csv_name = 'data\\'+"RabiTime"+"-"+time_now+".csv"
+
+    with open(csv_name,"w",newline='') as t:
+        file = csv.writer(t)
+        file.writerows(data)
 class SideBandCooling(EnvExperiment):
     def build(self):
 
@@ -38,8 +48,8 @@ class SideBandCooling(EnvExperiment):
         self.dds1_435.set(_CARRIER*MHz)
         self.pumping.set(260*MHz)
 
-        self.dds1_435.set_att(20.)
-        self.cooling.set_att(10.)
+        self.dds1_435.set_att(18.)
+        self.cooling.set_att(18.)
         self.pumping.set_att(18.)
 
         # define dataset
@@ -215,11 +225,12 @@ class SideBandCooling(EnvExperiment):
     def run(self):
         
         t1 = time.time()
-        N = 50
+        N = 400
         rabi_time = 0.0
-        step = 0.5
+        step = 1
+        data = np.zeros((N,2))
 
-        xdata = np.arange(N)
+        xdata = step*np.arange(N)
         ydata = [None]*N
         plt.ion()
         fig,=plt.plot(xdata,ydata)
@@ -229,6 +240,8 @@ class SideBandCooling(EnvExperiment):
             rabi_time = rabi_time + step
             count = self.SingleRun(rabi_time=rabi_time,run_times=200)
             ydata[i] = count
+            data[i,0] = rabi_time
+            data[i,1] = count
             
             ax.relim()
             ax.autoscale_view(True, True, True)
@@ -240,4 +253,13 @@ class SideBandCooling(EnvExperiment):
         t2 = time.time()
         print("running time cost:%s" % (t2-t1))
         plt.draw()
-        plt.pause(100)
+        
+        time_now = time.strftime("%Y-%m-%d-%H-%M")
+        csv_name = 'data\\'+"RabiTime"+"-"+time_now+".csv"
+
+        with open(csv_name,"w",newline='') as t:
+            file = csv.writer(t)
+            file.writerows(data)
+
+        
+

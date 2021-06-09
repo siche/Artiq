@@ -11,7 +11,6 @@ from wlm_web import wlm_web
 
 from dds2 import *
 from image_processing import has_ion
-from ttl_client import shutter
 from CurrentWebClient import current_web
 
 wm = wlm_web()
@@ -19,18 +18,10 @@ wl_871 = 0.0
 curr = current_web()
 DDS = dds_controller('COM5')
 
-shutter_370 = shutter(com=0)
-flip_mirror = shutter(com=1)
-shutter_399 = shutter(com=2)
 
-
-ccd_on = flip_mirror.on
-pmt_on = flip_mirror.off
-
-
-def is_871_locked(lock_point=871.034616):
+def is_871_locked(lock_point=871.034636):
     global wl_871
-    wl_871 = wm.get_channel_data(0)
+    wl_871 = wm.get_channel_data(7)
     is_locked = abs(wl_871-lock_point) < 0.000005
     return is_locked
 
@@ -54,95 +45,122 @@ class KasliTester(EnvExperiment):
     def build(self):
         dds_channel = ['urukul0_ch'+str(i) for i in range(4)]
         self.setattr_device('core')
-        self.detection = self.get_device(dds_channel[0])
-        self.cooling = self.get_device(dds_channel[1])
-        self.pumping = self.get_device(dds_channel[3])
+
+        # DDS port
+        self.dds935 = self.get_device(dds_channel[0])
+        self.light = self.get_device(dds_channel[1])
+        self.dds435 = self.get_device(dds_channel[2])
+
+        # Rf switch
         self.pmt = self.get_device('ttl0')
-        self.ttl_935_AOM = self.get_device('ttl4')
-        self.ttl_935_EOM = self.get_device('ttl7')
-        self.ttl_435 = self.get_device('ttl6')
-
-
-    @kernel
-    def pre_set(self):
-        self.core.break_realtime()
-        self.cooling.init()
-        self.detection.init()
-        self.pumping.init()
-
-        self.cooling.set(250*MHz)
-        self.detection.set(260*MHz)
-        self.pumping.set(260*MHz)
-
-        self.detection.set_att(20.)
-        self.cooling.set_att(10.)
-        self.pumping.set_att(18.)
+        self.coolingSwitch = self.get_device('ttl4')
+        self.repumpingSwitch = self.get_device('ttl5')
+        self.pumpingSwitch = self.get_device('ttl6')
+        self.rabiSwitch = self.get_device('ttl7')
 
     @kernel
     def run_sequence(self, rabi_time, run_times=100):
+        # t2 is the time of microwave
+
         # initialize dds
         self.core.break_realtime()
-        self.pumping.sw.off()
 
+        self.light.cpld.set_profile(0)
+        delay(2*us)
+        self.light.sw.on()
+        delay(2*us)
+        self.dds935.sw.on()
+        delay(2*us)
+
+        
+        with parallel:
+            self.coolingSwitch.on()
+            self.pumpingSwitch.off()
+            self.repumpingSwitch.on()
+        
         photon_count = 0
         photon_number = 0
         count = 0
+
         for i in range(run_times):
             with sequential:
 
                 # cooling for 1.5 ms
-                self.cooling.sw.on()
-                delay(1*ms)
-                self.cooling.sw.off()
-                delay(1*us)
+                self.light.sw.on()
+                delay(2.0*ms)
 
                 # pumping
-                self.pumping.sw.on()
-                delay(50*us)
-                self.pumping.sw.off()
-                delay(1*us)
+                self.light.cpld.set_profile(1)
+                delay(2*us)
 
-                # turn on 435 and turn off 935 sideband
-                # with parallel:
-                # turn off 935 sideband
-                
-                # turn off 935
-                # turn off 935 sideband
-                self.ttl_935_EOM.on()
-                self.ttl_935_AOM.on()
-                delay(1*us)
-
-                # turn on 435
-                self.ttl_435.off()
-                delay(rabi_time*us)
-                self.ttl_435.on()
-                delay(1*us)
-
-                # microwave on
-                """
-                self.microwave.sw.on()
-                delay(26.1778*us)
-                self.microwave.sw.off()
-                """
-                # turn on 935 without sideband
-                self.ttl_935_AOM.off()
-
-
-                # detection on
+            
                 with parallel:
-                    # self.detection.sw.on()
-                    # 利用cooling  光作为detection
-                    self.pmt.gate_rising(300*us)
-                    self.cooling.sw.on()
+                    self.coolingSwitch.off()
+                    self.pumpingSwitch.on()
+                
+                delay(5*us)
+                
+                # turn off 370
+                # turn off pumping EOM
+                # turn off 935
+                # turn off 935 EOM
+                
+                with parallel:
+                    self.light.sw.off()
+                    self.pumpingSwitch.off()
+                    self.dds935.sw.off()
+                    self.repumpingSwitch.off()
+
+                delay(2*us)   
+        
+                # turn on 435
+                self.rabiSwitch.on()
+                delay(rabi_time*us)
+                self.rabiSwitch.off()
+                
+
+                # detection
+                # turn on 370
+                # turn cooling EOM
+                # turn on 935
+                # turn off 935 EOM
+
+                with parallel:
+                    self.light.sw.on()
+                    self.dds935.sw.on()
+                    self.coolingSwitch.on()
+
+                    self.pmt.gate_rising(400*us)
                     photon_number = self.pmt.count(now_mu())
                     photon_count = photon_count + photon_number
                     if photon_number > 1:
                         count = count + 1
+                
+                """
+                with parallel:
+                    # self.detection.sw.on()
+                    # 利用cooling  光作为detection
+                    self.coolingSwitch.on()
+                    self.dds935.sw.on()
+                    self.light.sw.on()
+                    
+                    self.pmt.gate_rising(400*us)
+                    photon_number = self.pmt.count(now_mu())
+                    photon_count = photon_count + photon_number
+                    if photon_number > 1:
+                        count = count + 1
+                """
 
-                # turn on 935 sideband
-                self.ttl_935_EOM.off()
-                self.cooling.sw.on()
-
+                # recover
+                # Switch to profile 0 (cooling)
+                # turn on cooling EOM
+                # turn on 935 EOM 
+                
+                with parallel:
+                    self.light.cpld.set_profile(0)
+                    self.coolingSwitch.on()
+                    self.repumpingSwitch.on()
+                
         return (100*count/run_times, photon_count)
 
     def run(self):
@@ -151,19 +169,15 @@ class KasliTester(EnvExperiment):
         # AOM_435 Red Phonon Sideband 239.0195
         # AOM_435 = 239.965-22.52968/2
         t1 = time.time()
-        AOM_435 = 234.412
-        DDS_AMP = 0.6
+        AOM_435 = 241.909
+        DDS_AMP = 0.8
         DDS.set_frequency(frequency=AOM_435, amplitude=DDS_AMP)
-        lock_point = 871.034640
+        lock_point = 871.034636
         init_value = 0.0
-        scan_step = 4
+        scan_step = 3
         N = 50
         run_times = 200
         
-
-        self.pre_set()
-        pmt_on()
-      
         file_name = 'data\\Rabi_AOM_Time_Scan'+str(init_value)+'-'+\
                      str(float(init_value+N*scan_step))+'.csv'
         file = open(file_name, 'w+')

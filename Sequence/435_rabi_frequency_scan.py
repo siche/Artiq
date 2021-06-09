@@ -11,25 +11,19 @@ import matplotlib.pyplot as plt
 from wlm_web import wlm_web
 
 from image_processing import has_ion
-from ttl_client import shutter
 from SMB100B import SMB100B
 
 wm = wlm_web()
 wl_871 = 0.0
 
-shutter_370 = shutter(com=0)
-flip_mirror = shutter(com=1)
-shutter_399 = shutter(com=2)
 
-ccd_on = flip_mirror.on
-pmt_on = flip_mirror.off
 DDS = dds_controller('COM5')
 # dds_435 = DDS_AD9910()
 
 
-def is_871_locked(lock_point=871.034616):
+def is_871_locked(lock_point=871.034636):
     global wl_871
-    wl_871 = wm.get_channel_data(0)
+    wl_871 = wm.get_channel_data(7)
     is_locked = abs(wl_871-lock_point) < 0.000005
     return is_locked
 
@@ -68,32 +62,18 @@ class KasliTester(EnvExperiment):
     def build(self):
         dds_channel = ['urukul0_ch'+str(i) for i in range(4)]
         self.setattr_device('core')
-        self.detection = self.get_device(dds_channel[0])
-        self.cooling = self.get_device(dds_channel[1])
-        self.microwave = self.get_device(dds_channel[2])
-        self.pumping = self.get_device(dds_channel[3])
+
+        # DDS port
+        self.dds935 = self.get_device(dds_channel[0])
+        self.light = self.get_device(dds_channel[1])
+        self.dds435 = self.get_device(dds_channel[2])
+
+        # Rf switch
         self.pmt = self.get_device('ttl0')
-        self.ttl_935_AOM = self.get_device('ttl4')
-        self.ttl_935_EOM = self.get_device('ttl7')
-        self.ttl_435 = self.get_device('ttl6')
-
-    @kernel
-    def pre_set(self):
-        self.core.break_realtime()
-        self.cooling.init()
-        self.detection.init()
-        self.microwave.init()
-        self.pumping.init()
-
-        self.cooling.set(250*MHz)
-        self.detection.set(260*MHz)
-        self.microwave.set(400.*MHz)
-        self.pumping.set(260*MHz)
-
-        self.detection.set_att(20.)
-        self.cooling.set_att(10.)
-        self.microwave.set_att(0.)
-        self.pumping.set_att(18.)
+        self.coolingSwitch = self.get_device('ttl4')
+        self.repumpingSwitch = self.get_device('ttl5')
+        self.pumpingSwitch = self.get_device('ttl6')
+        self.rabiSwitch = self.get_device('ttl7')
 
     @kernel
     def run_sequence(self, rabi_time, run_times = 100):
@@ -101,80 +81,113 @@ class KasliTester(EnvExperiment):
 
         # initialize dds
         self.core.break_realtime()
-        self.microwave.sw.off()
-        self.pumping.sw.off()
 
+        self.light.cpld.set_profile(0)
+        delay(2*us)
+        self.light.sw.on()
+        delay(2*us)
+        self.dds935.sw.on()
+        delay(2*us)
+
+        
+        with parallel:
+            self.coolingSwitch.on()
+            self.pumpingSwitch.off()
+            self.repumpingSwitch.on()
+        
         photon_count = 0
         photon_number = 0
         count = 0
+
         for i in range(run_times):
             with sequential:
 
                 # cooling for 1.5 ms
-                self.cooling.sw.on()
-                delay(1*ms)
-                self.cooling.sw.off()
-                delay(1*us)
+                self.light.sw.on()
+                delay(2.0*ms)
 
                 # pumping
-                self.pumping.sw.on()
-                delay(25*us)
-                self.pumping.sw.off()
-                delay(1*us)
+                self.light.cpld.set_profile(1)
+                delay(2*us)
 
-                # turn on 435 and turn off 935 sideband
-                # with parallel:
-                # turn off 935 sideband
-                
-                # turn off 935
-                # turn off 935 sideband
-                self.ttl_935_EOM.on()
-                self.ttl_935_AOM.on()
-                delay(1*us)
-
-                # turn on 435
-                self.ttl_435.off()
-                delay(rabi_time*us)
-                self.ttl_435.on()
-                delay(1*us)
-
-                # microwave on
-                """
-                self.microwave.sw.on()
-                delay(26.1778*us)
-                self.microwave.sw.off()
-                """
-                # turn on 935 without sideband
-                self.ttl_935_AOM.off()
-
-
-                # detection on
+            
                 with parallel:
-                    # self.detection.sw.on()
-                    # 利用cooling  光作为detection
+                    self.coolingSwitch.off()
+                    self.pumpingSwitch.on()
+                
+                delay(5*us)
+                
+                # turn off 370
+                # turn off pumping EOM
+                # turn off 935
+                # turn off 935 EOM
+                
+                with parallel:
+                    self.light.sw.off()
+                    self.pumpingSwitch.off()
+                    self.dds935.sw.off()
+                    self.repumpingSwitch.off()
+
+                delay(2*us)   
+        
+                # turn on 435
+                self.rabiSwitch.on()
+                delay(rabi_time*us)
+                self.rabiSwitch.off()
+                
+
+                # detection
+                # turn on 370
+                # turn cooling EOM
+                # turn on 935
+                # turn off 935 EOM
+
+                with parallel:
+                    self.light.sw.on()
+                    self.dds935.sw.on()
+                    self.coolingSwitch.on()
+
                     self.pmt.gate_rising(400*us)
-                    self.cooling.sw.on()
                     photon_number = self.pmt.count(now_mu())
                     photon_count = photon_count + photon_number
                     if photon_number > 1:
                         count = count + 1
+                
+                """
+                with parallel:
+                    # self.detection.sw.on()
+                    # 利用cooling  光作为detection
+                    self.coolingSwitch.on()
+                    self.dds935.sw.on()
+                    self.light.sw.on()
+                    
+                    self.pmt.gate_rising(400*us)
+                    photon_number = self.pmt.count(now_mu())
+                    photon_count = photon_count + photon_number
+                    if photon_number > 1:
+                        count = count + 1
+                """
 
-                # turn on 935 sideband
-                self.ttl_935_EOM.off()
-                self.cooling.sw.on()
-
+                # recover
+                # Switch to profile 0 (cooling)
+                # turn on cooling EOM
+                # turn on 935 EOM 
+                
+                with parallel:
+                    self.light.cpld.set_profile(0)
+                    self.coolingSwitch.on()
+                    self.repumpingSwitch.on()
+                
         return (100*count/run_times, photon_count)
 
     def run(self):
-        self.pre_set()
 
-        pmt_on()
-        init_fre = 230.0
-        stop_fre = 246.0
-        DDS_AMP = 0.6
+        init_fre = 241.6
+        stop_fre = 242.0
+        DDS_AMP = 0.8
         lock_point = 871.034636
-        scan_step = 0.0025
-        rabi_time = 100
+        scan_step = 0.001
+        rabi_time = 100.0
 
         N =int((stop_fre-init_fre)/scan_step)
         run_times = 200

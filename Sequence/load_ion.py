@@ -1,7 +1,6 @@
 
 # auto load ion
 from image_processing import has_ion
-from ttl_client import shutter
 from CurrentWebClient import current_web
 import time
 import signal,sys
@@ -17,9 +16,6 @@ def register_data(t1):
 class IonLoader(object):
     def __init__(self):
         super(IonLoader, self).__init__()
-        self.shutter_370 = shutter(com=0)
-        self.flip_mirror = shutter(com=1)
-        self.shutter_399 = shutter(com=2)
         self.curr = current_web()
         self.isLoading = True
 
@@ -31,17 +27,11 @@ class IonLoader(object):
 
     def load_ion(self):
         self.curr.on()
-        self.flip_mirror.off()
-        time.sleep(0.3)
-        self.flip_mirror.on()
-        time.sleep(1)
 
         t1 = time.time()
         costed_time = 0
 
         while (not has_ion() and costed_time < 1200 and self.isLoading):
-            self.shutter_370.on()
-            self.shutter_399.on()
             t2 = time.time()
             costed_time = t2-t1
             print('\rION? %s LAODING %.1F' % (has_ion(), costed_time),end = ' ')
@@ -53,10 +43,7 @@ class IonLoader(object):
             return False
 
         if has_ion():    
-            self.flip_mirror.on()
             self.curr.off()
-            self.shutter_370.off()
-            self.shutter_399.off()
             self.curr.beep(3)
             register_data(costed_time)
             return True
@@ -64,7 +51,6 @@ class IonLoader(object):
             return False
 
     def reload_ion(self):
-        self.shutter_370.on()
         wait_time = 5
         costed_time = 0
 
@@ -74,17 +60,9 @@ class IonLoader(object):
 
         if has_ion():
             self.curr.off()
-            self.shutter_370.off()
-            self.shutter_399.off()
             self.curr.beep(3)
         else:
             self.load_ion()
-
-    def protect(self, is_on=True):
-        if is_on:
-            self.shutter_370.on()
-        else:
-            self.shutter_370.off()
 
     def exit(self, signum, frame):
         self.curr.off()

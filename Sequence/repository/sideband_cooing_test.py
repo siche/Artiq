@@ -1,12 +1,15 @@
 import numpy as np
-import time
+import time,csv
 from artiq.experiment import *
 import matplotlib.pyplot as plt
 from dds2 import *
 
-_RED_SIDEBANDS = [234.412,234.735]
-_CARRIER = 236.267
-AMP = 0.600
+_RED_SIDEBANDS = [240.377]
+_RED_AMPS = [0.80]
+_RED_NUMBER = len(_RED_SIDEBANDS)
+
+_CARRIER = 241.893
+_CARRIER_AMP = 0.800
 
 """
 DDS = dds_controller("COM5")
@@ -37,13 +40,25 @@ class SideBandCooling(EnvExperiment):
         self.dds1_435.init()
         self.pumping.init()
 
-        self.cooling.set(250*MHz)
-        self.dds1_435.set(_CARRIER*MHz)
+        self.cooling.set(250*MHz, profile=0)
+        self.cooling.set(260*MHz, profile=1)
+
         self.pumping.set(260*MHz)
 
-        self.dds1_435.set_att(20.)
+        self.dds1_435.set_att(18.)
         self.cooling.set_att(10.)
         self.pumping.set_att(18.)
+
+        self.dds1_435.set(_CARRIER*MHz, amplitude=_CARRIER_AMP, profile=0)
+
+        for i in range(_RED_NUMBER):
+            fre = _RED_SIDEBANDS[i]
+            amp = _RED_AMPS[i]
+
+            self.dds1_435.set(fre*MHz, amplitude=amp, profile=i+1)
+
+        self.dds1_435.cpld.set_profile(0)
+        self.cooling.cpld.set_profile(0)
 
         # define dataset
         # self.set_dataset("SBCData", np.full(100, 0), broadcast=True)
@@ -56,12 +71,13 @@ class SideBandCooling(EnvExperiment):
         photon_number = 0
 
         for i in range(run_times):
-            # with sequential:
-            self.cooling.sw.on()
-            delay(1*ms)
-            self.cooling.sw.off()
-            delay(1*us)
-            # cooling for 1.5 ms
+            # Doppler cooling
+            with sequential:
+                self.cooling.sw.on()
+                delay(1*ms)
+                self.cooling.sw.off()
+                delay(1*us)
+           
             # pumping
             self.pumping.sw.on()
             delay(50*us)
@@ -69,26 +85,28 @@ class SideBandCooling(EnvExperiment):
             delay(1*us)
 
             # sideband cooling
-            for i in range(2):
-                self.dds1_435.set(_RED_SIDEBANDS[i]*MHz)
-                delay(20*us)
+            
+            for i in range(1):
+                self.dds1_435.cpld.set_profile(i+1)
+                """
+                self.pumping.sw.on()
+                delay(50*us)
+                self.pumping.sw.off()
+                delay(1*us)
+                # delay(20*us)
+                """
 
                 for i in range(5):
-                    with parallel:
-
-                        # self.ttl_935_AOM.on()
-                        # self.ttl_935_EOM.on()
-                        self.ttl_435.off()
-
-                    delay(30*us)
+                    
+                    delta_t = 60+4*i
+                    self.ttl_435.off()
+                    delay(delta_t*us)
                     self.ttl_435.on()
                     delay(1*us)
 
                     # 1.2 Pumping Back
                     # self.ttl_935_AOM.off()
                     # self.ttl_935_EOM.off()
-                    delay(50*us)
-
                     self.pumping.sw.on()
                     delay(40*us)
                     self.pumping.sw.off()
@@ -100,9 +118,7 @@ class SideBandCooling(EnvExperiment):
 
             # turn off 935
             # turn off 935 sideband
-            self.dds1_435.set(_CARRIER*MHz)
-            delay(10*us)
-    
+            self.dds1_435.cpld.set_profile(0)
             self.ttl_935_EOM.on()
             self.ttl_935_AOM.on()
             delay(1*us)
@@ -116,7 +132,7 @@ class SideBandCooling(EnvExperiment):
             # detection
             # turn on 935 without sideband
             self.ttl_935_AOM.off()
-
+            self.cooling.cpld.set_profile(1)
             # detection on
             with parallel:
                 # self.detection.sw.on()
@@ -129,8 +145,10 @@ class SideBandCooling(EnvExperiment):
                     count = count + 1
 
             # turn on 935 sideband
+            self.cooling.cpld.set_profile(0)
             self.ttl_935_EOM.off()
             self.cooling.sw.on()
+            
         return(count)
 
     @kernel
@@ -244,13 +262,14 @@ class SideBandCooling(EnvExperiment):
     def run(self):
         
         self.pre_set()
-        time.sleep(0.1)
+        # time.sleep(0.1)
         t1 = time.time()
-        N = 100
-        step = 0.5
+        N = 200
+        step = 2.0
         rabi_time = 0.0
         all_count = [None]*N
         xdata = np.arange(N)
+        data = np.zeros((N,2))
 
         plt.ion()
         fig, = plt.plot(xdata,all_count)
@@ -260,13 +279,29 @@ class SideBandCooling(EnvExperiment):
             rabi_time = rabi_time+step
             count = self.SingleRun(rabi_time=rabi_time)
             all_count[i] = count
+            data[i,0] = rabi_time
+            data[i,1] = count
+
             print("Evevnt Count:%d" % count)
             ax.relim()
             ax.autoscale_view(True, True, True)
             fig.set_ydata(all_count)
             plt.draw()
             plt.pause(1e-17)
+
+
         t2 = time.time()
         print("running time cost:%s" % (t2-t1))
-        plt.show()
+        plt.draw()
+
+        time_now = time.strftime("%Y-%m-%d-%H-%M")
+        csv_name = 'data\\'+"SidebanCooling"+"-"+time_now+".csv"
+
+        with open(csv_name,"w",newline='') as t:
+            file = csv.writer(t)
+            file.writerows(data)
+
         # plot figure
+        plt.figure(2)
+        plt.plot(data[0,:], data[1,:])
+        plt.show()

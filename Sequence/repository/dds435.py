@@ -9,7 +9,7 @@ if os.name == "nt":
     import msvcrt
 
 
-fre = 236.267
+fre = 241.893
 
 class KasliTester(EnvExperiment):
     def build(self):
@@ -28,7 +28,7 @@ class KasliTester(EnvExperiment):
         
 
     def run(self):
-        print('set cooling frequecny %d' % fre)
+        print('set cooling frequecny %.3f' % fre)
         self.set_dds()
         """
         for i in range(4):

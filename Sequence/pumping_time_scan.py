@@ -9,44 +9,27 @@ import matplotlib.pyplot as plt
 if os.name == "nt":
     import msvcrt
 
-
 class KasliTester(EnvExperiment):
     def build(self):
         dds_channel = ['urukul0_ch'+str(i) for i in range(4)]
         self.setattr_device('core')
-        self.detection = self.get_device(dds_channel[0])
-        self.cooling = self.get_device(dds_channel[1])
-        self.microwave = self.get_device(dds_channel[2])
-        self.pumping = self.get_device(dds_channel[3])
+
+        # DDS port
+        self.dds935 = self.get_device(dds_channel[0])
+        self.light = self.get_device(dds_channel[1])
+        self.dds435 = self.get_device(dds_channel[2])
+
+        # Rf switch
         self.pmt = self.get_device('ttl0')
-        self.ttl_935 = self.get_device('ttl7')
-        self.ttl_pumping = self.get_device('ttl4')
-    
-    @kernel
-    def pre_set(self):
-        # initialize dds
-        self.core.break_realtime()
-        self.cooling.init()
-        self.detection.init()
-        self.microwave.init()
-        self.pumping.init()
-
-        self.cooling.set(250*MHz)
-        self.detection.set(260*MHz)
-        self.microwave.set(400.*MHz)
-        self.pumping.set(260*MHz)
-
-        self.detection.set_att(19.0) 
-        self.cooling.set_att(19.)
-        self.pumping.set_att(19.)
-        self.microwave.set_att(0.)
+        self.coolingSwitch = self.get_device('ttl4')
+        self.repumpingSwitch = self.get_device('ttl5')
+        self.pumpingSwitch = self.get_device('ttl6')
+        self.rabiSwitch = self.get_device('ttl7')
 
     @kernel
     def run_sequence(self,pumping_time):
         # t2 is the time of microwave
         self.core.break_realtime()
-        self.microwave.sw.off()
-        self.pumping.sw.off()
 
         photon_count = 0
         photon_number = 0
@@ -54,42 +37,40 @@ class KasliTester(EnvExperiment):
 
         for i in range(100):
             with sequential:
+                
+                # Doppler Cooling
+                self.light.sw.on()
+                delay(2*ms)
+                self.light.sw.off()
+                # pumping 
 
-                self.detection.sw.off()
-                self.pumping.sw.off()
-                # cooling for 1 ms
-                self.cooling.sw.on()
-                delay(1*ms)
-                self.cooling.sw.off()
-                delay(5*us)
+                self.light.cpld.set_profile(1)
+                self.coolingSwitch.off()
+                self.pumpingSwitch.on()
+                delay(2*us)
 
-                # pumping for 400us
-                self.pumping.sw.on()
+                # puming for time
+                self.light.sw.on()
                 delay(pumping_time*us)
-                self.pumping.sw.off()
+                self.light.sw.off()
+                self.pumpingSwitch.off()
                 delay(1*us)
+                
 
                 # delay(1*us)
                 # detection on
                 with parallel: 
-                    self.detection.sw.on()
+                    self.light.sw.on()
                     self.pmt.gate_rising(400*us)
                     photon_number = self.pmt.count(now_mu())
                     photon_count = photon_count + photon_number
                     if photon_number > 1:
                         count = count + 1
-                self.detection.sw.off()
-                self.cooling.sw.on()
-                self.ttl_pumping.off()
-                 # turn on 935         
-                #self.ttl_935.off()
-        
-        #self.detection.sw.off()
-        #self.microwave.sw.off()
-        #self.pumping.sw.off()
-        
-
-       
+                
+                # return to cooling again
+                self.light.cpld.set_profile(0)
+                self.light.sw.on()
+                self.coolingSwitch.on()
         return (count,photon_count)
 
     def run(self):
@@ -97,8 +78,8 @@ class KasliTester(EnvExperiment):
         # flip_time = 75
         # microwave_fre = 400.0
         init_time = 0.
-        time_interval = 1
-        N = 40
+        time_interval = 0.1
+        N = 20
         data = np.zeros((3,N))
         # pumping_time = 50.
         for i in range(N):

@@ -126,28 +126,28 @@ class HeatingRateMeasurement(EnvExperiment):
         # heating rate measurement
         # DDS parameter
 
-        aom_scan_step = 0.001/2
+        aom_scan_step = 0.001
 
         # Scan parametr
         # N：the number of frequency
         # M: the number of delay times
-        N = 100
-        M = 13
+        N = 200
+        M = 10
         RepeatTime = 200
-        frequency_scan_step = 1000
-        delay_time_start = 0
+        delay_time_step = 2000
+        delay_time_start = 6000
 
-        delay_times = np.linspace(delay_time_start,delay_time_start+(M-1)*frequency_scan_step,M)
+        delay_times = np.linspace(delay_time_start,delay_time_start+(M-1)*delay_time_step,M)
 
-        rabi_time =50.0
+        rabi_time =400.0
         delay_time = 0.0
 
-        _RED_SIDEBAND = 238.164
-        _BLUE_SIDEBAND = 241.863
-        _RED_AMP = 0.695
+        _RED_SIDEBAND = 243.432
+        _BLUE_SIDEBAND = 240.377
+        _RED_AMP = 0.68
         _BLUE_AMP = 0.700
 
-        WL_871 = 871.034655
+        WL_871 = 871.0346375
 
         aom_scan_steps = np.arange(0, N*aom_scan_step, aom_scan_step)
         _RED_SIDEBANDS = _RED_SIDEBAND - N/2*aom_scan_step+aom_scan_steps
