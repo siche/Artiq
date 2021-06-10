@@ -71,7 +71,7 @@ class KasliTester(EnvExperiment):
         # the origin output is about 9 dbm
         # the attenuation number must be float like 0.
         # dds 不是连续的
-        self.light.set_att(19.0)     # = -6.60dbm max power 18
+        self.light.set_att(25.0)     # = -6.60dbm max power 18 saturation 24@369.526308 count:400
         self.dds935.set_att(14.)
         self.dds435.set_att(15.0)
         self.protection.set_att(14.0) # max power:14

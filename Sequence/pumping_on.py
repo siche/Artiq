@@ -13,7 +13,7 @@ if os.name == "nt":
 class KasliTester(EnvExperiment):
     def build(self):
         self.setattr_device('core')
-        self.ttl_pumping = self.get_device('ttl4')
+        self.ttl_pumping = self.get_device('ttl6')
 
     @kernel
     def pre_set(self):

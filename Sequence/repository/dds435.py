@@ -9,7 +9,7 @@ if os.name == "nt":
     import msvcrt
 
 
-fre = 241.893
+fre = 240.0
 
 class KasliTester(EnvExperiment):
     def build(self):
@@ -20,10 +20,12 @@ class KasliTester(EnvExperiment):
     @kernel
     def set_dds(self):
         self.core.break_realtime()
+        delay(10*ms)
         self.dds2.init()
+        delay(10*ms)
         # set frequecny
         self.dds2.set_att(20.0)
-        self.dds2.set(fre*MHz)
+        self.dds2.set_frequency(fre*MHz)
         self.dds2.sw.on()
         
 

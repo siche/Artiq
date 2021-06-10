@@ -42,36 +42,12 @@ class FrequencyScan(EnvExperiment):
         self.pumpingSwitch = self.get_device('ttl6')
         self.rabiSwitch = self.get_device('ttl7')
 
-    @kernel
-    def pre_set(self):
-        self.core.break_realtime()
-        self.cooling.init()
-        self.dds1_435.init()
-        self.pumping.init()
+   
 
-        # profile 0: cooling
-        self.cooling.set(250*MHz, profile=0)
-        self.cooling.cpld.set_profile(0)
-
-        # 435 dds profile
-        self.dds1_435.set(frequency=_CARRIER*MHz)
-
-        # pumping
-        self.pumping.set(260*MHz)
-
-        # set attenuator
-        self.dds1_435.set_att(18.)
-        self.cooling.set_att(20.)
-        self.pumping.set_att(18.)
-
-        # define dataset
-        # self.set_dataset("SBCData", np.full(100, 0), broadcast=True)
     @kernel
     def SingleRun(self, AOM_fre=240.0, rabi_time=100.0, run_times=200):
 
-        # initialize dds
         self.core.break_realtime()
-        self.light.cpld.set_profile(0)
         delay(2*us)
 
         with parallel:
@@ -85,7 +61,7 @@ class FrequencyScan(EnvExperiment):
             self.repumpingSwitch.on()
 
         delay(20*us)
-        self.dds435.set(AOM_fre)
+        self.dds435.set_frequency(AOM_fre)
         delay(10*us)
 
         photon_count = 0
@@ -100,10 +76,10 @@ class FrequencyScan(EnvExperiment):
 
                 # cooling for 1.5 ms
                 self.light.sw.on()
-                delay(2.0*ms)
+                delay(1.5*ms)
 
                 # pumping
-                self.light.cpld.set_profile(1)
+                self.light.set_frequency(256*MHz)
                 delay(2*us)
 
                 with parallel:
@@ -148,7 +124,7 @@ class FrequencyScan(EnvExperiment):
                         count = count + 1
 
                 with parallel:
-                    self.light.cpld.set_profile(0)
+                    self.light.set_frequency(250*MHz)
                     self.coolingSwitch.on()
                     self.repumpingSwitch.on()                
         return count
@@ -245,8 +221,8 @@ class FrequencyScan(EnvExperiment):
         t1 = time.time()
         rabi_time = 100.0
 
-        start_fre = 241.8
-        stop_fre = 242.1
+        start_fre = 239.9
+        stop_fre = 240.1
         fre_step = 0.001
         N = int((stop_fre-start_fre)/fre_step)
 

@@ -44,7 +44,7 @@ class KasliTester(EnvExperiment):
                 self.light.sw.off()
                 # pumping 
 
-                self.light.cpld.set_profile(1)
+                self.light.set_frequency(256*MHz)
                 self.coolingSwitch.off()
                 self.pumpingSwitch.on()
                 delay(2*us)
@@ -68,7 +68,8 @@ class KasliTester(EnvExperiment):
                         count = count + 1
                 
                 # return to cooling again
-                self.light.cpld.set_profile(0)
+                self.light.set_frequency(250*MHz)
+                delay(2*us)
                 self.light.sw.on()
                 self.coolingSwitch.on()
         return (count,photon_count)
@@ -78,8 +79,8 @@ class KasliTester(EnvExperiment):
         # flip_time = 75
         # microwave_fre = 400.0
         init_time = 0.
-        time_interval = 0.1
-        N = 20
+        time_interval = 0.15
+        N = 30
         data = np.zeros((3,N))
         # pumping_time = 50.
         for i in range(N):

@@ -98,7 +98,7 @@ if __name__ == '__main__':
         print('set amplitue to default value')
 
     print('435 AOM fre:%.4fMHz Amplitude:%.2f' % (fre, amp))
-    dds1.set_frequency(port=0,frequency=fre,amplitude=amp,phase=0)
+    dds1.set_frequency(port=1,frequency=fre,amplitude=amp,phase=0)
     print("time cost:%.3f" % (time.time()-t1))
 
 """

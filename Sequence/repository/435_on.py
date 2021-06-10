@@ -18,7 +18,6 @@ class KasliTester(EnvExperiment):
     @kernel
     def pre_set(self):
         # initialize dd        
-
         self.core.break_realtime()
 
     @kernel
