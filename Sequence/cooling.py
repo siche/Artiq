@@ -63,7 +63,7 @@ class KasliTester(EnvExperiment):
         self.dds435.set(240*MHz, amplitude = 0.5, profile=1)
         delay(2*us)
 
-        self.protection.set(240*MHz, amplitude = 0.5, profile=0)
+        self.protection.set(270*MHz, amplitude = 0.5, profile=0)
         delay(2*us)
        
 
@@ -74,11 +74,14 @@ class KasliTester(EnvExperiment):
         self.light.set_att(19.0)     # = -6.60dbm max power 18
         self.dds935.set_att(14.)
         self.dds435.set_att(15.0)
-        self.protection.set_att(14.0)
+        self.protection.set_att(14.0) # max power:14
         
         #turn off all DDS except light
         
         self.light.sw.on()
+
+
+
         self.dds935.sw.on()
         self.dds435.sw.on()
         self.protection.sw.on()
